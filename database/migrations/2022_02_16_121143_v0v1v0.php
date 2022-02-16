@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -39,16 +38,6 @@ return new class extends Migration
             $table->timestamp('failed_at')->useCurrent();
         });
 
-        Schema::create('personal_access_tokens', function (Blueprint $table) {
-            $table->id();
-            $table->morphs('tokenable');
-            $table->string('name');
-            $table->string('token', 64)->unique();
-            $table->text('abilities')->nullable();
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamps();
-        });
-
         Schema::create('jobs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('queue')->index();
@@ -57,6 +46,58 @@ return new class extends Migration
             $table->unsignedInteger('reserved_at')->nullable();
             $table->unsignedInteger('available_at');
             $table->unsignedInteger('created_at');
+        });
+
+        Schema::create('addresses', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('street');
+            $table->string('postcode');
+            $table->string('city');
+            $table->timestamps();
+        });
+
+        Schema::create('customers', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->foreignId('user_id')->nullable();
+            $table->unsignedBigInteger('delivery_address_id')->nullable();
+            $table->unsignedBigInteger('billing_address_id')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('company_name')->nullable();
+            $table->timestamps();
+
+            $table->foreign('delivery_address_id')->references('id')->on('addresses');
+            $table->foreign('billing_address_id')->references('id')->on('addresses');
+        });
+
+        Schema::create('deliveries', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->timestamp('date');
+            $table->timestamp('deadline');
+            $table->timestamps();
+        });
+
+        Schema::create('orders', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->foreignId('customer_id');
+            $table->foreignId('delivery_id');
+            $table->timestamps();
+        });
+
+        Schema::create('bundles', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->integer('price')->comment(' / 100');
+            $table->integer('deliveries')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('buys', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->foreignId('customer_id');
+            $table->foreignId('bundle_id');
+            $table->timestamps();
         });
     }
 
@@ -70,7 +111,11 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_resets');
         Schema::dropIfExists('failed_jobs');
-        Schema::dropIfExists('personal_access_tokens');
         Schema::dropIfExists('jobs');
+
+        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('customers');
+        Schema::dropIfExists('deliveries');
+        Schema::dropIfExists('orders');
     }
 };
