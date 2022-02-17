@@ -80,12 +80,21 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->foreignId('customer_id');
             $table->foreignId('delivery_id');
+            $table->boolean('canceled')->default(false);
+            $table->timestamps();
+        });
+
+        Schema::create('products', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
 
         Schema::create('bundles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->foreignId('product_id');
+            $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->integer('price')->comment(' / 100');
             $table->integer('deliveries')->default(0);
@@ -116,5 +125,8 @@ return new class extends Migration {
         Schema::dropIfExists('customers');
         Schema::dropIfExists('deliveries');
         Schema::dropIfExists('orders');
+        Schema::dropIfExists('products');
+        Schema::dropIfExists('bundles');
+        Schema::dropIfExists('buys');
     }
 };

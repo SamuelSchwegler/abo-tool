@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Address;
 use App\Models\Customer;
+use App\Models\Delivery;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory(10)->create();
         Customer::factory(10)->create();
 
+        $this->call(DeliverySeeder::class);
         $this->call(HuenibachSeeder::class);
     }
 }
