@@ -15,11 +15,13 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('deliveries')" :active="request()->routeIs('deliveries')">
+                        {{ __('Lieferungen') }}
+                    </x-nav-link>
                 </div>
             </div>
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
-                <x-nav-link :href="route('login')">{{ __('Log In') }}</x-nav-link>
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -51,7 +53,9 @@
                             </form>
                         </x-slot>
                     </x-dropdown>
-                @endauth
+                @else
+                    <x-nav-link :href="route('login')">{{ __('Log In') }}</x-nav-link>
+                @endif
             </div>
 
             <!-- Hamburger -->

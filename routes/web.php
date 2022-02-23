@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::middleware([
+    'auth',
+])->group(function () {
+    Route::get('deliveries', [DeliveryController::class, 'index'])->name('deliveries');
+});
 require __DIR__.'/auth.php';
