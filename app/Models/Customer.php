@@ -10,13 +10,13 @@ class Customer extends Model
 {
     use HasFactory;
 
-    public function customer_deliveries(): HasMany {
-        return $this->hasMany(CustomerDelivery::class);
+    public function orders(): HasMany {
+        return $this->hasMany(Order::class);
     }
 
-    public function next_customer_deliveries(): HasMany {
-        return $this->customer_deliveries()->whereHas('delivery', function ($query) {
-            $query->where('date', '<=', now()->addDays(CustomerDelivery::PREVIEW_OFFSET))->where('date', '>=', now());
+    public function next_orders(): HasMany {
+        return $this->orders()->whereHas('delivery', function ($query) {
+            $query->where('date', '<=', now()->addDays(Order::PREVIEW_OFFSET))->where('date', '>=', now());
         });
     }
 }

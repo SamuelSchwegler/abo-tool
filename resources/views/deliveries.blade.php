@@ -21,7 +21,23 @@
                 @endforeach
             </x-box>
             <x-box>
-                <x-slot name="title">Saldo</x-slot>
+                <x-slot name="title">Meine Abos</x-slot>
+                <x-table>
+                    <x-slot name="header">
+                        <x-table-cell>Abo</x-table-cell>
+                        <x-table-cell>Intervall</x-table-cell>
+                        <x-table-cell>Guthaben</x-table-cell>
+                        <x-table-cell>davon geplant</x-table-cell>
+                        <x-table-cell>voraussichtliches Ende</x-table-cell>
+                    </x-slot>
+                    <tr>
+                        <x-table-cell>Gemüseabo gross</x-table-cell>
+                        <x-table-cell>bla</x-table-cell>
+                        <x-table-cell>6</x-table-cell>
+                        <x-table-cell>3</x-table-cell>
+                        <x-table-cell>28.04.2022</x-table-cell>
+                    </tr>
+                </x-table>
             </x-box>
         </div>
     </div>

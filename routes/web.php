@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BuyController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
@@ -18,11 +19,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::get('order/contact', [OrderController::class, 'contact'])->name('order.contact');
+Route::get('buy/contact', [BuyController::class, 'contact'])->name('buy.contact');
 
 Route::middleware([
     'auth',
 ])->group(function () {
-    Route::get('deliveries/customer', [DeliveryController::class, 'customer'])->name('deliveries.customer');
+    Route::get('orders/customer', [OrderController::class, 'customer'])->name('orders.customer');
 });
 require __DIR__.'/auth.php';

@@ -3,22 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    public function contact() {
+    public function customer()
+    {
+        $customer = Auth::user()?->customer;
 
-    }
-
-    public function contactSubmit() {
-        // todo allenfalls konto erstellen
-    }
-
-    public function payment() {
-
-    }
-
-    public function confirmation() {
-
+        return view('deliveries')->with([
+            'next_deliveries' => $customer?->next_orders ?? []
+        ]);
     }
 }

@@ -76,19 +76,11 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('customer_deliveries', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->foreignId('customer_id');
-            $table->foreignId('delivery_id');
-            $table->foreignId('product_id')->nullable();
-            $table->boolean('active')->default(true);
-            $table->timestamps();
-        });
-
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('customer_id');
             $table->foreignId('delivery_id');
+            $table->foreignId('product_id')->nullable();
             $table->boolean('canceled')->default(false);
             $table->timestamps();
         });

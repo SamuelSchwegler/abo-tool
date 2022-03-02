@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Customer;
 use App\Models\CustomerDelivery;
 use App\Models\Delivery;
+use App\Models\Order;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -27,7 +28,7 @@ class DeliverySeeder extends Seeder
             ]);
 
             foreach (Customer::all() as $customer) {
-                CustomerDelivery::create([
+                Order::create([
                     'customer_id' => $customer->id,
                     'delivery_id' => $delivery->id
                 ]);
