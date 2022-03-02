@@ -19,6 +19,6 @@
         </div>
     </div>
     <div>
-
+        <contact></contact>
     </div>
 </x-box>
