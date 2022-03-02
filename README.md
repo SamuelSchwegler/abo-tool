@@ -10,7 +10,10 @@ Funktioniert mit [Laravel Permission von Spatie](https://spatie.be/docs/laravel-
 | customer | Kundenaccount |                |
 
 
-## Testing
+## Development
+
+### Tailwind
+Muss mittels `npm run watch` komiliziert werden.
 
 ### Mailhog
 Installation siehe [github](https://github.com/mailhog/MailHog) `~/go/bin/MailHog`

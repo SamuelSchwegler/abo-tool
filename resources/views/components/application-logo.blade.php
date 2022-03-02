@@ -1,1 +1,1 @@
-<img src="/img/logo-gsh.png" alt="" class="w-96">
+<img src="/img/logo-gsh.png" alt="" id="logo">

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,13 +18,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('order/contact', [OrderController::class, 'contact'])->name('order.contact');
 
 Route::middleware([
     'auth',
 ])->group(function () {
-    Route::get('deliveries', [DeliveryController::class, 'index'])->name('deliveries');
+    Route::get('deliveries/customer', [DeliveryController::class, 'customer'])->name('deliveries.customer');
 });
 require __DIR__.'/auth.php';

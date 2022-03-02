@@ -22,13 +22,21 @@ class DatabaseSeeder extends Seeder
             $user->assignRole('customer');
         });
         $admin = User::factory()->create([
-            'email' => 'samuel@webtheke.ch',
+            'email' => 'demo@webtheke.ch',
             'password' => bcrypt('1234')
         ]);
-
         $admin->assignRole('admin');
 
+        $customer = User::factory()->create([
+            'email' => 'demo-user@webtheke.ch',
+            'password' => bcrypt('Demo!User19*Test')
+        ]);
+        $customer->assignRole('customer');
+
         Customer::factory(10)->create();
+        Customer::factory()->create([
+           'user_id' => $customer->id
+        ]);
 
         $this->call(DeliverySeeder::class);
         $this->call(HuenibachSeeder::class);
