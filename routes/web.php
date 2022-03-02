@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::get('buy/contact', [BuyController::class, 'contact'])->name('buy.contact');
+Route::get('buy/{bundle}/contact', [BuyController::class, 'contact'])->name('buy.contact');
 
 Route::middleware([
     'auth',

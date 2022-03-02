@@ -63,6 +63,7 @@ return new class extends Migration {
             $table->string('first_name');
             $table->string('last_name');
             $table->string('company_name')->nullable();
+            $table->string('phone')->nullable();
             $table->timestamps();
 
             $table->foreign('delivery_address_id')->references('id')->on('addresses');
@@ -106,6 +107,7 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->foreignId('customer_id');
             $table->foreignId('bundle_id');
+            $table->boolean('paid')->default(false);
             $table->timestamps();
         });
     }
