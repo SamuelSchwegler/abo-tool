@@ -24,6 +24,8 @@ Route::prefix('buy')->group(function () {
     Route::get('{buy}/payment', [BuyController::class, 'payment'])->name('buy.payment');
     Route::post('{buy}/payment', [BuyController::class, 'paymentSubmit']);
     Route::get('{buy}/confirmation', [BuyController::class, 'confirmation'])->name('buy.confirmation');
+
+    Route::get('manage-payments', [BuyController::class, 'managePayments'])->name('buy.payments');
 });
 
 Route::middleware([

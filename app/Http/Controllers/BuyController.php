@@ -59,4 +59,10 @@ class BuyController extends Controller
             'customer' => $buy->customer
         ]);
     }
+
+    public function managePayments() {
+        return view('buy.payments')->with([
+           'buys' => Buy::all()
+        ]);
+    }
 }
