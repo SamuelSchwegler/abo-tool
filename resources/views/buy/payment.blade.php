@@ -11,9 +11,13 @@
         </div>
         <div>
             <x-box>
-                <x-slot name="title">Kontakt</x-slot>
-                @include('parts.contact', $customer)
-                <x-anchor-button href="{{route('buy.payment', $buy)}}">Weiterfahren</x-anchor-button>
+                <x-slot name="title">Bezahlung</x-slot>
+                <p>Sie erhalten eine Email an {{$customer->user->email}} mit der Rechnung für Ihre Bestellung.</p>
+                <form action="{{route('buy.payment', $buy)}}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <x-button>Weiterfahren</x-button>
+                </form>
             </x-box>
         </div>
     </div>

@@ -1,5 +1,4 @@
-<x-box>
-    <x-slot name="title">Kontakt</x-slot>
+
     <div class="grid gap-4 grid-cols-2 pb-4">
         <div>
             <x-label for="first_name" :value="__('Vorname')" />
@@ -21,4 +20,3 @@
     <div>
         <contact></contact>
     </div>
-</x-box>

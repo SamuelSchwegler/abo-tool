@@ -11,12 +11,14 @@
                 {{$bundle->price}} CHF
             </div>
         </div>
-        <div class="flex space-x-4 my-6 text-sm font-medium">
-            <div class="flex-auto flex space-x-4">
-                <a href="{{route('buy.contact', $bundle)}}">
-                    Bestellen
-                </a>
+        @if($enable_buy ?? true)
+            <div class="flex space-x-4 my-6 text-sm font-medium">
+                <div class="flex-auto flex space-x-4">
+                    <x-anchor-button href="{{route('buy.contact', $bundle)}}">
+                        Bestellen
+                    </x-anchor-button>
+                </div>
             </div>
-        </div>
+        @endif
     </form>
 </div>

@@ -11,7 +11,13 @@ class Buy extends Model
 
     protected $guarded = ['id'];
 
-    public function customer() {
+    public function bundle()
+    {
+        return $this->belongsTo(Bundle::class);
+    }
+
+    public function customer()
+    {
         return $this->belongsTo(Customer::class);
     }
 }

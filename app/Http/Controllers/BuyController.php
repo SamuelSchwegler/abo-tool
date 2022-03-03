@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bundle;
 use App\Models\Buy;
+use App\Notifications\SendInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,12 +24,11 @@ class BuyController extends Controller
             ]);
 
             return view('buy.contact')->with([
+                'buy' => $buy,
                 'bundle' => $bundle,
                 'customer' => $buy->customer
             ]);
         }
-
-
     }
 
     public function contactSubmit()
@@ -36,13 +36,27 @@ class BuyController extends Controller
         // todo allenfalls konto erstellen
     }
 
-    public function payment()
+    public function payment(Buy $buy)
     {
-
+        return view('buy.payment')->with([
+            'buy' => $buy,
+            'bundle' => $buy->bundle,
+            'customer' => $buy->customer
+        ]);
     }
 
-    public function confirmation()
-    {
+    public function paymentSubmit(Buy $buy, Request $request) {
+        $buy->customer->user->notify(new SendInvoice($buy));
 
+        return redirect(route('buy.confirmation', $buy));
+    }
+
+    public function confirmation(Buy $buy)
+    {
+        return view('buy.confirmation')->with([
+            'buy' => $buy,
+            'bundle' => $buy->bundle,
+            'customer' => $buy->customer
+        ]);
     }
 }
