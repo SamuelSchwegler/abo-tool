@@ -55,6 +55,10 @@
             "php artisan optimize:clear",
             "php artisan migrate:fresh --seed",
             "composer run serve"
+        ],
+        "tests-cover": [
+            "@putenv XDEBUG_MODE=coverage",
+            "./vendor/bin/phpunit --coverage-html tests/report"
         ]
     },
     "extra": {

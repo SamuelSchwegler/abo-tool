@@ -70,4 +70,20 @@ class DeliveryServiceController extends Controller
             'service' => new DeliveryServiceResource($service)
         ], 200);
     }
+
+    public function apiRemovePostcode(DeliveryService $service, Request $request)
+    {
+        $validated = $request->validate([
+            'postcode' => ['required']
+        ]);
+
+        Postcode::where('postcode', $validated['postcode'])->delete();
+
+        $service->refresh();
+
+        return response([
+            'message' => 'ok',
+            'service' => new DeliveryServiceResource($service)
+        ], 200);
+    }
 }

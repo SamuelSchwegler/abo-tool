@@ -43,6 +43,6 @@ Route::middleware([
 
     Route::patch('/api/v1/delivery-service/{service}/', [DeliveryServiceController::class, 'apiUpdate']);
     Route::post('/api/v1/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
-
+    Route::post('/api/v1/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);
 });
 require __DIR__.'/auth.php';
