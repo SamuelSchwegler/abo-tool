@@ -35,8 +35,11 @@ Route::middleware([
 ])->group(function () {
     Route::get('orders/customer', [OrderController::class, 'customer'])->name('orders.customer');
 
-    Route::get('delivery-service', [DeliveryServiceController::class, 'edit'])->name('delivery-service');
+    Route::get('delivery-service', [DeliveryServiceController::class, 'create'])->name('delivery-service.create');
+    Route::post('delivery-service', [DeliveryServiceController::class, 'store']);
+
     Route::get('delivery-service/{service}', [DeliveryServiceController::class, 'edit'])->name('delivery-service.edit');
+    Route::get('delivery-service-default/', [DeliveryServiceController::class, 'edit'])->name('delivery-service.edit-default');
 
     Route::patch('/api/v1/delivery-service/{service}/', [DeliveryServiceController::class, 'apiUpdate']);
     Route::post('/api/v1/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);

@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\Log;
 
 class DeliveryServiceController extends Controller
 {
+    public function create() {
+        return view('delivery-service.create')->with([
+            'services' => DeliveryService::all()
+        ]);
+    }
+
+    public function store(Request $request) {
+        $validated = $request->validate(DeliveryService::rules());
+
+        $service = DeliveryService::create($validated);
+
+        return redirect(route('delivery-service.edit', $service));
+    }
+
     public function edit(?DeliveryService $service = null)
     {
         if (is_null($service)) {
@@ -25,9 +39,7 @@ class DeliveryServiceController extends Controller
 
     public function apiUpdate(DeliveryService $service, Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required']
-        ]);
+        $validated = $request->validate(DeliveryService::rules());
 
         $service->update([
             'name' => $validated['name']

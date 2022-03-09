@@ -21468,10 +21468,13 @@ var _hoisted_3 = {
   id: "add-postcode",
   "class": "grid grid-cols-2 gap-4"
 };
+var _hoisted_4 = {
+  "class": "col-span-2"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_text_input = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("text-input");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
     name: "name",
     label: "Bezeichnung",
     modelValue: $data.name,
@@ -21482,7 +21485,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onChange: $options.updateDeliveryService
   }, null, 8
   /* PROPS */
-  , ["modelValue", "value", "onChange"])])]);
+  , ["modelValue", "value", "onChange"])])])]);
 }
 
 /***/ }),

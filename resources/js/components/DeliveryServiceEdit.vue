@@ -2,7 +2,9 @@
     <div class="box">
         <h3 class="title">Details Lieferzone</h3>
         <div id="add-postcode" class="grid grid-cols-2 gap-4">
-            <text-input name="name" label="Bezeichnung" v-model="name" :value="name" @change="updateDeliveryService"></text-input>
+            <div class="col-span-2">
+                <text-input name="name" label="Bezeichnung" v-model="name" :value="name" @change="updateDeliveryService"></text-input>
+            </div>
         </div>
     </div>
 </template>
