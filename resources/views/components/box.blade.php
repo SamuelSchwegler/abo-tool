@@ -1,6 +1,6 @@
-<div class="p-6 bg-white bg-white overflow-hidden shadow-sm sm:rounded-lg border-b border-gray-200">
+<div class="box">
     @if(isset($title))
-        <h3 class="text-lg font-semibold">{{$title}}</h3>
+        <h3 class="title text-lg font-semibold">{{$title}}</h3>
     @endif
     {{$slot}}
 </div>

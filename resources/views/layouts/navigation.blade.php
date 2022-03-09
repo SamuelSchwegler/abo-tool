@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('buy.payments')" :active="request()->routeIs('buy.payments')">
                         {{ __('Zahlungen verwalten') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('delivery-service')" :active="request()->routeIs('delivery-service')">
+                        {{ __('Lieferzonen verwalten') }}
+                    </x-nav-link>
                 </div>
             </div>
             <!-- Settings Dropdown -->

@@ -72,6 +72,7 @@ return new class extends Migration {
 
         Schema::create('deliveries', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->foreignId('delivery_service_id');
             $table->timestamp('date');
             $table->timestamp('deadline');
             $table->timestamps();
@@ -109,6 +110,19 @@ return new class extends Migration {
             $table->foreignId('bundle_id');
             $table->boolean('paid')->default(false);
             $table->timestamps();
+        });
+
+        Schema::create('delivery_services', function (Blueprint $table) {
+           $table->bigIncrements('id');
+           $table->string('name');
+           $table->timestamps();
+        });
+
+        Schema::create('postcodes', function (Blueprint $table) {
+           $table->bigIncrements('id');
+           $table->string('postcode')->unique();
+           $table->foreignId('delivery_service_id');
+           $table->timestamps();
         });
     }
 

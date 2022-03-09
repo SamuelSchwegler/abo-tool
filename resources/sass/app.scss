@@ -10,11 +10,15 @@
 $white: #ffffff;
 $background: #FBF2E7;
 $green: #567B43;
-$violett: #772475;
+$violet: #772475;
 $dark: #262520;
 
 .bg-default {
     background-color: $background;
+}
+
+.bg-violet {
+    background-color: $violet !important;
 }
 
 .btn {
@@ -26,5 +30,20 @@ $dark: #262520;
 
     &:hover {
         background-color: darken( $green, 10%);
+    }
+}
+
+.box {
+    border-top-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    padding: 2rem;
+    background-color: $white;
+    margin-bottom: 2rem;
+
+    .title {
+        padding-bottom: 1rem;
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        font-weight: 600;
     }
 }

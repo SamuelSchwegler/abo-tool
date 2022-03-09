@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BuyController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\DeliveryServiceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
@@ -26,11 +27,19 @@ Route::prefix('buy')->group(function () {
     Route::get('{buy}/confirmation', [BuyController::class, 'confirmation'])->name('buy.confirmation');
 
     Route::get('manage-payments', [BuyController::class, 'managePayments'])->name('buy.payments');
+
 });
 
 Route::middleware([
     'auth',
 ])->group(function () {
     Route::get('orders/customer', [OrderController::class, 'customer'])->name('orders.customer');
+
+    Route::get('delivery-service', [DeliveryServiceController::class, 'edit'])->name('delivery-service');
+    Route::get('delivery-service/{service}', [DeliveryServiceController::class, 'edit'])->name('delivery-service.edit');
+
+    Route::patch('/api/v1/delivery-service/{service}/', [DeliveryServiceController::class, 'apiUpdate']);
+    Route::post('/api/v1/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
+
 });
 require __DIR__.'/auth.php';

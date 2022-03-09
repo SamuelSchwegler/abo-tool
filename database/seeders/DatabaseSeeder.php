@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
            'user_id' => $customer->id
         ]);
 
-        $this->call(DeliverySeeder::class);
         $this->call(HuenibachSeeder::class);
+        $this->call(DeliverySeeder::class);
     }
 }

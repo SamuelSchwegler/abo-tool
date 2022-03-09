@@ -3,9 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\Bundle;
+use App\Models\DeliveryService;
+use App\Models\Postcode;
 use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class HuenibachSeeder extends Seeder
 {
@@ -50,6 +53,21 @@ class HuenibachSeeder extends Seeder
             'deliveries' => 12,
             'price' => 17400,
             'product_id' => $gross->id
+        ]);
+
+        $post = DeliveryService::create([
+            'name' => 'Post'
+        ]);
+
+        $velo = DeliveryService::create([
+            'name' => 'Velokurier'
+        ]);
+
+        DB::table('postcodes')->insert([
+            ['delivery_service_id' => $velo->id, 'postcode' => 6122],
+            ['delivery_service_id' => $velo->id, 'postcode' => 6130],
+            ['delivery_service_id' => $post->id, 'postcode' => 3072],
+            ['delivery_service_id' => $post->id, 'postcode' => 3000],
         ]);
     }
 }
