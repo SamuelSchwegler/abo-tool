@@ -34,6 +34,7 @@ Route::middleware([
     'auth',
 ])->group(function () {
     Route::get('orders/customer', [OrderController::class, 'customer'])->name('orders.customer');
+    Route::get('order/{order}/download', [OrderController::class, 'exportDeliveryNote']);
 
     Route::get('delivery-service', [DeliveryServiceController::class, 'create'])->name('delivery-service.create');
     Route::post('delivery-service', [DeliveryServiceController::class, 'store']);

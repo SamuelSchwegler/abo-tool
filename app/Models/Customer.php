@@ -28,4 +28,9 @@ class Customer extends Model
     public function getNameAttribute(): string {
         return $this->first_name.' '.$this->last_name;
     }
+
+    public function billing_address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, 'billing_address_id');
+    }
 }
