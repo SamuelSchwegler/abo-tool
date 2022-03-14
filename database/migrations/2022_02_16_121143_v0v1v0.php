@@ -84,6 +84,7 @@ return new class extends Migration {
             $table->foreignId('delivery_id');
             $table->foreignId('product_id')->nullable();
             $table->boolean('canceled')->default(false);
+            $table->string('depository')->nullable()->comment('Abstellort');
             $table->timestamps();
         });
 
@@ -108,6 +109,7 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->foreignId('customer_id');
             $table->foreignId('bundle_id');
+            $table->integer('price')->comment(' / 100');
             $table->boolean('paid')->default(false);
             $table->timestamps();
         });
@@ -127,7 +129,10 @@ return new class extends Migration {
 
         Schema::create('settings', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name');
             $table->foreignId('address_id');
+            $table->string('besr_id')->nullable();
+            $table->string('iban')->nullable();
             $table->timestamps();
         });
     }

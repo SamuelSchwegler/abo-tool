@@ -42,7 +42,7 @@ class Buy extends Model
 
         $qrBill->setCreditorInformation(
             QrBill\DataGroup\Element\CreditorInformation::create(
-                'CH4431999123000889012' // This is a special QR-IBAN. Classic IBANs will not be valid here.
+                'CH5330790016597781328' // This is a special QR-IBAN. Classic IBANs will not be valid here.
             ));
 
         // Add debtor information
@@ -65,7 +65,7 @@ class Buy extends Model
         $qrBill->setPaymentAmountInformation(
             QrBill\DataGroup\Element\PaymentAmountInformation::create(
                 'CHF',
-                2500.25
+                $this->price / 100
             ));
 
         // Add payment reference

@@ -28,7 +28,7 @@ class DeliverySeeder extends Seeder
             ]);
 
             foreach (Customer::all() as $customer) {
-                Order::create([
+                Order::factory()->create([
                     'customer_id' => $customer->id,
                     'delivery_id' => $delivery->id,
                 ]);

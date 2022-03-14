@@ -77,7 +77,10 @@ class HuenibachSeeder extends Seeder
         ]);
 
         Setting::create([
-            'address_id' => $address->id
+            'name' => 'Gartenbauschule Huenibach',
+            'address_id' => $address->id,
+            'besr_id' => '',
+            'iban' => 'CH5330790016597781328'
         ]);
     }
 }

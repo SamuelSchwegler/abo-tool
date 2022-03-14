@@ -83,9 +83,10 @@ class BuyController extends Controller
             ->getPaymentPart();
 
         // 4. For demo purposes, let's save the generated example in a file
-        $examplePath = storage_path('app/bills/bill_'.$buy->id.'.pdf');
+        $path = storage_path('app/bills/bill_'.$buy->id.'.pdf');
 
-        $tcPdf->Output($examplePath, 'F');
+        $tcPdf->Output($path, 'F');
 
+        return response()->download($path);
     }
 }

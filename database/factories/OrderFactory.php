@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Bundle;
 use App\Models\Customer;
+use App\Models\Delivery;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order>
  */
-class BuyFactory extends Factory
+class OrderFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,12 +18,10 @@ class BuyFactory extends Factory
      */
     public function definition()
     {
-        $bundle = Bundle::inRandomOrder()->first();
         return [
+            'delivery_id' => Delivery::inRandomOrder()->first()->id,
             'customer_id' => Customer::inRandomOrder()->first()->id,
-            'bundle_id' => $bundle->id,
-            'price' => $bundle->price,
-            'paid' => $this->faker->boolean()
+            'canceled' => $this->faker->randomElement([false, false, false, true])
         ];
     }
 }

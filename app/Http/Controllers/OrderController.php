@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpWord\Exception\CopyFileException;
 use PhpOffice\PhpWord\Exception\CreateTemporaryFileException;
@@ -11,16 +15,21 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class OrderController extends Controller
 {
+    /**
+     * Übersichtsseite für den Kunden
+     * @return Application|Factory|View
+     */
     public function customer()
     {
         $customer = Auth::user()?->customer;
 
-        return view('deliveries')->with([
-            'next_deliveries' => $customer?->next_orders ?? [],
+        return view('orders')->with([
+            'next_orders' => OrderResource::collection($customer?->next_orders ?? collect([])),
         ]);
     }
 
     /**
+     * Lieferschein erstellen
      * @throws CopyFileException
      * @throws CreateTemporaryFileException
      */

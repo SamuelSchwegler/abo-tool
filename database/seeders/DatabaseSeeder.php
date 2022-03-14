@@ -37,6 +37,9 @@ class DatabaseSeeder extends Seeder
         Customer::factory()->create([
             'user_id' => $customer->id,
         ]);
+        Customer::factory()->create([
+            'user_id' => $admin->id, // eigentlich nicht direkt benötigt
+        ]);
 
         $this->call(HuenibachSeeder::class);
         $this->call(DeliverySeeder::class);

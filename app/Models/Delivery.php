@@ -9,5 +9,5 @@ class Delivery extends Model
 {
     use HasFactory;
 
-    protected $dates = ['date'];
+    protected $dates = ['date', 'deadline'];
 }

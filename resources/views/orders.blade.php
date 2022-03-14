@@ -9,12 +9,7 @@
     </x-box>
 
     <div class="mt-4 grid grid-cols-2 gap-4">
-        <x-box>
-            <x-slot name="title">Kommende Lieferungen</x-slot>
-            @foreach($next_deliveries as $customer_delivery)
-                {{$customer_delivery->delivery->date->format('d.m.y H:i')}}<br>
-            @endforeach
-        </x-box>
+        <manage-orders :orders="{{json_encode($next_orders)}}"></manage-orders>
         <x-box>
             <x-slot name="title">Meine Abos</x-slot>
             <x-table>
