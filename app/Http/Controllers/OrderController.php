@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpWord\Exception\CopyFileException;
 use PhpOffice\PhpWord\Exception\CreateTemporaryFileException;
@@ -17,7 +16,7 @@ class OrderController extends Controller
         $customer = Auth::user()?->customer;
 
         return view('deliveries')->with([
-            'next_deliveries' => $customer?->next_orders ?? []
+            'next_deliveries' => $customer?->next_orders ?? [],
         ]);
     }
 
@@ -37,7 +36,6 @@ class OrderController extends Controller
         $template->setValue('customer_street', $billing_address->street);
         $template->setValue('customer_postcode', $billing_address->postcode);
         $template->setValue('customer_city', $billing_address->city);
-
 
         $output = storage_path('app/delivery-notes/output.docx');
         $template->saveAs($output);

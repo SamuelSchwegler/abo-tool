@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use App\Models\Bundle;
 use App\Models\DeliveryService;
-use App\Models\Postcode;
 use App\Models\Product;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Setting;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -20,47 +20,47 @@ class HuenibachSeeder extends Seeder
     public function run()
     {
         $klein = Product::create([
-            'name' => 'kleine Gemüsetasche'
+            'name' => 'kleine Gemüsetasche',
         ]);
 
         $gross = Product::create([
-            'name' => 'grosse Gemüsetasche'
+            'name' => 'grosse Gemüsetasche',
         ]);
 
         Bundle::create([
             'name' => '12er Abo Gross a 44 CHF',
             'deliveries' => 12,
             'price' => 52800,
-            'product_id' => $klein->id
+            'product_id' => $klein->id,
         ]);
 
         Bundle::create([
             'name' => '6er Probe Abo Gross a 44 CHF',
             'deliveries' => 12,
             'price' => 26400,
-            'product_id' => $klein->id
+            'product_id' => $klein->id,
         ]);
 
         Bundle::create([
             'name' => '12er Abo Klein à 29 CHF',
             'deliveries' => 12,
             'price' => 34800,
-            'product_id' => $gross->id
+            'product_id' => $gross->id,
         ]);
 
         Bundle::create([
             'name' => '6er Probe Abo klein à 29 CHF',
             'deliveries' => 12,
             'price' => 17400,
-            'product_id' => $gross->id
+            'product_id' => $gross->id,
         ]);
 
         $post = DeliveryService::create([
-            'name' => 'Post'
+            'name' => 'Post',
         ]);
 
         $velo = DeliveryService::create([
-            'name' => 'Velokurier'
+            'name' => 'Velokurier',
         ]);
 
         DB::table('postcodes')->insert([
@@ -68,6 +68,16 @@ class HuenibachSeeder extends Seeder
             ['delivery_service_id' => $velo->id, 'postcode' => 6130],
             ['delivery_service_id' => $post->id, 'postcode' => 3072],
             ['delivery_service_id' => $post->id, 'postcode' => 3000],
+        ]);
+
+        $address = Address::create([
+            'street' => 'Chartreusestrasse 7',
+            'postcode' => '3626',
+            'city' => 'Hünibach'
+        ]);
+
+        Setting::create([
+            'address_id' => $address->id
         ]);
     }
 }

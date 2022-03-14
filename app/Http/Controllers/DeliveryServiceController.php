@@ -6,13 +6,12 @@ use App\Http\Resources\DeliveryServiceResource;
 use App\Models\DeliveryService;
 use App\Models\Postcode;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class DeliveryServiceController extends Controller
 {
     public function create() {
         return view('delivery-service.create')->with([
-            'services' => DeliveryService::all()
+            'services' => DeliveryService::all(),
         ]);
     }
 
@@ -33,7 +32,7 @@ class DeliveryServiceController extends Controller
         return view('delivery-service.edit')->with([
             'service' => $service,
             'services' => DeliveryService::all(),
-            'serviceResource' => new DeliveryServiceResource($service)
+            'serviceResource' => new DeliveryServiceResource($service),
         ]);
     }
 
@@ -42,39 +41,39 @@ class DeliveryServiceController extends Controller
         $validated = $request->validate(DeliveryService::rules());
 
         $service->update([
-            'name' => $validated['name']
+            'name' => $validated['name'],
         ]);
 
         return response([
             'message' => 'ok',
-            'service' => new DeliveryServiceResource($service)
+            'service' => new DeliveryServiceResource($service),
         ], 200);
     }
 
     public function apiAddPostcode(DeliveryService $service, Request $request)
     {
         $validated = $request->validate([
-            'postcode' => ['required']
+            'postcode' => ['required'],
         ]);
 
         Postcode::updateOrCreate([
-            'postcode' => $validated['postcode']
+            'postcode' => $validated['postcode'],
         ], [
-            'delivery_service_id' => $service->id
+            'delivery_service_id' => $service->id,
         ]);
 
         $service->refresh();
 
         return response([
             'message' => 'ok',
-            'service' => new DeliveryServiceResource($service)
+            'service' => new DeliveryServiceResource($service),
         ], 200);
     }
 
     public function apiRemovePostcode(DeliveryService $service, Request $request)
     {
         $validated = $request->validate([
-            'postcode' => ['required']
+            'postcode' => ['required'],
         ]);
 
         Postcode::where('postcode', $validated['postcode'])->delete();
@@ -83,7 +82,7 @@ class DeliveryServiceController extends Controller
 
         return response([
             'message' => 'ok',
-            'service' => new DeliveryServiceResource($service)
+            'service' => new DeliveryServiceResource($service),
         ], 200);
     }
 }

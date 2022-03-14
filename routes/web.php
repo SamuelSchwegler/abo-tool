@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\BuyController;
-use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\DeliveryServiceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
@@ -28,6 +27,7 @@ Route::prefix('buy')->group(function () {
 
     Route::get('manage-payments', [BuyController::class, 'managePayments'])->name('buy.payments');
 
+    Route::get('{buy}/bill', [BuyController::class, 'exportBill'])->name('buy.export.bill');
 });
 
 Route::middleware([

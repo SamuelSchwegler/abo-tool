@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DeliveryService extends Model
@@ -17,7 +16,7 @@ class DeliveryService extends Model
     public static function rules(): array
     {
         return [
-            'name' => ['required']
+            'name' => ['required'],
         ];
     }
 }

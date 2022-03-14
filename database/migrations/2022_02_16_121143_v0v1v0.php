@@ -124,6 +124,12 @@ return new class extends Migration {
            $table->foreignId('delivery_service_id');
            $table->timestamps();
         });
+
+        Schema::create('settings', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->foreignId('address_id');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -145,5 +151,6 @@ return new class extends Migration {
         Schema::dropIfExists('products');
         Schema::dropIfExists('bundles');
         Schema::dropIfExists('buys');
+        Schema::dropIfExists('settings');
     }
 };

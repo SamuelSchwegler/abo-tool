@@ -3,4 +3,5 @@
 !templates/
 !templates/**
 !delivery-notes/
+!bills/
 !.gitignore

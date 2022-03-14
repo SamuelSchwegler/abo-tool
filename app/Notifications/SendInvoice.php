@@ -26,7 +26,7 @@ class SendInvoice extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -37,14 +37,14 @@ class SendInvoice extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
         return (new MailMessage)
             ->subject('Ihre Rechnung')
-            ->greeting('Guten Tag ' . $notifiable->customer->name)
+            ->greeting('Guten Tag '.$notifiable->customer->name)
             ->line('Danke für Ihre Bestellung bei der Gartenbauschule Hünibach. Hier finden Sie die Rechnung.')
             ->action('Rechnung herunterladen', url('/'))
             ->line('Sobald Sie die Rechnung bezahlt haben, werden wir das Abo für Sie freischalten.')
@@ -54,7 +54,7 @@ class SendInvoice extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function toArray($notifiable)

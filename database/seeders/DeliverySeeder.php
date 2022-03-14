@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
-use App\Models\CustomerDelivery;
 use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Order;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DeliverySeeder extends Seeder
@@ -26,13 +24,13 @@ class DeliverySeeder extends Seeder
             $delivery = Delivery::create([
                 'date' => $date,
                 'deadline' => $date->copy()->subDays(2),
-                'delivery_service_id' => DeliveryService::inRandomOrder()->first()->id
+                'delivery_service_id' => DeliveryService::inRandomOrder()->first()->id,
             ]);
 
             foreach (Customer::all() as $customer) {
                 Order::create([
                     'customer_id' => $customer->id,
-                    'delivery_id' => $delivery->id
+                    'delivery_id' => $delivery->id,
                 ]);
             }
 

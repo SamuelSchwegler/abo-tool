@@ -11,7 +11,7 @@ class HomeController extends Controller
     public function home(): Application|Factory|\Illuminate\Contracts\View\View
     {
         return view('home')->with([
-            'bundles' => Bundle::all()
+            'bundles' => Bundle::all(),
         ]);
     }
 }

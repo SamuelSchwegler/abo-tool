@@ -3,10 +3,9 @@
 namespace Tests\Feature\App;
 
 use App\Models\DeliveryService;
-use App\Models\User;
 use Illuminate\Support\Str;
-use Tests\TestCase;
 use function route;
+use Tests\TestCase;
 
 class DeliveryServiceTest extends TestCase
 {
@@ -35,7 +34,7 @@ class DeliveryServiceTest extends TestCase
         $count = DeliveryService::count();
 
         $response = $this->post(route('delivery-service.create'), [
-            'name' => Str::random()
+            'name' => Str::random(),
         ]);
 
         $response->assertSessionDoesntHaveErrors();
