@@ -5,6 +5,7 @@ use App\Http\Controllers\DeliveryServiceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\api\v1\OrderController as ApiOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,5 +46,9 @@ Route::middleware([
     Route::patch('/api/v1/delivery-service/{service}/', [DeliveryServiceController::class, 'apiUpdate']);
     Route::post('/api/v1/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
     Route::post('/api/v1/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);
+
+    Route::prefix('api/v1')->group(function() {
+        Route::patch('/order/{order}/toggle-cancel', [ApiOrderController::class, 'toggleCancel']);
+    });
 });
 require __DIR__.'/auth.php';

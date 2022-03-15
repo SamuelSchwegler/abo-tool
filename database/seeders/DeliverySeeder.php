@@ -23,7 +23,7 @@ class DeliverySeeder extends Seeder
         while ($date->lte($end)) {
             $delivery = Delivery::create([
                 'date' => $date,
-                'deadline' => $date->copy()->subDays(2),
+                'deadline' => $date->copy()->subDays(1),
                 'delivery_service_id' => DeliveryService::inRandomOrder()->first()->id,
             ]);
 
@@ -34,7 +34,7 @@ class DeliverySeeder extends Seeder
                 ]);
             }
 
-            $date->addDays(7);
+            $date->addDays(3);
         }
     }
 }

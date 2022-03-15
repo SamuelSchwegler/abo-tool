@@ -30,7 +30,8 @@ class OrderResource extends JsonResource
                     'd.m.Y' => $delivery->deadline->format('d.m.Y'),
                 ],
             ],
-            'canceled' => $this->canceled
+            'canceled' => $this->canceled === 1,
+            'deadline_passed' => $this->deadlinePassed()
         ];
     }
 }

@@ -21,8 +21,8 @@ class Customer extends Model
 
     public function next_orders(): HasMany {
         return $this->orders()->whereHas('delivery', function ($query) {
-            $query->where('date', '<=', now()->addDays(Order::PREVIEW_OFFSET))->where('date', '>=', now());
-        });
+            $query->where('date', '>=', now()->subDay());
+        })->limit(Order::PREVIEW_OFFSET);
     }
 
     public function getNameAttribute(): string {
