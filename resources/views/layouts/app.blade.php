@@ -37,6 +37,7 @@
                 {{ $slot }}
             </div>
         </div>
+        <notifications position="bottom right"></notifications>
     </main>
 </div>
 </body>

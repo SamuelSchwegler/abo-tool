@@ -43,12 +43,13 @@ Route::middleware([
     Route::get('delivery-service/{service}', [DeliveryServiceController::class, 'edit'])->name('delivery-service.edit');
     Route::get('delivery-service-default/', [DeliveryServiceController::class, 'edit'])->name('delivery-service.edit-default');
 
-    Route::patch('/api/v1/delivery-service/{service}/', [DeliveryServiceController::class, 'apiUpdate']);
-    Route::post('/api/v1/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
-    Route::post('/api/v1/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);
+    Route::prefix('api/v1')->group(function () {
+        Route::patch('/delivery-service/{service}/', [DeliveryServiceController::class, 'apiUpdate']);
+        Route::post('/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
+        Route::post('/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);
 
-    Route::prefix('api/v1')->group(function() {
+        Route::patch('/order/{order}', [ApiOrderController::class, 'update']);
         Route::patch('/order/{order}/toggle-cancel', [ApiOrderController::class, 'toggleCancel']);
     });
 });
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

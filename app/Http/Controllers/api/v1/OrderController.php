@@ -15,6 +15,21 @@ use Illuminate\Support\Facades\Log;
 class OrderController extends Controller
 {
     /**
+     * @param Order $order
+     * @param Request $request
+     * @return Response|Application|ResponseFactory
+     */
+    public function update(Order $order, Request $request): Response|Application|ResponseFactory
+    {
+        $validated = $request->validate([
+            'depository' => ['nullable', 'string']
+        ]);
+        $order->update($validated);
+
+        return response(['order' => $order]);
+    }
+
+    /**
      * Abmeldung einer Bestellung regeln
      * @throws OrderEditException
      */
