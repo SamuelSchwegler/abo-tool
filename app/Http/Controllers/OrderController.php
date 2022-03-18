@@ -23,6 +23,9 @@ class OrderController extends Controller
     {
         $customer = Auth::user()?->customer;
 
+        $bundles = $customer->bundles();
+        dd($bundles);
+
         return view('orders')->with([
             'next_orders' => OrderResource::collection($customer?->next_orders ?? collect([])),
         ]);
