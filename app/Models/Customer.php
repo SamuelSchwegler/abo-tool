@@ -42,9 +42,13 @@ class Customer extends Model
             ->leftJoin('deliveries', 'deliveries.id', 'orders.delivery_id')
             ->where('canceled', 0)
             ->groupBy('orders.product_id')
-            ->selectRaw('products.id as product_id, products.name, COUNT(orders.id) as ordered, SUM(IF(deliveries.deadline >= NOW(), 1, 0)) AS open')->get();
+            ->selectRaw('products.id as product_id, products.name, COUNT(orders.id) as ordered, SUM(IF(deliveries.deadline >= NOW(), 1, 0)) AS planned')->get();
     }
 
+    /**
+     * Zusammenfassung über Kontostand für die Produkte (noch offene Lieferungen)
+     * @return Collection
+     */
     public function productBalances(): Collection
     {
         $balances = [];
@@ -53,7 +57,7 @@ class Customer extends Model
             $balance = $buy;
             $balance->total_deliveries = (int) $buy->total_deliveries;
             $balance->ordered = (int) $order->ordered;
-            $balance->open = (int) $order->open;
+            $balance->planned = (int) $order->planned;
             $balance->balance = $balance->total_deliveries - $balance->ordered;
 
             // todo calculate Expected end

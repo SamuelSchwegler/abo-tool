@@ -16,29 +16,23 @@
                 </th>
                 </thead>
                 <tbody class="bg-white dark:bg-slate-800">
-                <order v-for="(order, index) in orders" :input_order="order"></order>
+                <order v-for="(order, index) in orders" :input_order="order" @toggleOrder="toggleOrder"></order>
                 </tbody>
             </table>
         </div>
         <div class="box">
             <h3 class="title">Meine Abos</h3>
-            <table class="border-collapse table-auto w-full text-sm">
+            <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key">
                 <thead>
                 <tr>
                     <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                         Abo
                     </th>
                     <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                        Intervall
-                    </th>
-                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                         Guthaben
                     </th>
                     <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                         davon geplant
-                    </th>
-                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                        vorauss. Ende
                     </th>
                 </tr>
                 </thead>
@@ -47,14 +41,12 @@
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
                         {{ balance.name }}
                     </td>
-                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"></td>
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
                         {{balance.balance}}
                     </td>
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                        {{balance.open}}
+                        {{balance.planned}}
                     </td>
-                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">28.04.2022</td>
                 </tr>
                 </tbody>
             </table>
@@ -67,8 +59,22 @@ import order from "./Order";
 
 export default {
     name: "CustomerOrders",
-    props: ["orders", "product_balances"],
-    components: {order}
+    props: ["orders", "input_product_balances"],
+    components: {order},
+    data: function(){
+        return {
+            product_balances: this.input_product_balances,
+            balances_key: 0,
+        }
+    },
+    methods: {
+        toggleOrder(action) {
+            let index = this.product_balances.findIndex(balance => balance.product_id === action.product_id);
+            this.product_balances[index].balance += action.running ? -1 : 1;
+            this.product_balances[index].planned += action.running ? 1 : -1;
+            this.balances_key++;
+        }
+    }
 }
 </script>
 

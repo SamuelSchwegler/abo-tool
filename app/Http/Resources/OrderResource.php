@@ -18,6 +18,7 @@ class OrderResource extends JsonResource
     public function toArray($request)
     {
         $delivery = $this->delivery;
+        $product = $this->product;
 
         return [
             'id' => $this->id,
@@ -29,6 +30,10 @@ class OrderResource extends JsonResource
                 'deadline' => [
                     'd.m.Y' => $delivery->deadline->format('d.m.Y'),
                 ],
+            ],
+            'product' => [
+                'id' => $product->id,
+                'name' => $product->name
             ],
             'canceled' => $this->canceled === 1,
             'deadline_passed' => $this->deadlinePassed()

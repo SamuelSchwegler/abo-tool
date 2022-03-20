@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 class Order extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
 
     const PREVIEW_OFFSET = 10; // wie viele Lieferungen voraus werden Orders angezeigt.
@@ -22,6 +23,11 @@ class Order extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     public function deadlinePassed(): bool
