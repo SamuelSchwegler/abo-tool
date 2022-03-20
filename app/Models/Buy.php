@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\TraitUuid;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Sprain\SwissQrBill as QrBill;
 
 class Buy extends Model
 {
-    use HasFactory;
+    use HasFactory, TraitUuid;
 
     protected $guarded = ['id'];
 
@@ -102,5 +103,10 @@ class Buy extends Model
         }
 
         return $qrBill;
+    }
+
+    public function getFormatedPriceAttribute(): string
+    {
+        return number_format($this->price / 100, 2, '.', '\'');
     }
 }

@@ -46,7 +46,7 @@ class SendInvoice extends Notification
             ->subject('Ihre Rechnung')
             ->greeting('Guten Tag '.$notifiable->customer->name)
             ->line('Danke für Ihre Bestellung bei der Gartenbauschule Hünibach. Hier finden Sie die Rechnung.')
-            ->action('Rechnung herunterladen', url('/'))
+            ->action('Rechnung herunterladen', url(route('buy.export.bill', $this->buy)))
             ->line('Sobald Sie die Rechnung bezahlt haben, werden wir das Abo für Sie freischalten.')
             ->salutation('Wir wünschen Ihnen einen schönen Tag');
     }

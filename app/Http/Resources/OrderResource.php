@@ -35,6 +35,7 @@ class OrderResource extends JsonResource
                 'id' => $product->id,
                 'name' => $product->name
             ],
+            'depository' => $this->depository,
             'canceled' => $this->canceled === 1,
             'deadline_passed' => $this->deadlinePassed()
         ];

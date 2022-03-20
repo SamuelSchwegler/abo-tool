@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BuyResource;
 use App\Models\Bundle;
 use App\Models\Buy;
 use App\Notifications\SendInvoice;
@@ -23,6 +24,7 @@ class BuyController extends Controller
             $buy = Buy::create([
                 'customer_id' => $customer->id,
                 'bundle_id' => $bundle->id,
+                'price' => $bundle->price
             ]);
 
             return view('buy.contact')->with([
@@ -64,7 +66,7 @@ class BuyController extends Controller
 
     public function managePayments() {
         return view('buy.payments')->with([
-            'buys' => Buy::all(),
+            'buys' => BuyResource::collection(Buy::all()),
         ]);
     }
 

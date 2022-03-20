@@ -3,11 +3,13 @@ import Contact from "./components/Contact";
 import PostcodeManagement from "./components/PostcodeManagement";
 import DeliveryServiceEdit from "./components/DeliveryServiceEdit";
 import CustomerOrders from "./components/customer/CustomerOrders";
+import ManagePayments from "./components/admin/ManagePayments";
+
 import Notifications from '@kyvg/vue3-notification'
 
 const app = createApp({
     components: {
-        Contact, PostcodeManagement, DeliveryServiceEdit, CustomerOrders
+        Contact, PostcodeManagement, DeliveryServiceEdit, CustomerOrders, ManagePayments
     }
 });
 app.use(Notifications)

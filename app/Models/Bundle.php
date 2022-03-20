@@ -13,8 +13,8 @@ class Bundle extends Model
         return $this->hasMany(Buy::class);
     }
 
-    public function getPriceAttribute($db)
+    public function getFormatedPriceAttribute(): string
     {
-        return ! is_null($db) ? number_format($db / 100, 2, '.', '\'') : null;
+        return number_format($this->price / 100, 2, '.', '\'');
     }
 }

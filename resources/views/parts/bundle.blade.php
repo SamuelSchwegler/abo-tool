@@ -8,7 +8,7 @@
                 {{$bundle->name}}
             </h1>
             <div class="text-lg font-semibold text-slate-500">
-                {{$bundle->price}} CHF
+                {{$bundle->formated_price}} CHF
             </div>
         </div>
         @if($enable_buy ?? true)

@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\v1\OrderController as ApiOrderController;
+use App\Http\Controllers\api\v1\BuyController as ApiBuyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +27,6 @@ Route::prefix('buy')->group(function () {
     Route::post('{buy}/payment', [BuyController::class, 'paymentSubmit']);
     Route::get('{buy}/confirmation', [BuyController::class, 'confirmation'])->name('buy.confirmation');
 
-    Route::get('manage-payments', [BuyController::class, 'managePayments'])->name('buy.payments');
-
     Route::get('{buy}/bill', [BuyController::class, 'exportBill'])->name('buy.export.bill');
 });
 
@@ -43,6 +42,8 @@ Route::middleware([
     Route::get('delivery-service/{service}', [DeliveryServiceController::class, 'edit'])->name('delivery-service.edit');
     Route::get('delivery-service-default/', [DeliveryServiceController::class, 'edit'])->name('delivery-service.edit-default');
 
+    Route::get('manage-payments', [BuyController::class, 'managePayments'])->name('buy.payments');
+
     Route::prefix('api/v1')->group(function () {
         Route::patch('/delivery-service/{service}/', [DeliveryServiceController::class, 'apiUpdate']);
         Route::post('/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
@@ -50,6 +51,8 @@ Route::middleware([
 
         Route::patch('/order/{order}', [ApiOrderController::class, 'update']);
         Route::patch('/order/{order}/toggle-cancel', [ApiOrderController::class, 'toggleCancel']);
+
+        Route::patch('/buy/{buy}', [ApiBuyController::class, 'update']);
     });
 });
 require __DIR__ . '/auth.php';

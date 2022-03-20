@@ -106,7 +106,7 @@ return new class extends Migration {
         });
 
         Schema::create('buys', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->primary();
             $table->foreignId('customer_id');
             $table->foreignId('bundle_id');
             $table->integer('price')->comment(' / 100');
