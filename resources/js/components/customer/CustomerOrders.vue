@@ -43,11 +43,17 @@
                 </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-slate-800">
-                <tr>
-                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">Gemüseabo gross</td>
+                <tr v-for="(balance, index) in product_balances">
+                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                        {{ balance.name }}
+                    </td>
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"></td>
-                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">6</td>
-                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">3</td>
+                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                        {{balance.balance}}
+                    </td>
+                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                        {{balance.open}}
+                    </td>
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">28.04.2022</td>
                 </tr>
                 </tbody>
@@ -61,7 +67,7 @@ import order from "./Order";
 
 export default {
     name: "CustomerOrders",
-    props: ["orders"],
+    props: ["orders", "product_balances"],
     components: {order}
 }
 </script>

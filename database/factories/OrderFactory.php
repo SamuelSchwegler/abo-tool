@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Customer;
 use App\Models\Delivery;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class OrderFactory extends Factory
         return [
             'delivery_id' => Delivery::inRandomOrder()->first()->id,
             'customer_id' => Customer::inRandomOrder()->first()->id,
+            'product_id' => Product::inRandomOrder()->first()->id,
             'canceled' => $this->faker->randomElement([false, false, false, true])
         ];
     }
