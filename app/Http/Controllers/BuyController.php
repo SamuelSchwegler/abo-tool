@@ -24,7 +24,8 @@ class BuyController extends Controller
             $buy = Buy::create([
                 'customer_id' => $customer->id,
                 'bundle_id' => $bundle->id,
-                'price' => $bundle->price
+                'price' => $bundle->price,
+                'issued' => now()
             ]);
 
             return view('buy.contact')->with([
@@ -65,8 +66,11 @@ class BuyController extends Controller
     }
 
     public function managePayments() {
+        $buys = Buy::orderBy('issued')->where(function($query) {
+            $query->where('paid', 0)->orWhere('issued', '>=', now()->subWeeks(2));
+        })->get();
         return view('buy.payments')->with([
-            'buys' => BuyResource::collection(Buy::all()),
+            'buys' => BuyResource::collection($buys),
         ]);
     }
 

@@ -13,6 +13,7 @@ class Buy extends Model
     use HasFactory, TraitUuid;
 
     protected $guarded = ['id'];
+    protected $dates = ['issued'];
 
     public function bundle()
     {

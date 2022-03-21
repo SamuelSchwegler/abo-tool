@@ -23,7 +23,8 @@ class BuyFactory extends Factory
             'customer_id' => Customer::inRandomOrder()->first()->id,
             'bundle_id' => $bundle->id,
             'price' => $bundle->price,
-            'paid' => $this->faker->boolean()
+            'paid' => $this->faker->boolean(),
+            'issued' => $this->faker->dateTimeBetween('- 3 months', 'now')
         ];
     }
 }

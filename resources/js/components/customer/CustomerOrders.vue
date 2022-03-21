@@ -72,6 +72,7 @@ export default {
             let index = this.product_balances.findIndex(balance => balance.product_id === action.product_id);
             this.product_balances[index].balance += action.running ? -1 : 1;
             this.product_balances[index].planned += action.running ? 1 : -1;
+
             this.balances_key++;
         }
     }

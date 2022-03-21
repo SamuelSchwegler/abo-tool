@@ -111,6 +111,7 @@ return new class extends Migration {
             $table->foreignId('bundle_id');
             $table->integer('price')->comment(' / 100');
             $table->boolean('paid')->default(false);
+            $table->timestamp('issued');
             $table->timestamps();
         });
 

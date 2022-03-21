@@ -3,11 +3,20 @@
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             {{ buy.id }}
         </td>
+        <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+            {{ buy.customer.name }}
+        </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400 text-right">
             {{ buy.price }} CHF
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-            <toggle v-model="buy.paid" @change="updateBuy"></toggle>
+            <Toggle v-model="buy.paid" @change="updateBuy"></Toggle>
+        </td>
+        <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+            {{ buy.created['d.m.Y']}}
+        </td>
+        <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400 text-right">
+            {{ buy.age }}
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             <a target="_blank" :href="'/buy/' + buy.id + '/bill'" title="PDF Download"
@@ -24,14 +33,13 @@
 
 <script>
 import Toggle from "@vueform/toggle";
-import axios from 'axios'
 
 export default {
     name: "BuyPayment",
+    props: ['input_buy'],
     components: {
         Toggle
     },
-    props: ['input_buy'],
     data: function () {
         return {
             buy: this.input_buy

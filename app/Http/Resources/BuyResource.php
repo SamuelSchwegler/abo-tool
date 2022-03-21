@@ -16,8 +16,16 @@ class BuyResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'customer' => [
+                'id' => $this->customer->id,
+                'name' => $this->customer->name
+            ],
             'price' => $this->formated_price,
-            'paid' => $this->paid
+            'paid' => $this->paid === 1,
+            'created' => [
+                'd.m.Y' => $this->issued->format('d.m.Y')
+            ],
+            'age' => $this->issued->diffInDays(now()) + 1
         ];
     }
 }
