@@ -17,7 +17,9 @@ class BuyController extends Controller
     {
         $user = Auth::user();
         if (is_null($user)) {
-            // todo login
+            return view('buy.registration')->with([
+                'bundle' => $bundle
+            ]);
         } else {
             $customer = $user->customer;
 

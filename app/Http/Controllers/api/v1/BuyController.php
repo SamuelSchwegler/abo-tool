@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BuyResource;
 use App\Models\Buy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use function PHPUnit\Framework\assertNotNull;
 
 class BuyController extends Controller
@@ -17,6 +18,7 @@ class BuyController extends Controller
             'paid' => ['nullable', 'boolean']
         ]);
         $buy->update($validated);
+        Log::info($validated);
 
         return response(['buy' => BuyResource::make($buy)]);
     }

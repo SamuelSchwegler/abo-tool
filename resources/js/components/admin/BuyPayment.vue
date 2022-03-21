@@ -1,5 +1,5 @@
 <template>
-    <tr>
+    <tr :key="key">
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             {{ buy.id }}
         </td>
@@ -10,7 +10,7 @@
             {{ buy.price }} CHF
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-            <Toggle v-model="buy.paid" @change="updateBuy"></Toggle>
+            <Toggle v-model="paid" @change="updateBuy"></Toggle>
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             {{ buy.created['d.m.Y']}}
@@ -42,19 +42,23 @@ export default {
     },
     data: function () {
         return {
-            buy: this.input_buy
+            buy: this.input_buy,
+            paid: this.input_buy.paid,
+            key: 0
         }
     },
     methods: {
         async updateBuy() {
             await axios.patch(`/api/v1/buy/` + this.buy.id, {
-                paid: this.buy.paid
+                paid: this.paid
             }).then(response => {
                 this.buy = response.data.buy;
                 this.$notify({type: "success", text: 'Bearbeiten erfolgreich'});
             }).catch(error => {
                 this.$notify({type: "danger", text: 'Es ist ein Fehler aufgetreten'});
             });
+
+            this.key++;
         }
     }
 }

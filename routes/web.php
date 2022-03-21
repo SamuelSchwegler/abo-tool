@@ -23,6 +23,9 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 
 Route::prefix('buy')->group(function () {
     Route::get('{bundle}/contact', [BuyController::class, 'contact'])->name('buy.contact');
+
+    Route::post('{bundle}/registration', [BuyController::class, 'registrationSubmit'])->name('buy.registration');
+
     Route::get('{buy}/payment', [BuyController::class, 'payment'])->name('buy.payment');
     Route::post('{buy}/payment', [BuyController::class, 'paymentSubmit']);
     Route::get('{buy}/confirmation', [BuyController::class, 'confirmation'])->name('buy.confirmation');
