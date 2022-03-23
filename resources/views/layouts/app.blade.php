@@ -17,7 +17,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased" id="app">
 <div class="min-h-screen bg-default">
 @include('layouts.navigation')
 
@@ -30,8 +30,9 @@
         </div>
     </header>
 
+
     <!-- Page Content -->
-    <main class="container mx-auto" id="app">
+    <main class="container mx-auto">
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 {{ $slot }}

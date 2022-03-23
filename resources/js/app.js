@@ -1,18 +1,22 @@
-import {createApp} from "vue";
-import Contact from "./components/Contact";
-import PostcodeManagement from "./components/PostcodeManagement";
-import DeliveryServiceEdit from "./components/DeliveryServiceEdit";
-import CustomerOrders from "./components/customer/CustomerOrders";
-import ManagePayments from "./components/admin/ManagePayments";
+import {createApp} from 'vue'
 
-import Notifications from '@kyvg/vue3-notification'
+require('./bootstrap')
+import App from './App.vue'
+import axios from 'axios'
+import router from './router'
+import Notifications from '@kyvg/vue3-notification';
 
-const app = createApp({
-    components: {
-        Contact, PostcodeManagement, DeliveryServiceEdit, CustomerOrders, ManagePayments
-    }
+import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
+
+const store = createStore({
+    // ...
+    plugins: [createPersistedState()],
 });
-app.use(Notifications)
-app.mount("#app");
 
-require('./bootstrap');
+const app = createApp(App)
+app.config.globalProperties.$axios = axios;
+app.use(router)
+app.use(Notifications);
+//app.use(store);
+app.mount('#app')

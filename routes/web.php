@@ -1,12 +1,11 @@
 <?php
 
+use App\Http\Controllers\api\v1\BuyController as ApiBuyController;
+use App\Http\Controllers\api\v1\OrderController as ApiOrderController;
 use App\Http\Controllers\BuyController;
 use App\Http\Controllers\DeliveryServiceController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\api\v1\OrderController as ApiOrderController;
-use App\Http\Controllers\api\v1\BuyController as ApiBuyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +18,14 @@ use App\Http\Controllers\api\v1\BuyController as ApiBuyController;
 |
 */
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
 
+Route::get('/', function (){
+    return view('app');
+})->name('home');
+Route::get('/{any}', function (){
+    return view('app');
+})->where('any', '.*');;
+/*
 Route::prefix('buy')->group(function () {
     Route::get('{bundle}/contact', [BuyController::class, 'contact'])->name('buy.contact');
 
@@ -59,3 +64,4 @@ Route::middleware([
     });
 });
 require __DIR__ . '/auth.php';
+*/
