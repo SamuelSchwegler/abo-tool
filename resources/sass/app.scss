@@ -21,6 +21,14 @@ $dark: #262520;
     background-color: $violet !important;
 }
 
+.text-violet {
+    color: $violet;
+}
+
+.bg-green {
+    background-color: $green !important;
+}
+
 .btn {
     background-color: $green;
     color: $white;
@@ -36,7 +44,7 @@ $dark: #262520;
 .box {
     border-top-left-radius: 2rem;
     border-bottom-right-radius: 2rem;
-    padding: 2rem;
+    padding: 1.5rem;
     background-color: $white;
     margin-bottom: 2rem;
 

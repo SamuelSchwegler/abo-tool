@@ -1,8 +1,4 @@
 {
-    "/js/app.js": "/js/app.js?id=15ede7bfebd2141ecc3241b08e83e50c",
-    "/js/resource/js/components/login.js": "/js/resource/js/components/login.js?id=e3601eed0d867367a6d40a2b08bfa813",
-    "/js/resource/js/components/register.js": "/js/resource/js/components/register.js?id=e759f091b40bd55870b4e87df8776401",
-    "/js/resource/js/components/layouts/dashboard.js": "/js/resource/js/components/layouts/dashboard.js?id=d0977801eabb3a677757eb10ca3e2a20",
-    "/js/resource/js/components/dashboard.js": "/js/resource/js/components/dashboard.js?id=e0f35a2d556c1760b306f8f747e6458d",
-    "/css/app.css": "/css/app.css?id=93f45802f0802aa138806c4dc5384356"
+    "/js/app.js": "/js/app.js?id=08bc5b9e085d095bd5c2614455ab5fab",
+    "/css/app.css": "/css/app.css?id=0bbf21f5be6669611f59d7662a669ea8"
 }

@@ -29,5 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('bundles', [BundleController::class, 'bundles']);
 Route::get('bundle/{bundle}', [BundleController::class, 'bundle']);
 
+Route::post('bundle/{bundle}/buy', [BundleController::class, 'submitBuy']);
+
 Route::middleware('auth:sanctum')->group(function() {
 });
