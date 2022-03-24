@@ -55,16 +55,18 @@
 </template>
 
 <script>
-import order from "./Order";
+
+import order from "../components/parts/Order";
 
 export default {
     name: "CustomerOrders",
-    props: ["orders", "input_product_balances"],
     components: {order},
     data: function(){
         return {
             product_balances: this.input_product_balances,
             balances_key: 0,
+            orders: [],
+            input_product_balances: []
         }
     },
     methods: {
@@ -75,6 +77,22 @@ export default {
 
             this.balances_key++;
         }
+    },
+    created() {
+        this.$axios.get(`/api/orders/`)
+            .then(response => {
+                this.orders = response.data.orders;
+                this.product_balances = response.data.product_balances;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    },
+    beforeRouteEnter(to, from, next) {
+        if (!window.Laravel.isLoggedIn) {
+            window.location.href = "/";
+        }
+        next();
     }
 }
 </script>

@@ -35,7 +35,7 @@ export default {
     },
     methods: {
         async toggleCancel() {
-            await axios.patch(`/api/v1/order/` + this.order.id + `/toggle-cancel/`).then(response => {
+            await axios.patch(`/api/order/` + this.order.id + `/toggle-cancel/`).then(response => {
                 this.order = response.data.order;
                 let text = !this.running ? 'Sie haben sich von der Lieferung abgemeldet' : 'Sie haben Sich für die Lieferung angemeldet';
                 this.$notify({ type: "success", text: text });
@@ -45,7 +45,7 @@ export default {
             });
         },
         async updateOrder() {
-            await axios.patch(`/api/v1/order/` + this.order.id, {
+            await axios.patch(`/api/order/` + this.order.id, {
                 depository: this.order.depository
             }).then(response => {
                 this.order = response.data.order;

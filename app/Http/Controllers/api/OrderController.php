@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\api;
 
 use App\Exceptions\OrderEditException;
 use App\Http\Controllers\Controller;
@@ -10,11 +10,23 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use function PHPUnit\Framework\assertNotNull;
+use function response;
 
 class OrderController extends Controller
 {
+    public function orders()
+    {
+        $user = Auth::user();
+        $customer = $user->customer;
+
+        return \response([
+            'orders' => OrderResource::collection(OrderResource::collection($customer?->next_orders ?? collect([]))),
+            'product_balances' => $customer->productBalances()
+        ]);
+    }
+
     /**
      * @param Order $order
      * @param Request $request
@@ -24,7 +36,7 @@ class OrderController extends Controller
     public function update(Order $order, Request $request): Response|Application|ResponseFactory
     {
         assertNotNull($order);
-        if($order->deadlinePassed()) {
+        if ($order->deadlinePassed()) {
             throw OrderEditException::deadlineHasPassed($order);
         }
 
@@ -42,7 +54,7 @@ class OrderController extends Controller
      */
     public function toggleCancel(Order $order): Response|Application|ResponseFactory
     {
-        if($order->deadlinePassed()) {
+        if ($order->deadlinePassed()) {
             throw OrderEditException::deadlineHasPassed($order);
         }
         $order->update([

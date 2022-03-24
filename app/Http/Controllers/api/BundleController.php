@@ -9,6 +9,7 @@ use App\Models\Bundle;
 use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\User;
+use App\Notifications\SendInvoice;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,6 +72,8 @@ class BundleController extends Controller
             'price' => $bundle->price,
             'issued' => now()
         ]);
+
+        $user->notify(new SendInvoice($buy));
 
         return response(['status' => 'success', 'buy' => BuyResource::make($buy)]);
     }

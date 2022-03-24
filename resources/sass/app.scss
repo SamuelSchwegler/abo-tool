@@ -18,7 +18,7 @@ $dark: #262520;
 }
 
 .bg-violet {
-    background-color: $violet !important;
+    background-color: $violet;
 }
 
 .text-violet {
@@ -26,7 +26,11 @@ $dark: #262520;
 }
 
 .bg-green {
-    background-color: $green !important;
+    background-color: $green;
+}
+
+.bg-green-hover {
+    background-color: darken( $green, 10% );
 }
 
 .btn {
@@ -35,6 +39,10 @@ $dark: #262520;
     padding: 0.375rem;
     border-radius: 0.375rem;
     transition-duration: 1s;
+
+    &.bg-violet {
+        background-color: $violet;
+    }
 
     &:hover {
         background-color: darken( $green, 10%);

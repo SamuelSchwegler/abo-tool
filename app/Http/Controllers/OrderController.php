@@ -16,20 +16,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class OrderController extends Controller
 {
     /**
-     * Übersichtsseite für den Kunden
-     * @return Application|Factory|View
-     */
-    public function customer()
-    {
-        $customer = Auth::user()?->customer;
-
-        return view('orders')->with([
-            'next_orders' => OrderResource::collection($customer?->next_orders ?? collect([])),
-            'product_balances' => $customer->productBalances()
-        ]);
-    }
-
-    /**
      * Lieferschein erstellen
      * @throws CopyFileException
      * @throws CreateTemporaryFileException

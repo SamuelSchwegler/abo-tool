@@ -1,17 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\DeliveryServiceResource;
 use App\Models\DeliveryService;
 use App\Models\Postcode;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class DeliveryServiceController extends Controller
 {
-    public function create() {
-        return view('delivery-service.create')->with([
-            'services' => DeliveryService::all(),
+    public function services(): Response|Application|ResponseFactory
+    {
+        return response([
+            'services' => DeliveryServiceResource::collection(DeliveryService::all())
         ]);
     }
 
@@ -20,7 +25,9 @@ class DeliveryServiceController extends Controller
 
         $service = DeliveryService::create($validated);
 
-        return redirect(route('delivery-service.edit', $service));
+        return \response([
+            'service' => DeliveryServiceResource::make($service)
+        ]);
     }
 
     public function edit(?DeliveryService $service = null)

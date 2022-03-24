@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         async addPostcode() {
-            await axios.post(`/api/v1/delivery-service/` + this.service.id + `/add/`, {
+            await axios.post(`/api/delivery-service/` + this.service.id + `/add/`, {
                 'postcode': this.postcodeToAdd
             }).then(response => {
                 this.postcodes = response.data.service.postcodes;
@@ -47,7 +47,7 @@ export default {
             });
         },
         async removePostcode(postcode) {
-            await axios.post(`/api/v1/delivery-service/` + this.service.id + `/remove/`, {
+            await axios.post(`/api/delivery-service/` + this.service.id + `/remove/`, {
                 'postcode': postcode
             }).then(response => {
                 this.postcodes = response.data.service.postcodes;

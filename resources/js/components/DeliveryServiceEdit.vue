@@ -23,7 +23,7 @@ export default {
     },
     methods: {
         async updateDeliveryService() {
-            await axios.patch(`/api/v1/delivery-service/` + this.service.id + `/`, {
+            await axios.patch(`/api/delivery-service/` + this.service.id + `/`, {
                 'name': this.name
             }).then(response => {
                 this.name = response.data.service.name;

@@ -62,7 +62,7 @@ class AuthController extends Controller
         $response = [
             'success' => $success,
             'message' => $message,
-            'user' => UserResource::make(Auth::user())
+            'user' => Auth::check() ? UserResource::make(Auth::user()) : []
         ];
         return response()->json($response);
     }

@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\BundleController;
+use App\Http\Controllers\api\BuyController;
+use App\Http\Controllers\api\DeliveryServiceController;
+use App\Http\Controllers\api\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\api\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,5 +33,20 @@ Route::get('bundle/{bundle}', [BundleController::class, 'bundle']);
 
 Route::post('bundle/{bundle}/buy', [BundleController::class, 'submitBuy']);
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('orders', [OrderController::class, 'orders']);
+    Route::patch('/order/{order}', [OrderController::class, 'update']);
+    Route::patch('/order/{order}/toggle-cancel', [OrderController::class, 'toggleCancel']);
+
+    Route::get('payments', [BuyController::class, 'payments']);
+    Route::get('buy/{buy}', [BuyController::class, 'buy']);
+    Route::patch('/buy/{buy}', [BuyController::class, 'update']);
+
+    Route::get('delivery-services', [DeliveryServiceController::class, 'services']);
+    Route::patch('/delivery-service/{service}/', [DeliveryServiceController::class, 'apiUpdate']);
+    Route::post('/delivery-service/', [DeliveryServiceController::class, 'store']);
+
+    Route::post('/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
+    Route::post('/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);
 });

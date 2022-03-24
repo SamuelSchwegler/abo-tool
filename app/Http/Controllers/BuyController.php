@@ -13,69 +13,6 @@ use Sprain\SwissQrBill as QrBill;
 
 class BuyController extends Controller
 {
-    public function contact(Bundle $bundle)
-    {
-        $user = Auth::user();
-        if (is_null($user)) {
-            return view('buy.registration')->with([
-                'bundle' => $bundle
-            ]);
-        } else {
-            $customer = $user->customer;
-
-            $buy = Buy::create([
-                'customer_id' => $customer->id,
-                'bundle_id' => $bundle->id,
-                'price' => $bundle->price,
-                'issued' => now()
-            ]);
-
-            return view('buy.contact')->with([
-                'buy' => $buy,
-                'bundle' => $bundle,
-                'customer' => $buy->customer,
-            ]);
-        }
-    }
-
-    public function contactSubmit()
-    {
-        // todo allenfalls konto erstellen
-    }
-
-    public function payment(Buy $buy)
-    {
-        return view('buy.payment')->with([
-            'buy' => $buy,
-            'bundle' => $buy->bundle,
-            'customer' => $buy->customer,
-        ]);
-    }
-
-    public function paymentSubmit(Buy $buy, Request $request) {
-        $buy->customer->user->notify(new SendInvoice($buy));
-
-        return redirect(route('buy.confirmation', $buy));
-    }
-
-    public function confirmation(Buy $buy)
-    {
-        return view('buy.confirmation')->with([
-            'buy' => $buy,
-            'bundle' => $buy->bundle,
-            'customer' => $buy->customer,
-        ]);
-    }
-
-    public function managePayments() {
-        $buys = Buy::orderBy('issued')->where(function($query) {
-            $query->where('paid', 0)->orWhere('issued', '>=', now()->subWeeks(2));
-        })->get();
-        return view('buy.payments')->with([
-            'buys' => BuyResource::collection($buys),
-        ]);
-    }
-
     public function exportBill(Buy $buy) {
         $qrBill = $buy->createBill();
 

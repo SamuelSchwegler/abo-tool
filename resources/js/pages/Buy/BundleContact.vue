@@ -61,14 +61,13 @@
 </template>
 
 <script>
-import Bundle from "../components/Bundle";
-import Customer from "../components/parts/Customer";
-import AddressVue from "../components/parts/Address";
-import ProgressSteps from "../components/parts/ProgressSteps";
-import TextInput from "../components/form/textInput";
-import Alert from "../components/parts/Alert";
-import LoginModal from "../components/parts/LoginModal";
-import {ref} from "vue";
+import Bundle from "../../components/Bundle";
+import Customer from "../../components/parts/Customer";
+import AddressVue from "../../components/parts/Address";
+import ProgressSteps from "../../components/parts/ProgressSteps";
+import TextInput from "../../components/form/textInput";
+import Alert from "../../components/parts/Alert";
+import LoginModal from "../../components/parts/LoginModal";
 
 export default {
     name: "BundleBuy",
@@ -99,7 +98,7 @@ export default {
                 href: '#',
                 status: 'current'
             },
-            {id: '03', name: 'Preview', description: 'Penatibus eu quis ante.', href: '#', status: 'upcoming'},
+            {id: '03', name: 'Bezahlung', description: 'Zustellung Rechnung.', href: '#', status: 'upcoming'},
         ]
 
         let user = window.Laravel.user;
@@ -136,7 +135,8 @@ export default {
                 ...this.user.customer,
                 ...this.credentials
             }).then(response => {
-
+                let buy = response.data.buy;
+                this.$router.push({name: 'buy.bill', params: { id: buy.id }})
             }).catch(error => {
                 this.errors = error.response.data.errors;
                 this.bundleBuyKey++;
@@ -162,7 +162,7 @@ export default {
                 this.bundle = response.data.data;
             })
             .catch(function (error) {
-                console.error(error);
+                console.log(error);
             });
     }
 }

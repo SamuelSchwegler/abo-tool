@@ -18,14 +18,18 @@ class BuyResource extends JsonResource
             'id' => $this->id,
             'customer' => [
                 'id' => $this->customer->id,
-                'name' => $this->customer->name
+                'name' => $this->customer->name,
+                'user' => [
+                    'email' => $this->customer->user->email
+                ]
             ],
             'price' => $this->formated_price,
             'paid' => $this->paid === 1,
             'created' => [
                 'd.m.Y' => $this->issued->format('d.m.Y')
             ],
-            'age' => $this->issued->diffInDays(now()) + 1
+            'age' => $this->issued->diffInDays(now()) + 1,
+            'bundle' => BundleResource::make($this->bundle)
         ];
     }
 }
