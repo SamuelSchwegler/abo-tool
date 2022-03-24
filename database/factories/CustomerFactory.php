@@ -22,6 +22,7 @@ class CustomerFactory extends Factory
             'user_id' => User::inRandomOrder()->first()->id,
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
+            'phone' => $this->faker->phoneNumber(),
             'company_name' => $this->faker->randomElement([$this->faker->company(), null, null]),
             'delivery_address_id' => Address::inRandomOrder()->first()->id,
             'billing_address_id' => Address::inRandomOrder()->first()->id,

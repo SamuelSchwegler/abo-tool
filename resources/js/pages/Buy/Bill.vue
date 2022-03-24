@@ -26,7 +26,12 @@ export default {
     data() {
         return {
             billKey: 0,
-            buy: {},
+            buy: {
+                bundle: {},
+                customer: {
+                    user: {}
+                }
+            },
             steps: [
                 {
                     id: '01',
@@ -46,14 +51,19 @@ export default {
             ]
         }
     },
+    methods: {
+        async load() {
+            await this.$axios.get(`/api/buy/${this.$route.params.id}`)
+                .then(response => {
+                    this.buy = response.data.buy;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    },
     created() {
-        this.$axios.get(`/api/buy/${this.$route.params.id}`)
-            .then(response => {
-                this.buy = response.data.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        this.load();
     },
     beforeRouteEnter(to, from, next) {
         if (!window.Laravel.isLoggedIn) {

@@ -12,7 +12,7 @@ use function response;
 class BuyController extends Controller
 {
     public function buy(Buy $buy) {
-        return BuyResource::make($buy);
+        return response(['buy' => BuyResource::make($buy)]);
     }
 
     public function update(Buy $buy, Request $request) {

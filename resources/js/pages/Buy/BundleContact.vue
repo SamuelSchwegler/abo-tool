@@ -5,21 +5,18 @@
             <h3 class="title">Ihre Bestellung</h3>
             <bundle :bundle="bundle" v-if="bundle.hasOwnProperty('id')"></bundle>
             <div v-if="!isLoggedIn" class="mt-5">
-                <alert :text="'Um die Liefertermine zu verwalten brauchen Sie ein Kundenkonto. In diesem Schritt können Sie gleich ein Konto erstellen.'"></alert>
+                <alert
+                    :text="'Um die Liefertermine zu verwalten brauchen Sie ein Kundenkonto. In diesem Schritt können Sie gleich ein Konto erstellen.'"></alert>
                 <div class="grid gap-4 grid-cols-2 mt-5">
-                    <div>
-                        <text-input name="email" v-model="credentials.email" label="Email" :error="errors['email']"></text-input>
-                    </div>
-                    <div>
-                        <text-input name="password" v-model="credentials.password" label="Passwort" :error="errors['password']"></text-input>
-                    </div>
+                    <login-credentials :credentials="credentials" :errors="errors"></login-credentials>
                     <div>
                         <button type="button" @click="openLoginModal"
                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Ich habe bereits ein Konto
                         </button>
                     </div>
-                    <login-modal v-on:authenticated="authenticated" :show="show_loginModal" :key="loginModalKey"></login-modal>
+                    <login-modal v-on:authenticated="authenticated" :show="show_loginModal"
+                                 :key="loginModalKey"></login-modal>
                 </div>
             </div>
         </div>
@@ -44,17 +41,17 @@
             </fieldset>
             <div v-if="delivery_option !== 'pickup'" class="mt-5">
                 <h4>Lieferadresse</h4>
-                <address-vue :address="user.customer.delivery_address" class="mt-5"></address-vue>
+                <address-vue :address="user.customer.delivery_address" class="mt-5" :errors="delivery_address_errors"></address-vue>
             </div>
             <div v-if="delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
-                <address-vue :address="user.customer.billing_address"></address-vue>
+                <address-vue :address="user.customer.billing_address" :errors="billing_address_errors"></address-vue>
             </div>
         </div>
     </div>
     <div class="text-center">
         <button type="button" @click="proceed"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green hover:bg-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Daten Speichern und Fortfahren
         </button>
     </div>
@@ -68,11 +65,12 @@ import ProgressSteps from "../../components/parts/ProgressSteps";
 import TextInput from "../../components/form/textInput";
 import Alert from "../../components/parts/Alert";
 import LoginModal from "../../components/parts/LoginModal";
+import LoginCredentials from "../../components/parts/LoginCredentials";
 
 export default {
     name: "BundleBuy",
     components: {
-        ProgressSteps, Alert, LoginModal,
+        ProgressSteps, Alert, LoginModal, LoginCredentials,
         Bundle, Customer, AddressVue, TextInput
     },
 
@@ -125,20 +123,42 @@ export default {
             credentials: {
                 email: '',
                 password: ''
-            }
+            },
+            delivery_address_errors: [],
+            billing_address_errors: []
         }
     },
     methods: {
         proceed: function () {
+            if (this.delivery_option === "match") {
+                this.user.customer.billing_address = this.user.customer.delivery_address;
+            } else if (this.delivery_option === "pickup") {
+                this.user.customer.billing_address = {}
+            }
 
             this.$axios.post(`/api/bundle/${this.$route.params.id}/buy`, {
+                pickup: this.delivery_option === "pickup",
+                delivery_option: this.delivery_option,
                 ...this.user.customer,
                 ...this.credentials
             }).then(response => {
                 let buy = response.data.buy;
-                this.$router.push({name: 'buy.bill', params: { id: buy.id }})
+                this.$router.push({name: 'buy.bill', params: {id: buy.id}})
             }).catch(error => {
                 this.errors = error.response.data.errors;
+
+                this.delivery_address_errors = {
+                    street: this.errors['delivery_address.street'],
+                    postcode: this.errors['delivery_address.postcode'],
+                    city: this.errors['delivery_address.city']
+                }
+
+                this.billing_address_errors = {
+                    street: this.errors['billing_address.street'],
+                    postcode: this.errors['billing_address.postcode'],
+                    city: this.errors['billing_address.city']
+                }
+
                 this.bundleBuyKey++;
             });
         },

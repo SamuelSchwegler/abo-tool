@@ -18,7 +18,18 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'email' => $this->email,
-            'customer' => CustomerResource::make($customer)
+            'customer' => !is_null($customer) ? CustomerResource::make($customer) : [
+                'delivery_address' => [
+                    'street' => '',
+                    'postcode' => '',
+                    'city' => ''
+                ],
+                'billing_address' => [
+                    'street' => '',
+                    'postcode' => '',
+                    'city' => ''
+                ]
+            ]
         ];
     }
 }

@@ -1,13 +1,13 @@
 <template>
     <div class="grid gap-4 grid-cols-4 pb-4">
         <div class="col-span-4">
-            <text-input name="street" :value="address.street" label="Strasse"></text-input>
+            <text-input name="street" v-model="address.street" :value="address.street" label="Strasse" :error="errors['street']"></text-input>
         </div>
         <div class="col-span-1">
-            <text-input name="postcode" :value="address.postcode" label="PLZ"></text-input>
+            <text-input name="postcode" v-model="address.postcode" :value="address.postcode" label="PLZ" :error="errors['postcode']"></text-input>
         </div>
         <div class="col-span-3">
-            <text-input name="city" :value="address.city" label="Stadt"></text-input>
+            <text-input name="city" v-model="address.city" :value="address.city" label="Stadt" :error="errors['city']"></text-input>
         </div>
     </div>
 </template>
@@ -17,7 +17,7 @@ import textInput from "../form/textInput";
 
 export default {
     name: "Address",
-    props: ['address'],
+    props: ['address', "errors"],
     components: {
         textInput
     }

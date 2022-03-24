@@ -6,17 +6,17 @@
                 <li v-for="(step, stepIdx) in steps" :key="step.name" class="relative md:flex-1 md:flex">
                     <a v-if="step.status === 'complete'" :href="step.href" class="group flex items-center w-full">
           <span class="px-6 py-4 flex items-center text-sm font-medium">
-            <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800">
+            <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-violet rounded-full group-hover:bg-indigo-800">
               <CheckIcon class="w-6 h-6 text-white" aria-hidden="true" />
             </span>
             <span class="ml-4 text-sm font-medium text-gray-900">{{ step.name }}</span>
           </span>
                     </a>
                     <a v-else-if="step.status === 'current'" :href="step.href" class="px-6 py-4 flex items-center text-sm font-medium" aria-current="step">
-          <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-indigo-600 rounded-full">
-            <span class="text-indigo-600">{{ step.id }}</span>
+          <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-violet rounded-full">
+            <span class="text-violet">{{ step.id }}</span>
           </span>
-                        <span class="ml-4 text-sm font-medium text-indigo-600">{{ step.name }}</span>
+                        <span class="ml-4 text-sm font-medium text-violet">{{ step.name }}</span>
                     </a>
                     <a v-else :href="step.href" class="group flex items-center">
           <span class="px-6 py-4 flex items-center text-sm font-medium">

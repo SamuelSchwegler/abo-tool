@@ -88,4 +88,16 @@ class Customer extends Model
     {
         return $this->belongsTo(Address::class, 'billing_address_id');
     }
+
+    public static function rules(): array {
+        return [
+            'first_name' => ['required', 'string'],
+            'last_name' => ['required', 'string'],
+            'company_name' => ['nullable', 'string'],
+            'phone' => ['required', 'string'],
+            'pickup' => ['nullable', 'boolean'],
+            'delivery_address_id' => ['nullable', 'exists:addresses,id'],
+            'billing_address_id' => ['nullable', 'exists:addresses,id']
+        ];
+    }
 }

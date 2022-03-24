@@ -60,14 +60,15 @@ return new class extends Migration {
             $table->foreignId('user_id')->nullable();
             $table->unsignedBigInteger('delivery_address_id')->nullable();
             $table->unsignedBigInteger('billing_address_id')->nullable();
+            $table->boolean('pickup')->default(false);
             $table->string('first_name');
             $table->string('last_name');
             $table->string('company_name')->nullable();
             $table->string('phone')->nullable();
             $table->timestamps();
 
-            $table->foreign('delivery_address_id')->references('id')->on('addresses');
-            $table->foreign('billing_address_id')->references('id')->on('addresses');
+            $table->foreign('delivery_address_id')->references('id')->on('addresses')->onDelete('set null');
+            $table->foreign('billing_address_id')->references('id')->on('addresses')->onDelete('set null');
         });
 
         Schema::create('deliveries', function (Blueprint $table) {
