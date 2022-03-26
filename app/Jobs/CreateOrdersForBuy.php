@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Buy;
+use App\Models\Delivery;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -32,6 +33,6 @@ class CreateOrdersForBuy implements ShouldQueue
      */
     public function handle()
     {
-        //
+        // richtiger Delivery Service finden
     }
 }

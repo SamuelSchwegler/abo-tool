@@ -59,8 +59,8 @@ class Customer extends Model
             $order = $this->productOrders()->where('product_id', $buy->product_id)->first();
             $balance = $buy;
             $balance->total_deliveries = (int) $buy->total_deliveries;
-            $balance->ordered = (int) $order->ordered;
-            $balance->planned = (int) $order->planned;
+            $balance->ordered = (int) $order?->ordered ?? 0;
+            $balance->planned = (int) $order?->planned ?? 0;
             $balance->balance = $balance->total_deliveries - $balance->ordered;
 
             // todo calculate Expected end
@@ -88,6 +88,14 @@ class Customer extends Model
     public function billing_address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'billing_address_id');
+    }
+
+    public function delivery_service() {
+        $postcode = $this->delivery_address->postcode;
+
+        return DeliveryService::whereHas('postcodes', function ($query) use ($postcode) {
+           $query->where('postcode', $postcode);
+        })->first();
     }
 
     public static function rules(): array {

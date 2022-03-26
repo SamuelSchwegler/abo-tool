@@ -115,11 +115,12 @@ class BundleController extends Controller
                 'user_id' => $user->id,
             ], $customerValidated, $address_data));
         } else {
-            $customer->delivery_address->delete();
-            $customer->billing_address->delete();
+            $customer->delivery_address?->delete();
+            $customer->billing_address?->delete();
 
             $customer->update(array_merge($customerValidated, $address_data));
         }
+        $user->refresh(); // customer für user nachladen
 
         $buy = Buy::create([
             'customer_id' => $customer->id,
