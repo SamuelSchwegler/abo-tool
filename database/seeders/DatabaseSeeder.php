@@ -18,8 +18,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Address::factory(20)->create();
-        \App\Models\User::factory(10)->create()->each(function ($user) {
+        User::factory(10)->create()->each(function ($user) {
             $user->assignRole('customer');
+            Customer::factory()->create([
+                'user_id' => $user->id
+            ]);
         });
         $admin = User::factory()->create([
             'email' => 'demo@webtheke.ch',
@@ -33,11 +36,12 @@ class DatabaseSeeder extends Seeder
         ]);
         $customer->assignRole('customer');
 
-        Customer::factory(10)->create();
         Customer::factory()->create([
+            'last_name' => 'Kunde',
             'user_id' => $customer->id,
         ]);
         Customer::factory()->create([
+            'last_name' => 'Admin',
             'user_id' => $admin->id, // eigentlich nicht direkt benötigt
         ]);
 

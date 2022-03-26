@@ -12,6 +12,12 @@
             <p>Bitte beachten Sie, dass das Abo erst gültig wird, wenn wir den Zahlungseingang bestätigt haben.</p>
         </div>
     </div>
+    <div class="text-center">
+        <button type="button" @click="proceed"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green hover:bg-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Meine Lieferungen anschauen
+        </button>
+    </div>
 </template>
 
 <script>
@@ -60,6 +66,9 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+        proceed() {
+            this.$router.push({name: 'orders'})
         }
     },
     created() {

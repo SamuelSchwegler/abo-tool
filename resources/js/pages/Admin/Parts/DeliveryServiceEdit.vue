@@ -10,7 +10,8 @@
 </template>
 
 <script>
-import TextInput from "./form/textInput";
+
+import TextInput from "../../../components/form/textInput";
 
 export default {
     name: "DeliveryServiceEdit",

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Customer extends Model
 {
@@ -30,7 +31,7 @@ class Customer extends Model
 
     public function productBuys(): Collection
     {
-        return DB::table('buys')->where('buys.customer_id', $this->id)
+        return DB::table('buys')->where('buys.customer_id', '=', $this->id)->where('buys.paid', 1)
             ->leftJoin('bundles', 'buys.bundle_id', 'bundles.id')
             ->leftJoin('products','products.id', 'bundles.product_id')
             ->groupBy('products.id')

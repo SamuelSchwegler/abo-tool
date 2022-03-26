@@ -41,7 +41,8 @@
             </fieldset>
             <div v-if="delivery_option !== 'pickup'" class="mt-5">
                 <h4>Lieferadresse</h4>
-                <address-vue :address="user.customer.delivery_address" class="mt-5" :errors="delivery_address_errors"></address-vue>
+                <address-vue :address="user.customer.delivery_address" class="mt-5"
+                             :errors="delivery_address_errors"></address-vue>
             </div>
             <div v-if="delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
@@ -133,7 +134,7 @@ export default {
             if (this.delivery_option === "match") {
                 this.user.customer.billing_address = this.user.customer.delivery_address;
             } else if (this.delivery_option === "pickup") {
-                this.user.customer.billing_address = {}
+                this.user.customer.delivery_address = {}
             }
 
             this.$axios.post(`/api/bundle/${this.$route.params.id}/buy`, {

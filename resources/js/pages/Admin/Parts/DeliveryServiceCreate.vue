@@ -6,14 +6,15 @@
                 <text-input name="name" label="Bezeichnung" v-model="name" :value="name"></text-input>
             </div>
             <div class="col-span-1">
-                <button class="btn" @click="store">Erstellen</button>
+                <button class="btn bg-green w-full mt-6" @click="store">Erstellen</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import TextInput from "./form/textInput";
+
+import TextInput from "../../../components/form/textInput";
 
 export default {
     name: "DeliveryServiceCreate",

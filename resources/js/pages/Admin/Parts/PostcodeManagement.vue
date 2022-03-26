@@ -18,14 +18,15 @@
                 <text-input name="postcode" label="PLZ hinzufügen" v-model="postcodeToAdd"></text-input>
             </div>
             <div class="col-span-2 pt-6">
-                <button class="btn w-full" @click="addPostcode">Hinzufügen</button>
+                <button class="btn bg-green w-full" @click="addPostcode">Hinzufügen</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import TextInput from "./form/textInput";
+import TextInput from "../../../components/form/textInput";
+
 export default {
     components: {TextInput},
     props: ['service'],

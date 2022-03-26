@@ -2,10 +2,10 @@
     <div class="grid grid-cols-5 gap-8" :key="serviceKey">
         <div class="box">
             <ul>
-                <li v-for="(s, index) in services" v-bind:class="{'bg-violet': s.id === service.id}" class="btn mb-2" >
+                <li v-for="(s, index) in services" v-bind:class="{'bg-violet': s.id === service.id, 'bg-green': s.id !== service.id}" class="btn mb-2" >
                     <a class="block w-full" @click="switchService(s.id)">{{ s.name }}</a>
                 </li>
-                <li class="btn" v-bind:class="{'bg-violet': inCreate}">
+                <li class="btn" v-bind:class="{'bg-violet': inCreate, 'bg-green': !inCreate}">
                     <a class="block w-full" @click="createService">Hinzufügen</a>
                 </li>
             </ul>
@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import DeliveryServiceEdit from "../../components/DeliveryServiceEdit";
-import PostcodeManagement from "../../components/PostcodeManagement";
-import DeliveryServiceCreate from "../../components/DeliveryServiceCreate";
+import PostcodeManagement from "./Parts/PostcodeManagement";
+import DeliveryServiceEdit from "./Parts/DeliveryServiceEdit";
+import DeliveryServiceCreate from "./Parts/DeliveryServiceCreate";
 
 export default {
     name: "DeliveryServices",

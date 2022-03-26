@@ -10,6 +10,9 @@
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Kunde
                 </th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    Produkt
+                </th>
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-right">
                     Betrag
                 </th>
@@ -36,7 +39,7 @@
 
 <script>
 
-import BuyPayment from "../../components/parts/BuyPayment";
+import BuyPayment from "./Parts/BuyPayment";
 
 export default {
     name: "ManagePayments",

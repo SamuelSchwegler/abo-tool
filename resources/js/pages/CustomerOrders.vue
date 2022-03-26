@@ -22,7 +22,7 @@
         </div>
         <div class="box">
             <h3 class="title">Meine Abos</h3>
-            <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key">
+            <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key" v-if="product_balances.length > 0">
                 <thead>
                 <tr>
                     <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
@@ -50,6 +50,7 @@
                 </tr>
                 </tbody>
             </table>
+            <alert :text="'Momentan ist noch kein Guthaben für Bestellungen freigeschaltet.'"></alert>
         </div>
     </div>
 </template>
@@ -57,16 +58,16 @@
 <script>
 
 import order from "../components/parts/Order";
+import Alert from "../components/parts/Alert";
 
 export default {
     name: "CustomerOrders",
-    components: {order},
+    components: {order, Alert},
     data: function(){
         return {
-            product_balances: this.input_product_balances,
+            product_balances: [],
             balances_key: 0,
             orders: [],
-            input_product_balances: []
         }
     },
     methods: {
