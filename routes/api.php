@@ -44,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/buy/{buy}', [BuyController::class, 'update']);
 
     Route::get('delivery-services', [DeliveryServiceController::class, 'services']);
-    Route::patch('/delivery-service/{service}/', [DeliveryServiceController::class, 'apiUpdate']);
+    Route::patch('/delivery-service/{service}/', [DeliveryServiceController::class, 'update']);
     Route::post('/delivery-service/', [DeliveryServiceController::class, 'store']);
 
     Route::post('/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);

@@ -159,6 +159,7 @@ export default {
                 this.$axios.post('/api/logout')
                     .then(response => {
                         if (response.data.success) {
+                            this.isLoggedIn = false;
                             window.location.href = "/"
                         } else {
                             console.log(response)

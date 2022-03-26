@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Address;
 use App\Models\Bundle;
 use App\Models\Customer;
 use App\Models\User;
@@ -20,6 +21,7 @@ class BundleTest extends TestCase
         $email = $this->faker->safeEmail();
         $user_count = User::count();
         $customer_count = Customer::count();
+        $address_count = Address::count();
 
         $response = $this->post('/api/bundle/' . $bundle->id . '/buy', []);
         $response->assertSessionHasErrors(['email', 'password']);
@@ -32,6 +34,7 @@ class BundleTest extends TestCase
             'password' => Str::random(8)
         ]);
         self::assertTrue(Auth::check());
+        $response->assertStatus(302); // wieso soll es ein redirect geben?
         $response->assertSessionHasErrors(['first_name', 'last_name']);
         self::assertEquals($user_count + 1, User::count());
         self::assertEquals($customer_count, Customer::count());
@@ -47,10 +50,65 @@ class BundleTest extends TestCase
                 'city' => $this->faker->city()
             ]
         ];
+
         $response = $this->post('/api/bundle/' . $bundle->id . '/buy', $data);
 
+        $response->assertOk();
+        // $response->assertSessionDoesntHaveErrors();
         self::assertEquals($customer_count + 1, Customer::count());
+        self::assertEquals($address_count + 1, Address::count());
         self::assertTrue(Auth::check());
-        $response->assertSessionDoesntHaveErrors();
+
+        // Variante mit Split
+        $data = [
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'phone' => $this->faker->phoneNumber(),
+            'delivery_option' => 'split',
+            'delivery_address' => [
+                'street' => $this->faker->streetAddress(),
+                'postcode' => $this->faker->postcode(),
+                'city' => $this->faker->city()
+            ]
+        ];
+        $response = $this->post('/api/bundle/' . $bundle->id . '/buy', $data);
+        $response->assertSessionHasErrors(['billing_address']);
+
+        $data = [
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'phone' => $this->faker->phoneNumber(),
+            'delivery_option' => 'split',
+            'delivery_address' => [
+                'street' => $this->faker->streetAddress(),
+                'postcode' => $this->faker->postcode(),
+                'city' => $this->faker->city()
+            ],
+            'billing_address' => [
+                'street' => $this->faker->streetAddress(),
+                'postcode' => $this->faker->postcode(),
+                'city' => $this->faker->city()
+            ]
+        ];
+        $response = $this->post('/api/bundle/' . $bundle->id . '/buy', $data);
+        self::assertEquals($customer_count + 1, Customer::count());
+        self::assertEquals($address_count + 2, Address::count());
+        $response->assertOk();
+
+        $data = [
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'phone' => $this->faker->phoneNumber(),
+            'delivery_option' => 'pickup',
+            'billing_address' => [
+                'street' => $this->faker->streetAddress(),
+                'postcode' => $this->faker->postcode(),
+                'city' => $this->faker->city()
+            ]
+        ];
+        $response = $this->post('/api/bundle/' . $bundle->id . '/buy', $data);
+        self::assertEquals($customer_count + 1, Customer::count());
+        self::assertEquals($address_count + 1, Address::count());
+        $response->assertOk();
     }
 }

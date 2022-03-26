@@ -30,20 +30,7 @@ class DeliveryServiceController extends Controller
         ]);
     }
 
-    public function edit(?DeliveryService $service = null)
-    {
-        if (is_null($service)) {
-            $service = DeliveryService::first();
-        }
-
-        return view('delivery-service.edit')->with([
-            'service' => $service,
-            'services' => DeliveryService::all(),
-            'serviceResource' => new DeliveryServiceResource($service),
-        ]);
-    }
-
-    public function apiUpdate(DeliveryService $service, Request $request)
+    public function update(DeliveryService $service, Request $request)
     {
         $validated = $request->validate(DeliveryService::rules());
 

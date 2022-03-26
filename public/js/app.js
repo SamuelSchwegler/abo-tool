@@ -22445,6 +22445,7 @@ var settings = [{
       this.$axios.get('/sanctum/csrf-cookie').then(function (response) {
         _this.$axios.post('/api/logout').then(function (response) {
           if (response.data.success) {
+            _this.isLoggedIn = false;
             window.location.href = "/";
           } else {
             console.log(response);

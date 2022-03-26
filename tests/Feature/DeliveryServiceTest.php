@@ -3,11 +3,15 @@
 namespace Tests\Feature;
 
 use App\Models\DeliveryService;
+use App\Models\Postcode;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class DeliveryServiceTest extends TestCase
 {
+    use WithFaker;
+
     public function test_store()
     {
         $this->actingAs($this->admin);
@@ -21,5 +25,69 @@ class DeliveryServiceTest extends TestCase
         $response->assertSessionDoesntHaveErrors();
         $response->assertOk();
         self::assertEquals($count + 1, DeliveryService::count());
+    }
+
+    public function test_addRemovePostcode() {
+        $this->actingAs($this->admin);
+
+        $postcode_count = Postcode::count();
+        $service1 = DeliveryService::create([
+            'name' => 'Postcode Adder'
+        ]);
+        $service2 = DeliveryService::create([
+            'name' => 'Postcode Adder 2'
+        ]);
+        $postcode = $this->faker->numberBetween(1000, 9999);
+
+        $response = $this->post('/api/delivery-service/'.$service1->id.'/add/', [
+            'postcode' => $postcode,
+        ]);
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertOk();
+
+        $service1->refresh();
+        $service2->refresh();
+        self::assertEquals($postcode_count + 1, Postcode::count());
+        self::assertEquals(1, $service1->postcodes->count());
+        self::assertEquals(0, $service2->postcodes->count());
+
+        $response = $this->post('/api/delivery-service/'.$service2->id.'/add/', [
+            'postcode' => $postcode,
+        ]);
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertOk();
+
+        $service1->refresh();
+        $service2->refresh();
+        self::assertEquals($postcode_count + 1, Postcode::count());
+        self::assertEquals(0, $service1->postcodes->count());
+        self::assertEquals(1, $service2->postcodes->count());
+
+        $response = $this->post('/api/delivery-service/'.$service2->id.'/remove/', [
+            'postcode' => $postcode,
+        ]);
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertOk();
+
+        $service1->refresh();
+        $service2->refresh();
+        self::assertEquals($postcode_count, Postcode::count());
+        self::assertEquals(0, $service1->postcodes->count());
+        self::assertEquals(0, $service2->postcodes->count());
+    }
+
+    public function test_Update() {
+        $this->actingAs($this->admin);
+
+        $service = DeliveryService::create([
+            'name' => 'alt'
+        ]);
+
+        $response = $this->patch('/api/delivery-service/'.$service->id, [
+            'name' => 'neu',
+        ]);
+        $service->refresh();
+        $response->assertOk();
+        self::assertEquals('neu', $service->name);
     }
 }

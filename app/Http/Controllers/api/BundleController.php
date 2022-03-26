@@ -43,8 +43,6 @@ class BundleController extends Controller
      */
     public function submitBuy(Bundle $bundle, Request $request)
     {
-        Log::info($request->all());
-
         $customer = null;
         if (Auth::check()) {
             $user = Auth::user();
@@ -63,6 +61,8 @@ class BundleController extends Controller
             Auth::login($user);
         }
         assertNotNull($user);
+        Log::info($request->all());
+        Log::info(Customer::rules());
         $customerValidated = $request->validate(Customer::rules());
 
         $deliveryAddressRules = [
@@ -79,35 +79,38 @@ class BundleController extends Controller
             'billing_address.city' => ['required', 'string']
         ];
 
-        if ($request->delivery_option === "match") {
-            $deliveryAddressValidated = $request->validate($deliveryAddressRules);
+        switch ($request->delivery_option) {
+            case "match":
+                $deliveryAddressValidated = $request->validate($deliveryAddressRules);
 
-            $address = Address::create($deliveryAddressValidated['delivery_address']);
+                $address = Address::create($deliveryAddressValidated['delivery_address']);
 
-            $address_data = [
-                'billing_address_id' => $address->id,
-                'delivery_address_id' => $address->id
-            ];
-        } elseif ($request->delivery_option === "pickup") {
-            $billingAddressValidated = $request->validate($billingAddressRules);
+                $address_data = [
+                    'billing_address_id' => $address->id,
+                    'delivery_address_id' => $address->id
+                ];
+                break;
+            case "pickup":
+                $billingAddressValidated = $request->validate($billingAddressRules);
 
-            $address = Address::create($billingAddressValidated['billing_address']);
+                $address = Address::create($billingAddressValidated['billing_address']);
 
-            $address_data = [
-                'billing_address_id' => $address->id,
-                'delivery_address_id' => null,
-            ];
-        } elseif ($request->delivery_option === "split") {
-            $deliveryAddressValidated = $request->validate($deliveryAddressRules);
-            $billingAddressValidated = $request->validate($billingAddressRules);
+                $address_data = [
+                    'billing_address_id' => $address->id,
+                    'delivery_address_id' => null,
+                ];
+                break;
+            case "split":
+                $deliveryAddressValidated = $request->validate($deliveryAddressRules);
+                $billingAddressValidated = $request->validate($billingAddressRules);
 
-            $delivery = Address::create($deliveryAddressValidated['delivery_address']);
-            $billing = Address::create($billingAddressValidated['billing_address']);
+                $delivery = Address::create($deliveryAddressValidated['delivery_address']);
+                $billing = Address::create($billingAddressValidated['billing_address']);
 
-            $address_data = [
-                'billing_address_id' => $delivery->id,
-                'delivery_address_id' => $billing->id
-            ];
+                $address_data = [
+                    'billing_address_id' => $delivery->id,
+                    'delivery_address_id' => $billing->id
+                ];
         }
 
         if (is_null($customer)) {

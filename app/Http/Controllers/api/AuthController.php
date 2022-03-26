@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ class AuthController extends Controller
 {
     /**
      * Register
-     */
+
     public function register(Request $request)
     {
         try {
@@ -39,6 +40,7 @@ class AuthController extends Controller
         ];
         return response()->json($response);
     }
+     */
 
     /**
      * Login
@@ -70,7 +72,7 @@ class AuthController extends Controller
     /**
      * Logout
      */
-    public function logout()
+    public function logout(Request $request): JsonResponse
     {
         try {
             Session::flush();
