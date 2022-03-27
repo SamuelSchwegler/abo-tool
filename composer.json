@@ -65,7 +65,7 @@
         ],
         "tests-cover": [
             "@putenv XDEBUG_MODE=coverage",
-            "./vendor/bin/phpunit --coverage-html tests/report"
+            "./vendor/bin/phpunit --coverage-html tests/report/ --verbose"
         ]
     },
     "extra": {
