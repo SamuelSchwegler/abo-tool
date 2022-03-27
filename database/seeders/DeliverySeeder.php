@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\Delivery;
 use App\Models\DeliveryService;
@@ -28,10 +29,15 @@ class DeliverySeeder extends Seeder
             ]);
 
             foreach (Customer::all() as $customer) {
-                Order::factory()->create([
-                    'customer_id' => $customer->id,
-                    'delivery_id' => $delivery->id,
-                ]);
+                $buy = $customer->buys->where('paid', 1)->first();
+                if(!is_null($buy)) {
+                    Order::factory()->create([
+                        'product_id' => $buy->bundle->product->id,
+                        'customer_id' => $customer->id,
+                        'delivery_id' => $delivery->id,
+                    ]);
+                }
+
             }
 
             $date->addDays(3);

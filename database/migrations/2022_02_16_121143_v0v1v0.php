@@ -119,6 +119,7 @@ return new class extends Migration {
         Schema::create('delivery_services', function (Blueprint $table) {
            $table->bigIncrements('id');
            $table->string('name');
+           $table->boolean('pickup')->default(false);
            $table->timestamps();
         });
 

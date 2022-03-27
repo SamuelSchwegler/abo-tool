@@ -90,12 +90,16 @@ class Customer extends Model
         return $this->belongsTo(Address::class, 'billing_address_id');
     }
 
+    /**
+     * Gibt Lieferservice für Adresse des Kundens, falls diese nicht in den Lieferzonen ist wird Selbstabholung gewählt
+     * @return mixed
+     */
     public function delivery_service() {
         $postcode = $this->delivery_address->postcode;
 
         return DeliveryService::whereHas('postcodes', function ($query) use ($postcode) {
            $query->where('postcode', $postcode);
-        })->first();
+        })->first() ?? DeliveryService::where('pickup', 1)->first();
     }
 
     public static function rules(): array {

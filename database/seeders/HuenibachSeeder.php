@@ -55,6 +55,11 @@ class HuenibachSeeder extends Seeder
             'product_id' => $gross->id,
         ]);
 
+        $pickup = DeliveryService::create([
+            'name' => 'Abholung in Hünibach',
+            'pickup' => 1
+        ]);
+
         $post = DeliveryService::create([
             'name' => 'Post',
         ]);

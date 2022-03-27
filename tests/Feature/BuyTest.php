@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\CreateOrdersForBuy;
 use App\Models\Buy;
+use App\Models\Customer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -18,5 +20,20 @@ class BuyTest extends TestCase
         $this->actingAs($this->admin);
         $response = $this->get(route('buy.export.bill', $buy));
         $response->assertDownload();
+    }
+
+    public function test_createOrdersForBuyJob() {
+        $customer = Customer::factory()->create();
+        $buy = Buy::factory([
+            'customer_id' => $customer->id
+        ])->create();
+
+        self::assertEquals(0, $customer->orders->count());
+
+        CreateOrdersForBuy::dispatchSync($buy);
+        $customer->refresh();
+
+        self::assertGreaterThan(0,$customer->orders->count());
+
     }
 }

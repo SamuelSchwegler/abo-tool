@@ -4,8 +4,10 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BuyResource;
+use App\Jobs\CreateOrdersForBuy;
 use App\Models\Buy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use function PHPUnit\Framework\assertNotNull;
 use function response;
 
@@ -22,6 +24,11 @@ class BuyController extends Controller
             'paid' => ['nullable', 'boolean']
         ]);
         $buy->update($validated);
+
+        if($request->has('paid') && $buy->paid) {
+            Log::info('before job');
+            CreateOrdersForBuy::dispatch($buy);
+        }
 
         return response(['buy' => BuyResource::make($buy)]);
     }

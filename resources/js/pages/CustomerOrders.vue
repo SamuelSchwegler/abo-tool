@@ -1,6 +1,6 @@
 <template>
     <div class="mt-4 grid grid-cols-2 gap-4">
-        <div class="box">
+        <div class="box" v-if="orders.length > 0">
             <h3 class="title">Kommende Lieferungen</h3>
             <table class="border-collapse table-auto w-full text-sm">
                 <thead>
@@ -22,7 +22,8 @@
         </div>
         <div class="box">
             <h3 class="title">Meine Abos</h3>
-            <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key" v-if="product_balances.length > 0">
+            <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key"
+                   v-if="product_balances.length > 0">
                 <thead>
                 <tr>
                     <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
@@ -42,15 +43,15 @@
                         {{ balance.name }}
                     </td>
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                        {{balance.balance}}
+                        {{ balance.balance }}
                     </td>
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                        {{balance.planned}}
+                        {{ balance.planned }}
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <alert :text="'Momentan ist noch kein Guthaben für Bestellungen freigeschaltet.'"></alert>
+            <alert v-else :text="'Momentan ist noch kein Guthaben für Bestellungen freigeschaltet.'"></alert>
         </div>
     </div>
 </template>
@@ -63,7 +64,7 @@ import Alert from "../components/parts/Alert";
 export default {
     name: "CustomerOrders",
     components: {order, Alert},
-    data: function(){
+    data: function () {
         return {
             product_balances: [],
             balances_key: 0,
@@ -73,8 +74,10 @@ export default {
     methods: {
         toggleOrder(action) {
             let index = this.product_balances.findIndex(balance => balance.product_id === action.product_id);
-            this.product_balances[index].balance += action.running ? -1 : 1;
-            this.product_balances[index].planned += action.running ? 1 : -1;
+            if (index > -1) { // nur falls index gefunden worden ist
+                this.product_balances[index].balance += action.running ? -1 : 1;
+                this.product_balances[index].planned += action.running ? 1 : -1;
+            }
 
             this.balances_key++;
         }

@@ -16,7 +16,7 @@ class DeliveryServiceController extends Controller
     public function services(): Response|Application|ResponseFactory
     {
         return response([
-            'services' => DeliveryServiceResource::collection(DeliveryService::all())
+            'services' => DeliveryServiceResource::collection(DeliveryService::where('pickup', 0)->get())
         ]);
     }
 
