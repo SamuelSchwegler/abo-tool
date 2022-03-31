@@ -19,7 +19,8 @@ class DeliveryResource extends JsonResource
             'date' => [
                 'd.m.Y' => $this->date->format('d.m.Y'),
                 'Y-m-d' => $this->date->format('Y-m-d'),
-                'weekday' => $this->date->isoFormat('dddd')
+                'weekday' => $this->date->isoFormat('dddd'),
+                'passed' => today()->gt($this->date)
             ],
             'deadline' => [
                 'd.m.Y' => $this->deadline->format('d.m.Y'),
