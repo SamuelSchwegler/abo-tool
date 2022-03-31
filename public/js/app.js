@@ -22564,7 +22564,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       filterKey: 0,
       deliveriesKey: 0,
       filter: {
-        delivery_service_ids: []
+        delivery_service_ids: [],
+        order_by: "date"
       }
     };
   },
@@ -22581,11 +22582,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return axios.get('/api/deliveries/', {
                   params: {
                     start: _formats__WEBPACK_IMPORTED_MODULE_1__["default"].getDateString(_this.show_until, 'Y-m-d'),
-                    delivery_service_ids: _this.filter.delivery_service_ids.length > 0 ? _this.filter.delivery_service_ids : null
+                    delivery_service_ids: _this.filter.delivery_service_ids.length > 0 ? _this.filter.delivery_service_ids : null,
+                    order_by: _this.filter.order_by
                   }
                 }).then(function (response) {
                   _this.deliveries = response.data.deliveries;
                   _this.delivery_services = response.data.delivery_services;
+
+                  if (_this.filter.delivery_service_ids.length === 0) {
+                    // falls kein Service ausgewählt ist, dann soll man einen neuen nehmen
+                    _this.filter.delivery_service_ids = _this.delivery_services.map(function (d) {
+                      return d.id;
+                    });
+                  }
+
                   _this.filterKey++;
                   _this.deliveriesKey++;
                 })["catch"](function (error) {
@@ -22601,7 +22611,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     filterChange: function filterChange(params) {
-      this.filter[params.section] = this.toggleValueInArray(this.filter[params.section], params.value);
+      if (Array.isArray(this.filter[params.section])) {
+        this.filter[params.section] = this.toggleValueInArray(this.filter[params.section], params.value);
+      } else {
+        this.filter[params.section] = params.value;
+      }
+
       this.load();
     },
     toggleValueInArray: function toggleValueInArray(array, value) {
@@ -22867,10 +22882,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var sortOptions = [{
+  value: 'date',
   name: 'Datum',
   href: '#',
   current: true
 }, {
+  value: 'deadline',
   name: 'Deadline',
   href: '#',
   current: false
@@ -22898,20 +22915,24 @@ var sortOptions = [{
   props: ['delivery_services', 'filter'],
   data: function data() {
     var delivery_options = [];
+    var activeCount = 0;
 
     for (var i = 0; i < this.delivery_services.length; i++) {
       var service = this.delivery_services[i];
+      var checked = this.filter.delivery_service_ids.includes(service.id) || this.filter.delivery_service_ids.length === 0;
+      activeCount += checked;
       delivery_options.push({
         value: service.id,
         label: service.name,
-        checked: this.filter.delivery_service_ids.includes(service.id) || this.filter.delivery_service_ids.length === 0
+        checked: checked
       });
     }
 
     var filters = [{
       id: 'delivery_service_ids',
       name: 'Lieferservice',
-      options: delivery_options
+      options: delivery_options,
+      activeCount: activeCount
     }];
     return {
       filters: filters
@@ -24645,7 +24666,9 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   "class": "border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
 }, " # Bestellungen "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
-}, " Deadline ")])], -1
+}, " Deadline "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  "class": "border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
+}, " Lieferscheine ")])], -1
 /* HOISTED */
 );
 
@@ -24667,6 +24690,13 @@ var _hoisted_8 = {
 var _hoisted_9 = {
   "class": "border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"
 };
+
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
+  "class": "border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400"
+}, null, -1
+/* HOISTED */
+);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_delivery_filter = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("delivery-filter");
 
@@ -24696,7 +24726,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(delivery.deadline['d.m.Y']), 1
     /* TEXT */
-    )], 2
+    ), _hoisted_10], 2
     /* CLASS */
     );
   }), 256
@@ -24988,7 +25018,7 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNod
 var _hoisted_7 = {
   "class": "py-1"
 };
-var _hoisted_8 = ["href"];
+var _hoisted_8 = ["href", "onClick"];
 var _hoisted_9 = {
   "class": "hidden sm:block"
 };
@@ -25061,6 +25091,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     var active = _ref.active;
                     return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
                       href: option.href,
+                      onClick: function onClick($event) {
+                        return $options.updateFilter({
+                          id: 'order_by'
+                        }, option);
+                      },
                       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([option.current ? 'font-medium text-gray-900' : 'text-gray-500', active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm'])
                     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(option.name), 11
                     /* TEXT, CLASS, PROPS */
@@ -25111,7 +25146,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                 return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(section.name), 1
                 /* TEXT */
-                ), sectionIdx === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_11, "1")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_ChevronDownIcon, {
+                ), sectionIdx === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(section.activeCount), 1
+                /* TEXT */
+                )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_ChevronDownIcon, {
                   "class": "flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500",
                   "aria-hidden": "true"
                 })];

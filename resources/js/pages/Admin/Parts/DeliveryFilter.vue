@@ -43,7 +43,7 @@
                                 class="origin-top-left absolute left-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                                 <div class="py-1">
                                     <MenuItem v-for="option in sortOptions" :key="option.name" v-slot="{ active }">
-                                        <a :href="option.href"
+                                        <a :href="option.href" @click="updateFilter({id: 'order_by'}, option)"
                                            :class="[option.current ? 'font-medium text-gray-900' : 'text-gray-500', active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm']">
                                             {{ option.name }}
                                         </a>
@@ -67,7 +67,9 @@
                                         class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                                         <span>{{ section.name }}</span>
                                         <span v-if="sectionIdx === 0"
-                                              class="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums">1</span>
+                                              class="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums">
+                                            {{ section.activeCount }}
+                                        </span>
                                         <ChevronDownIcon
                                             class="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                                             aria-hidden="true"/>
@@ -130,8 +132,8 @@ import {XIcon} from '@heroicons/vue/outline'
 import {ChevronDownIcon} from '@heroicons/vue/solid'
 
 const sortOptions = [
-    {name: 'Datum', href: '#', current: true},
-    {name: 'Deadline', href: '#', current: false},
+    {value: 'date', name: 'Datum', href: '#', current: true},
+    {value: 'deadline', name: 'Deadline', href: '#', current: false},
 ]
 
 export default {
@@ -157,13 +159,17 @@ export default {
     props: ['delivery_services', 'filter'],
     data() {
         let delivery_options = [];
+        let activeCount = 0;
+
         for (let i = 0; i < this.delivery_services.length; i++) {
             let service = this.delivery_services[i];
+            let checked = (this.filter.delivery_service_ids.includes(service.id) || this.filter.delivery_service_ids.length === 0);
+            activeCount += checked;
 
             delivery_options.push({
                 value: service.id,
                 label: service.name,
-                checked: (this.filter.delivery_service_ids.includes(service.id) || this.filter.delivery_service_ids.length === 0),
+                checked: checked,
             });
         }
 
@@ -172,6 +178,7 @@ export default {
                 id: 'delivery_service_ids',
                 name: 'Lieferservice',
                 options: delivery_options,
+                activeCount: activeCount
             }
         ]
 

@@ -20,6 +20,9 @@
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Deadline
                 </th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    Lieferscheine
+                </th>
             </tr>
             </thead>
             <tbody class="bg-white dark:bg-slate-800">
@@ -38,6 +41,9 @@
                 </td>
                 <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
                     {{ delivery.deadline['d.m.Y'] }}
+                </td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+
                 </td>
             </tr>
             </tbody>
@@ -62,7 +68,8 @@ export default {
             filterKey: 0,
             deliveriesKey: 0,
             filter: {
-                delivery_service_ids: []
+                delivery_service_ids: [],
+                order_by: "date"
             }
         }
     },
@@ -71,11 +78,16 @@ export default {
             await axios.get('/api/deliveries/', {
                 params: {
                     start: formats.getDateString(this.show_until, 'Y-m-d'),
-                    delivery_service_ids: this.filter.delivery_service_ids.length > 0 ? this.filter.delivery_service_ids : null
+                    delivery_service_ids: this.filter.delivery_service_ids.length > 0 ? this.filter.delivery_service_ids : null,
+                    order_by: this.filter.order_by
                 }
             }).then(response => {
                 this.deliveries = response.data.deliveries;
                 this.delivery_services = response.data.delivery_services;
+                if(this.filter.delivery_service_ids.length === 0) { // falls kein Service ausgewählt ist, dann soll man einen neuen nehmen
+                    this.filter.delivery_service_ids = this.delivery_services.map(d => d.id);
+                }
+
                 this.filterKey++;
                 this.deliveriesKey++;
             }).catch(function (error) {
@@ -83,7 +95,11 @@ export default {
             });
         },
         filterChange(params) {
-            this.filter[params.section] = this.toggleValueInArray(this.filter[params.section], params.value);
+            if(Array.isArray(this.filter[params.section])) {
+                this.filter[params.section] = this.toggleValueInArray(this.filter[params.section], params.value);
+            } else {
+                this.filter[params.section] = params.value;
+            }
             this.load();
         },
         toggleValueInArray(array, value) {
