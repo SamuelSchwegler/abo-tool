@@ -20,7 +20,7 @@
         <section aria-labelledby="filter-heading">
             <h2 id="filter-heading" class="sr-only">Filters</h2>
 
-            <div class="relative z-10 bg-white border-b border-gray-200 pb-4">
+            <div class="relative bg-white border-b border-gray-200 pb-4">
                 <div class="max-w-7xl mx-auto px-4 flex items-center justify-between sm:px-6 lg:px-8">
                     <Menu as="div" class="relative inline-block text-left">
                         <div>

@@ -143,6 +143,10 @@ class CreatePermissionTables extends Migration
         Permission::create([
             'name' => 'manage deliveries'
         ])->syncRoles([$admin, $office]);
+
+        Permission::create([
+            'name' => 'manage customers'
+        ])->syncRoles([$admin, $office]);
     }
 
     /**

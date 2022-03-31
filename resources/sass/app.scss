@@ -1,6 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
 
 #logo {
     height: .6666 * 5rem;
@@ -12,29 +13,32 @@ $background: #FBF2E7;
 $green: #567B43;
 $violet: #772475;
 $dark: #262520;
+$brown: #B8A877;
+$light-green: #9F993A;
+$orange: #E4935D;
+$blue: #6E9DAC;
+
+$default_colors: (green: $green, violet: $violet, dark: $dark, brown: $brown);
+@each $key,$color in $default_colors {
+    .bg-#{$key} {
+        background-color: $color;
+
+        &:not(&.box):hover {
+            background-color: darken($color, 10%);
+        }
+    }
+
+    .border-#{$key} {
+        border-color: $color;
+    }
+
+    .text-#{$key} {
+        color: $color;
+    }
+}
 
 .bg-default {
     background-color: $background;
-}
-
-.bg-violet {
-    background-color: $violet;
-}
-
-.border-violet {
-    border-color: $violet;
-}
-
-.text-violet {
-    color: $violet;
-}
-
-.bg-green {
-    background-color: $green;
-}
-
-.bg-green-hover {
-    background-color: darken( $green, 10% );
 }
 
 .btn {
@@ -42,18 +46,26 @@ $dark: #262520;
     padding: 0.375rem;
     border-radius: 0.375rem;
     transition-duration: 1s;
+}
 
-    &.bg-violet {
-        background-color: $violet;
-    }
+.page-title {
+    font-size: 30px;
+    font-family: 'Libre Baskerville', serif;
+    --tw-text-opacity: 1;
+    color: rgb(17 24 39 / var(--tw-text-opacity));
+    font-weight: 400;
+}
+
+.font-family-title {
+    font-family: 'Libre Baskerville', serif;
 }
 
 .box {
     border-top-left-radius: 2rem;
     border-bottom-right-radius: 2rem;
     padding: 1.5rem;
-    background-color: $white;
     margin-bottom: 2rem;
+    border: 2px solid $white;
 
     .title {
         padding-bottom: 1rem;

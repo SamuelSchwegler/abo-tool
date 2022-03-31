@@ -11,6 +11,8 @@ import DeliveryServices from "../pages/Admin/DeliveryServices";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import Deliveries from "../pages/Admin/Deliveries";
+import Customers from "../pages/Admin/Customers";
+import Delivery from "../pages/Admin/Delivery";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -102,6 +104,35 @@ export const routes = [
                 window.location.href = "/";
             }
         }
+    },
+    {
+        name: 'delivery',
+        path: '/delivery/:id',
+        component: Delivery,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage deliveries')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'customers',
+        path: '/customers',
+        component: Customers,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage customers')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'customer-orders',
+        path: '/customer/:id/orders',
+        component: CustomerOrders
     },
 ];
 

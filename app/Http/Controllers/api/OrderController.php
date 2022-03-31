@@ -4,7 +4,9 @@ namespace App\Http\Controllers\api;
 
 use App\Exceptions\OrderEditException;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CustomerResource;
 use App\Http\Resources\OrderResource;
+use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -16,12 +18,16 @@ use function response;
 
 class OrderController extends Controller
 {
-    public function orders()
+    public function orders(?Customer $customer = null)
     {
-        $user = Auth::user();
-        $customer = $user->customer;
+        if(is_null($customer)) {
+            $user = Auth::user();
+            $customer = $user->customer;
+        }
+
 
         return \response([
+            'customer' => CustomerResource::make($customer),
             'orders' => OrderResource::collection(OrderResource::collection($customer?->next_orders ?? collect([]))),
             'product_balances' => $customer->productBalances()
         ]);

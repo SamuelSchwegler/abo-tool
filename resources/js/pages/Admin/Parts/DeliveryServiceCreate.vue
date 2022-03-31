@@ -1,5 +1,5 @@
 <template>
-    <div class="box">
+    <div class="box bg-white">
         <h3 class="title">Details Lieferzone</h3>
         <div id="add-postcode" class="grid grid-cols-3 gap-4">
             <div class="col-span-2">

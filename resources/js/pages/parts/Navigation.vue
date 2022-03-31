@@ -133,7 +133,7 @@ import {
     MenuIcon,
     XIcon,
 } from '@heroicons/vue/outline'
-import {CashIcon, ChevronDownIcon, MailIcon, MapIcon} from '@heroicons/vue/solid'
+import {CashIcon, ChevronDownIcon, MailIcon, MapIcon, UserGroupIcon} from '@heroicons/vue/solid'
 
 export default {
     components: {
@@ -173,6 +173,13 @@ export default {
                         href: '/delivery-services',
                         icon: MapIcon,
                         can: this.can('manage delivery services')
+                    },
+                    {
+                        name: 'Kunden',
+                        description: 'Kundenverwaltung',
+                        href: '/customers',
+                        icon: UserGroupIcon,
+                        can: this.can('manage customers')
                     }
                 ]
             },

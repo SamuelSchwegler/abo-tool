@@ -1,11 +1,16 @@
 <template>
+    <div class="sm:flex sm:items-center mb-4">
+        <div class="sm:flex-auto">
+            <h1 class="page-title">Lieferzonen</h1>
+        </div>
+    </div>
     <div class="grid grid-cols-5 gap-8" :key="serviceKey">
-        <div class="box">
+        <div class="box bg-white">
             <ul>
-                <li v-for="(s, index) in services" v-bind:class="{'bg-violet': s.id === service.id, 'bg-green': s.id !== service.id}" class="btn mb-2" >
+                <li v-for="(s, index) in services" v-bind:class="{'bg-violet': s.id === service.id, 'bg-green': s.id !== service.id}" class="btn mb-2 cursor-pointer" >
                     <a class="block w-full" @click="switchService(s.id)">{{ s.name }}</a>
                 </li>
-                <li class="btn" v-bind:class="{'bg-violet': inCreate, 'bg-green': !inCreate}">
+                <li class="btn cursor-pointer" v-bind:class="{'bg-violet': inCreate, 'bg-green': !inCreate}">
                     <a class="block w-full" @click="createService">Hinzufügen</a>
                 </li>
             </ul>
@@ -43,6 +48,7 @@ export default {
     methods: {
         switchService(id) {
             this.service = this.services.filter(s => s.id === id)[0];
+            this.inCreate = false;
             this.serviceKey++;
         },
         createService() {

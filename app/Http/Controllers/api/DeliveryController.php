@@ -39,4 +39,10 @@ class DeliveryController extends Controller
             'delivery_services' => DeliveryServiceResource::collection(DeliveryService::all())
         ]);
     }
+
+    public function delivery(Delivery $delivery) {
+        return response([
+            'delivery' => DeliveryResource::make($delivery)
+        ]);
+    }
 }

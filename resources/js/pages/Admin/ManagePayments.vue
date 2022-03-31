@@ -1,6 +1,10 @@
 <template>
-    <div class="box">
-        <h3 class="title">Zahlungen</h3>
+    <div class="sm:flex sm:items-center mb-4">
+        <div class="sm:flex-auto">
+            <h1 class="page-title">Rechnungen</h1>
+        </div>
+    </div>
+    <div class="box bg-white">
         <table class="border-collapse table-auto w-full text-sm" v-if="buys.length > 0">
             <thead>
             <tr>

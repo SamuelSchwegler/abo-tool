@@ -1,6 +1,10 @@
 <template>
-    <div class="box">
-        <h3 class="title">Zahlungen</h3>
+    <div class="sm:flex sm:items-center mb-4">
+        <div class="sm:flex-auto">
+            <h1 class="page-title">Lieferungen</h1>
+        </div>
+    </div>
+    <div class="box bg-white">
         <delivery-filter v-on:filter="filterChange" :delivery_services="delivery_services" :filter="filter" class="mb-4" :key="'delivery_filter_key_' + filterKey"></delivery-filter>
         <table class="border-collapse table-auto w-full text-sm" v-if="deliveries.length > 0" :key="'deliveries_key_' + deliveriesKey">
             <thead>
@@ -23,6 +27,7 @@
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Lieferscheine
                 </th>
+                <th>Details</th>
             </tr>
             </thead>
             <tbody class="bg-white dark:bg-slate-800">
@@ -44,6 +49,9 @@
                 </td>
                 <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
 
+                </td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                    <router-link :to="'/delivery/' + delivery.id" class="text-indigo-600 hover:text-indigo-900">mehr</router-link>
                 </td>
             </tr>
             </tbody>

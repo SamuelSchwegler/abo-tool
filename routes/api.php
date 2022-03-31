@@ -3,6 +3,7 @@
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\BundleController;
 use App\Http\Controllers\api\BuyController;
+use App\Http\Controllers\api\CustomerController;
 use App\Http\Controllers\api\DeliveryController;
 use App\Http\Controllers\api\DeliveryServiceController;
 use App\Http\Controllers\api\OrderController;
@@ -39,6 +40,10 @@ Route::post('bundle/{bundle}/buy', [BundleController::class, 'submitBuy']);
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('orders', [OrderController::class, 'orders']);
+    Route::group(['middleware' => ['permission:manage customers']], function () {
+        Route::get('orders/{customer}', [OrderController::class, 'orders']);
+    });
+
     Route::patch('/order/{order}', [OrderController::class, 'update']);
     Route::patch('/order/{order}/toggle-cancel', [OrderController::class, 'toggleCancel']);
 
@@ -54,4 +59,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);
 
     Route::get('/deliveries', [DeliveryController::class, 'deliveries']);
+    Route::get('/delivery/{delivery}', [DeliveryController::class, 'delivery']);
+
+    Route::get('/customers', [CustomerController::class, 'customers']);
+
 });

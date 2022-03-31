@@ -14,6 +14,23 @@ class DeliveryResource extends JsonResource
      */
     public function toArray($request)
     {
+        $orders = $this->orders;
+        $orders_array = [];
+        foreach($orders as $order) {
+            $orders_array[] = [
+                'id' => $order->id,
+                'customer' => [
+                    'id' => $order->customer->id,
+                    'name' => $order->customer->name
+                ],
+                'product' => [
+                    'id' => $order->product->id,
+                    'name' => $order->product->name
+                ],
+                'depository' => $this->depository ?? '',
+            ];
+        }
+
         return [
             'id' => $this->id,
             'date' => [
@@ -30,7 +47,7 @@ class DeliveryResource extends JsonResource
                 'id' => $this->delivery_service->id,
                 'name' => $this->delivery_service->name
             ],
-            'orders' => OrderResource::collection($this->orders)
+            'orders' => $orders_array
         ];
     }
 }

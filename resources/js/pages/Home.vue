@@ -1,5 +1,5 @@
 <template>
-    <div class="box">
+    <div class="box bg-white">
         <p>Abonnieren Sie unser Bio-Gemüse, und wir liefern es Ihnen frisch vom Feld bis vor die Haustür. Jede Woche
             neu.</p>
     </div>
