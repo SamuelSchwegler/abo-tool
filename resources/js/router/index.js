@@ -1,7 +1,6 @@
 import {createWebHistory, createRouter} from "vue-router";
 
 import Home from '../pages/Home';
-import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
 import Dashboard from "../pages/Dashboard";
 import BundleContact from "../pages/Buy/BundleContact";
@@ -9,6 +8,8 @@ import Bill from "../pages/Buy/Bill";
 import CustomerOrders from "../pages/CustomerOrders";
 import ManagePayments from "../pages/Admin/ManagePayments";
 import DeliveryServices from "../pages/Admin/DeliveryServices";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import ResetPassword from "../pages/auth/ResetPassword";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -32,17 +33,28 @@ export const routes = [
     {
         name: 'buy.bill',
         path: '/buy/:id',
-        component: Bill
-    },
-    {
-        name: 'register',
-        path: '/register',
-        component: Register
+        component: Bill,
+        beforeRouteEnter(to, from, next) {
+            if (!window.Laravel.isLoggedIn) {
+                window.location.href = "/";
+            }
+            next();
+        }
     },
     {
         name: 'login',
         path: '/login',
         component: Login
+    },
+    {
+        name: 'forgot-password',
+        path: '/forgot-password',
+        component: ForgotPassword
+    },
+    {
+        name: 'reset-password',
+        path: '/reset-password/:token',
+        component: ResetPassword
     },
     {
         name: 'dashboard',
