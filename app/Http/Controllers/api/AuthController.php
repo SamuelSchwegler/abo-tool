@@ -49,7 +49,7 @@ class AuthController extends Controller
     /**
      * Logout
      */
-    public function logout(Request $request): Response
+    public function logout(Request $request): JsonResponse
     {
         try {
             Session::flush();

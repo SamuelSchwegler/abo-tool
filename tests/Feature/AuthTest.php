@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -41,6 +44,35 @@ class AuthTest extends TestCase
         $response = $this->post('api/logout');
         $response->assertOk();
         $response->assertJson(['success' => true]);
-        //self::assertFalse(auth('sanctum')->check());
+    }
+
+    public function test_passwordForgotten() {
+        $user = User::inRandomOrder()->first();
+        Notification::fake();
+        $response = $this->json('post', '/api/forgot-password');
+        $response->assertStatus(422);
+
+        $response = $this->json('post', '/api/forgot-password', [
+            'email' => $user->email
+        ]);
+        $response->assertStatus(200);
+        Notification::assertSentTo($user, ResetPassword::class);
+    }
+
+    public function test_submitResetPassword() {
+        $user = User::inRandomOrder()->first();
+        $token = app('auth.password.broker')->createToken($user);
+        $password = Str::random();
+
+        $response = $this->json('post', '/api/reset-password', [
+            'token' => $token,
+            'email' => $user->email,
+            'password' => $password,
+            'password_confirmation' => $password
+        ]);
+        $response->assertOk();
+        $user->refresh();
+
+        self::assertTrue(Hash::check($password, $user->password));
     }
 }
