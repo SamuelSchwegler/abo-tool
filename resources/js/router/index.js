@@ -10,6 +10,14 @@ import CustomerOrders from "../pages/CustomerOrders";
 import ManagePayments from "../pages/Admin/ManagePayments";
 import DeliveryServices from "../pages/Admin/DeliveryServices";
 
+const can = (can) => {
+    if (window.Laravel.permissions.length > 0) {
+        return window.Laravel.permissions.some(r => can.includes(r))
+    }
+
+    return false;
+};
+
 export const routes = [
     {
         name: 'home',
@@ -49,12 +57,27 @@ export const routes = [
     {
         name: 'manage-payments',
         path: '/manage-payments',
-        component: ManagePayments
+        component: ManagePayments,
+        beforeEnter: (to, from, next) => {
+            console.log(window.Laravel.permissions);
+            if (window.Laravel.isLoggedIn && can('manage payments')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
     },
     {
         name: 'delivery-services',
         path: '/delivery-services',
-        component: DeliveryServices
+        component: DeliveryServices,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage delivery services')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
     },
 ];
 

@@ -72,12 +72,6 @@ export default {
     },
     created() {
         this.load();
-    },
-    beforeRouteEnter(to, from, next) {
-        if (!window.Laravel.isLoggedIn) {
-            window.location.href = "/";
-        }
-        next();
     }
 }
 </script>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
@@ -119,17 +120,25 @@ class CreatePermissionTables extends Migration
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
             ->forget(config('permission.cache.key'));
 
-        Role::create([
+        $admin = Role::create([
             'name' => 'admin'
         ]);
 
-        Role::create([
+        $office = Role::create([
             'name' => 'office'
         ]);
 
         Role::create([
             'name' => 'customer'
         ]);
+
+        Permission::create([
+            'name' => 'manage payments'
+        ])->syncRoles([$admin, $office]);
+
+        Permission::create([
+            'name' => 'manage delivery services'
+        ])->syncRoles([$admin, $office]);
     }
 
     /**
