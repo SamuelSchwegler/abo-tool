@@ -55,26 +55,6 @@ class HuenibachSeeder extends Seeder
             'product_id' => $gross->id,
         ]);
 
-        $pickup = DeliveryService::create([
-            'name' => 'Abholung in Hünibach',
-            'pickup' => 1
-        ]);
-
-        $post = DeliveryService::create([
-            'name' => 'Post',
-        ]);
-
-        $velo = DeliveryService::create([
-            'name' => 'Velokurier',
-        ]);
-
-        DB::table('postcodes')->insert([
-            ['delivery_service_id' => $velo->id, 'postcode' => 6122],
-            ['delivery_service_id' => $velo->id, 'postcode' => 6130],
-            ['delivery_service_id' => $post->id, 'postcode' => 3072],
-            ['delivery_service_id' => $post->id, 'postcode' => 3000],
-        ]);
-
         $address = Address::create([
             'street' => 'Chartreusestrasse 7',
             'postcode' => '3626',

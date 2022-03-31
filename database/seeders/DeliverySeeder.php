@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Jobs\CreateOrdersForBuy;
 use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\Delivery;
@@ -18,29 +19,37 @@ class DeliverySeeder extends Seeder
      */
     public function run()
     {
+        Buy::factory(5)->create([
+            'paid' => 0
+        ]);
+        $paidBuys = Buy::factory(5)->create([
+            'paid' => 1
+        ]);
+
         $date = now()->subWeeks(3);
-        $end = $date->copy()->addMonths(4);
+        $end = $date->copy()->addMonths(3);
 
         while ($date->lte($end)) {
-            $delivery = Delivery::create([
+            $delivery1 = Delivery::create([
                 'date' => $date,
                 'deadline' => $date->copy()->subDays(1),
                 'delivery_service_id' => DeliveryService::inRandomOrder()->first()->id,
             ]);
 
-            foreach (Customer::all() as $customer) {
-                $buy = $customer->buys->where('paid', 1)->first();
-                if(!is_null($buy)) {
-                    Order::factory()->create([
-                        'product_id' => $buy->bundle->product->id,
-                        'customer_id' => $customer->id,
-                        'delivery_id' => $delivery->id,
-                    ]);
-                }
+            $date->addDays(2);
 
-            }
+            $delivery2 = Delivery::create([
+                'date' => $date,
+                'deadline' => $date->copy()->subDays(1),
+                'delivery_service_id' => DeliveryService::inRandomOrder()->where('id', '!=', $delivery1->delivery_service_id)->first()->id,
+            ]);
 
-            $date->addDays(3);
+            $date->addDays(5);
+
+        }
+
+        foreach($paidBuys as $buy) {
+            CreateOrdersForBuy::dispatch($buy);
         }
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\BundleController;
 use App\Http\Controllers\api\BuyController;
+use App\Http\Controllers\api\DeliveryController;
 use App\Http\Controllers\api\DeliveryServiceController;
 use App\Http\Controllers\api\OrderController;
 use Illuminate\Http\Request;
@@ -51,4 +52,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
     Route::post('/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);
+
+    Route::get('/deliveries', [DeliveryController::class, 'deliveries']);
 });

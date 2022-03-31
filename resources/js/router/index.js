@@ -10,6 +10,7 @@ import ManagePayments from "../pages/Admin/ManagePayments";
 import DeliveryServices from "../pages/Admin/DeliveryServices";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
+import Deliveries from "../pages/Admin/Deliveries";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -71,7 +72,6 @@ export const routes = [
         path: '/manage-payments',
         component: ManagePayments,
         beforeEnter: (to, from, next) => {
-            console.log(window.Laravel.permissions);
             if (window.Laravel.isLoggedIn && can('manage payments')) {
                 next();
             } else {
@@ -85,6 +85,18 @@ export const routes = [
         component: DeliveryServices,
         beforeEnter: (to, from, next) => {
             if (window.Laravel.isLoggedIn && can('manage delivery services')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'deliveries',
+        path: '/deliveries',
+        component: Deliveries,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage deliveries')) {
                 next();
             } else {
                 window.location.href = "/";

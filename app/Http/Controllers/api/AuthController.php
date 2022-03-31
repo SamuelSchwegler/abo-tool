@@ -31,10 +31,10 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $success = true;
-            $message = 'User login successfully';
+            $message = 'Login erfolgreich';
         } else {
             $success = false;
-            $message = 'Unauthorised';
+            $message = 'Das hat nicht geklappt';
         }
 
         // response
@@ -55,7 +55,7 @@ class AuthController extends Controller
             Session::flush();
 
             $success = true;
-            $message = 'Successfully logged out';
+            $message = 'Logout erfolgreich';
         } catch (\Illuminate\Database\QueryException $ex) {
             $success = false;
             $message = $ex->getMessage();

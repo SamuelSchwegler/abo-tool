@@ -133,7 +133,7 @@ import {
     MenuIcon,
     XIcon,
 } from '@heroicons/vue/outline'
-import {CashIcon, ChevronDownIcon, MapIcon} from '@heroicons/vue/solid'
+import {CashIcon, ChevronDownIcon, MailIcon, MapIcon} from '@heroicons/vue/solid'
 
 export default {
     components: {
@@ -143,6 +143,7 @@ export default {
         PopoverPanel,
         ChevronDownIcon,
         MenuIcon,
+        MailIcon,
         XIcon,
     },
     name: 'Navigation',
@@ -152,21 +153,29 @@ export default {
             settings: {
                 canAny: this.can('manage payments') || this.can('manage payments'),
                 routes: [
-                {
-                    name: 'Rechnungen',
-                    description: 'Zahlungen verwalten.',
-                    href: '/manage-payments',
-                    icon: CashIcon,
-                    can: this.can('manage payments')
-                },
-                {
-                    name: 'Lieferzonen',
-                    description: 'Postleitzahlen in Lieferzonen einteilen',
-                    href: '/delivery-services',
-                    icon: MapIcon,
-                    can: this.can('manage delivery services')
-                }
-            ]},
+                    {
+                        name: 'Rechnungen',
+                        description: 'Zahlungen verwalten.',
+                        href: '/manage-payments',
+                        icon: CashIcon,
+                        can: this.can('manage payments')
+                    },
+                    {
+                        name: 'Lieferungen',
+                        description: 'Lieferungen bearbeiten',
+                        href: '/deliveries',
+                        icon: MailIcon,
+                        can: this.can('manage deliveries')
+                    },
+                    {
+                        name: 'Lieferzonen',
+                        description: 'Postleitzahlen in Lieferzonen einteilen',
+                        href: '/delivery-services',
+                        icon: MapIcon,
+                        can: this.can('manage delivery services')
+                    }
+                ]
+            },
         }
     },
     created() {
