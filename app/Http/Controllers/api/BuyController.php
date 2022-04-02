@@ -26,7 +26,6 @@ class BuyController extends Controller
         $buy->update($validated);
 
         if($request->has('paid') && $buy->paid) {
-            Log::info('before job');
             CreateOrdersForBuy::dispatch($buy);
         }
 

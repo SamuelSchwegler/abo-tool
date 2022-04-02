@@ -2,14 +2,17 @@
 
 namespace App\Jobs;
 
+use App\Models\Customer;
 use App\Models\Delivery;
 use App\Models\DeliveryService;
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class CreateOrdersForDelivery implements ShouldQueue
 {
@@ -36,6 +39,17 @@ class CreateOrdersForDelivery implements ShouldQueue
      */
     public function handle()
     {
-        // todo generate for matching customers with orders...
+        $customers = $this->service->customers();
+        foreach ($customers as $customer) {
+
+            foreach ($customer->buys as $buy) {
+                $order = Order::create([
+                    'customer_id' => $customer->id,
+                    'delivery_id' => $this->delivery->id,
+                    'product_id' => $buy->bundle->product->id
+                ]);
+            }
+
+        }
     }
 }
