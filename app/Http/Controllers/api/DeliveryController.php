@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Exceptions\DeliveryException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DeliveryResource;
 use App\Http\Resources\DeliveryServiceResource;
@@ -49,8 +50,17 @@ class DeliveryController extends Controller
         ]);
     }
 
+    /**
+     * @param Delivery $delivery
+     * @return Response|Application|ResponseFactory
+     * @throws DeliveryException
+     */
     public function toggleApproved(Delivery $delivery): Response|Application|ResponseFactory
     {
+        if($delivery->deadlinePassed()) {
+            throw DeliveryException::deadlineHasPassed($delivery);
+        }
+
         $delivery->update([
             'approved' => !$delivery->approved
         ]);

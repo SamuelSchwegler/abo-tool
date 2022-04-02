@@ -32,6 +32,6 @@ class Order extends Model
 
     public function deadlinePassed(): bool
     {
-        return $this->delivery->deadline->lt(now());
+        return $this->delivery->deadlinePassed();
     }
 }

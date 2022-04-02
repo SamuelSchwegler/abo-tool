@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
-use App\Jobs\CreateOrdersForDelivery;
+use App\Jobs\DeliveryCreateOrders;
+use App\Jobs\DeliveryRemoveOrders;
 use App\Models\Delivery;
-use Illuminate\Support\Facades\Log;
 
 class DeliveryObserver
 {
@@ -27,8 +27,12 @@ class DeliveryObserver
      */
     public function updated(Delivery $delivery)
     {
-        if($delivery->isDirty('approved') && $delivery->approved) {
-            CreateOrdersForDelivery::dispatch($delivery);
+        if($delivery->isDirty('approved')) {
+            if($delivery->approved) {
+                DeliveryCreateOrders::dispatch($delivery);
+            } else {
+                DeliveryRemoveOrders::dispatch($delivery);
+            }
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Exceptions\OrderEditException;
+use App\Exceptions\DeliveryException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\OrderResource;
@@ -37,13 +37,13 @@ class OrderController extends Controller
      * @param Order $order
      * @param Request $request
      * @return Response|Application|ResponseFactory
-     * @throws OrderEditException
+     * @throws DeliveryException
      */
     public function update(Order $order, Request $request): Response|Application|ResponseFactory
     {
         assertNotNull($order);
         if ($order->deadlinePassed()) {
-            throw OrderEditException::deadlineHasPassed($order);
+            throw DeliveryException::deadlineHasPassed($order->delivery);
         }
 
         $validated = $request->validate([
@@ -56,12 +56,12 @@ class OrderController extends Controller
 
     /**
      * Abmeldung einer Bestellung regeln
-     * @throws OrderEditException
+     * @throws DeliveryException
      */
     public function toggleCancel(Order $order): Response|Application|ResponseFactory
     {
         if ($order->deadlinePassed()) {
-            throw OrderEditException::deadlineHasPassed($order);
+            throw DeliveryException::deadlineHasPassed($order->delivery);
         }
         $order->update([
             'canceled' => !$order->canceled

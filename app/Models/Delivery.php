@@ -23,4 +23,9 @@ class Delivery extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function deadlinePassed(): bool
+    {
+        return $this->deadline->lt(now());
+    }
 }

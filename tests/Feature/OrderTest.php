@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Exceptions\OrderEditException;
+use App\Exceptions\DeliveryException;
 use App\Models\Delivery;
 use App\Models\Order;
 use Illuminate\Foundation\Testing\RefreshDatabase;

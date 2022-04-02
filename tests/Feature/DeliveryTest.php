@@ -3,7 +3,8 @@
 namespace Tests\Feature;
 
 use App\Jobs\CreateDeliveries;
-use App\Jobs\CreateOrdersForDelivery;
+use App\Jobs\DeliveryCreateOrders;
+use App\Jobs\DeliveryRemoveOrders;
 use App\Models\Address;
 use App\Models\Buy;
 use App\Models\Customer;
@@ -70,7 +71,13 @@ class DeliveryTest extends TestCase
         $response->assertOk();
         $delivery->refresh();
         self::assertEquals(1, $delivery->approved);
-        Queue::assertPushed(CreateOrdersForDelivery::class);
+        Queue::assertPushed(DeliveryCreateOrders::class);
+
+        $response = $this->json('patch', '/api/delivery/'.$delivery->id.'/toggle-approved');
+        $response->assertOk();
+        $delivery->refresh();
+        self::assertEquals(0, $delivery->approved);
+        Queue::assertPushed(DeliveryRemoveOrders::class);
     }
 
     public function test_createOrdersForDeliveryJob() {
@@ -105,11 +112,18 @@ class DeliveryTest extends TestCase
             'date' => now()->addDays(5)
         ]);
 
-        CreateOrdersForDelivery::dispatch($delivery);
+        DeliveryCreateOrders::dispatch($delivery);
         $delivery->refresh();
         $customer->refresh();
 
         self::assertEquals(1, $customer->orders->count());
         self::assertEquals(1, $delivery->orders->count());
+
+        DeliveryRemoveOrders::dispatch($delivery);
+        $delivery->refresh();
+        $customer->refresh();
+
+        self::assertEquals(0, $customer->orders->count());
+        self::assertEquals(0, $delivery->orders->count());
     }
 }
