@@ -42,7 +42,7 @@
                     {{ delivery.date['d.m.Y'] }}
                 </td>
                 <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                    {{ delivery.delivery_service.name }}
+                    <router-link :to="'/delivery-service/' + delivery.delivery_service.id" class="text-indigo-600 hover:text-indigo-900">{{ delivery.delivery_service.name }}</router-link>
                 </td>
                 <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
                     {{ delivery.orders.length }}

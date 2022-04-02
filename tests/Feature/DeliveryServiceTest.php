@@ -20,6 +20,8 @@ class DeliveryServiceTest extends TestCase
 
         $response = $this->post('/api/delivery-service', [
             'name' => Str::random(),
+            'days' => ['sat'],
+            'deadline_distance' => 1
         ]);
 
         $response->assertSessionDoesntHaveErrors();
@@ -31,10 +33,10 @@ class DeliveryServiceTest extends TestCase
         $this->actingAs($this->admin);
 
         $postcode_count = Postcode::count();
-        $service1 = DeliveryService::create([
+        $service1 = DeliveryService::factory()->create([
             'name' => 'Postcode Adder'
         ]);
-        $service2 = DeliveryService::create([
+        $service2 = DeliveryService::factory()->create([
             'name' => 'Postcode Adder 2'
         ]);
         $postcode = $this->faker->numberBetween(1000, 9999);
@@ -79,12 +81,14 @@ class DeliveryServiceTest extends TestCase
     public function test_Update() {
         $this->actingAs($this->admin);
 
-        $service = DeliveryService::create([
-            'name' => 'alt'
+        $service = DeliveryService::factory()->create([
+            'name' => 'alt',
         ]);
 
         $response = $this->patch('/api/delivery-service/'.$service->id, [
             'name' => 'neu',
+            'days' => ['sat'],
+            'deadline_distance' => 1
         ]);
         $service->refresh();
         $response->assertOk();

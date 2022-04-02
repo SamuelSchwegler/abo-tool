@@ -20839,10 +20839,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context2.next = 2;
                 return _this2.$axios.get("/api/delivery-services/").then(function (response) {
-                  var _this2$services$;
-
                   _this2.services = response.data.services;
-                  _this2.service = (_this2$services$ = _this2.services[0]) !== null && _this2$services$ !== void 0 ? _this2$services$ : null;
+
+                  if (_this2.$route.params.hasOwnProperty('id')) {
+                    _this2.service = _this2.services.filter(function (service) {
+                      return service.id === parseInt(_this2.$route.params.id);
+                    })[0];
+                  } else {
+                    var _this2$services$;
+
+                    _this2.service = (_this2$services$ = _this2.services[0]) !== null && _this2$services$ !== void 0 ? _this2$services$ : null;
+                  }
+
                   _this2.serviceKey++;
                 })["catch"](function (error) {
                   console.log(error);
@@ -23038,9 +23046,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(delivery.date['d.m.Y']), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(delivery.delivery_service.name), 1
-    /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(delivery.orders.length), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+      to: '/delivery-service/' + delivery.delivery_service.id,
+      "class": "text-indigo-600 hover:text-indigo-900"
+    }, {
+      "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+        return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(delivery.delivery_service.name), 1
+        /* TEXT */
+        )];
+      }),
+      _: 2
+      /* DYNAMIC */
+
+    }, 1032
+    /* PROPS, DYNAMIC_SLOTS */
+    , ["to"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(delivery.orders.length), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(delivery.deadline['d.m.Y']), 1
     /* TEXT */
@@ -25488,6 +25508,17 @@ var routes = [{
 }, {
   name: 'delivery-services',
   path: '/delivery-services',
+  component: _pages_Admin_DeliveryServices__WEBPACK_IMPORTED_MODULE_7__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (window.Laravel.isLoggedIn && can('manage delivery services')) {
+      next();
+    } else {
+      window.location.href = "/";
+    }
+  }
+}, {
+  name: 'delivery-service',
+  path: '/delivery-service/:id',
   component: _pages_Admin_DeliveryServices__WEBPACK_IMPORTED_MODULE_7__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (window.Laravel.isLoggedIn && can('manage delivery services')) {

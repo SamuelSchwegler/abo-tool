@@ -25,7 +25,7 @@ class CustomerTest extends TestCase
             'delivery_address_id' => $delivery->id
         ]);
 
-        $service = DeliveryService::create(['name' => Str::random(3)]);
+        $service = DeliveryService::factory()->create(['name' => Str::random(3)]);
         Postcode::create([
             'delivery_service_id' => $service->id,
             'postcode' => $postcode

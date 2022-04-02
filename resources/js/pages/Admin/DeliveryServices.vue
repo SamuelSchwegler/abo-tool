@@ -62,7 +62,11 @@ export default {
             await this.$axios.get(`/api/delivery-services/`)
                 .then(response => {
                     this.services = response.data.services;
-                    this.service = this.services[0] ?? null;
+                    if(this.$route.params.hasOwnProperty('id')) {
+                        this.service = this.services.filter(service => service.id === parseInt(this.$route.params.id))[0];
+                    } else {
+                        this.service = this.services[0] ?? null;
+                    }
                     this.serviceKey++;
                 })
                 .catch(function (error) {

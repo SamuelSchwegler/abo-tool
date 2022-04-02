@@ -94,6 +94,18 @@ export const routes = [
         }
     },
     {
+        name: 'delivery-service',
+        path: '/delivery-service/:id',
+        component: DeliveryServices,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage delivery services')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
         name: 'deliveries',
         path: '/deliveries',
         component: Deliveries,
