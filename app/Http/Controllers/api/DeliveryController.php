@@ -7,7 +7,10 @@ use App\Http\Resources\DeliveryResource;
 use App\Http\Resources\DeliveryServiceResource;
 use App\Models\Delivery;
 use App\Models\DeliveryService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
 class DeliveryController extends Controller
@@ -44,5 +47,14 @@ class DeliveryController extends Controller
         return response([
             'delivery' => DeliveryResource::make($delivery)
         ]);
+    }
+
+    public function toggleApproved(Delivery $delivery): Response|Application|ResponseFactory
+    {
+        $delivery->update([
+            'approved' => !$delivery->approved
+        ]);
+
+        return $this->delivery($delivery);
     }
 }

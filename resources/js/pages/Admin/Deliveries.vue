@@ -27,6 +27,9 @@
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Lieferscheine
                 </th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    Bestätigt
+                </th>
                 <th>Details</th>
             </tr>
             </thead>
@@ -51,6 +54,9 @@
 
                 </td>
                 <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                    {{ delivery.approved ? 'ja' : 'nein'}}
+                </td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
                     <router-link :to="'/delivery/' + delivery.id" class="text-indigo-600 hover:text-indigo-900">mehr</router-link>
                 </td>
             </tr>
@@ -62,6 +68,7 @@
 <script>
 import formats from "../../formats";
 import DeliveryFilter from "./Parts/DeliveryFilter";
+import helpers from "../../helpers";
 
 export default {
     name: "Deliveries",
@@ -111,12 +118,7 @@ export default {
             this.load();
         },
         toggleValueInArray(array, value) {
-            if(array.includes(value)) {
-                return array.filter(function (ele) { return ele !== value;});
-            } else {
-               array.push(value);
-               return array;
-            }
+            return helpers.toggleValueInArray(array, value)
         }
     },
     created() {

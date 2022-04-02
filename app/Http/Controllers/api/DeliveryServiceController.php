@@ -16,7 +16,7 @@ class DeliveryServiceController extends Controller
     public function services(): Response|Application|ResponseFactory
     {
         return response([
-            'services' => DeliveryServiceResource::collection(DeliveryService::where('pickup', 0)->get())
+            'services' => DeliveryServiceResource::collection(DeliveryService::all())
         ]);
     }
 
@@ -34,9 +34,7 @@ class DeliveryServiceController extends Controller
     {
         $validated = $request->validate(DeliveryService::rules());
 
-        $service->update([
-            'name' => $validated['name'],
-        ]);
+        $service->update($validated);
 
         return response([
             'message' => 'ok',

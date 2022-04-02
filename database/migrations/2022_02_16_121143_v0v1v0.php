@@ -76,6 +76,7 @@ return new class extends Migration {
             $table->foreignId('delivery_service_id');
             $table->timestamp('date');
             $table->timestamp('deadline');
+            $table->boolean('approved')->default(false);
             $table->timestamps();
         });
 
@@ -120,6 +121,8 @@ return new class extends Migration {
            $table->bigIncrements('id');
            $table->string('name');
            $table->boolean('pickup')->default(false);
+           $table->json('days')->comment('an welchen Wochentagen soll eine Lieferung ausgelöst werden');
+           $table->smallInteger('deadline_distance')->default(2)->comment('wie viel Tage vor der Lieferung soll die Deadline enden.');
            $table->timestamps();
         });
 

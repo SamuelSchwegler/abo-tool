@@ -47,6 +47,7 @@ class DeliveryResource extends JsonResource
                 'id' => $this->delivery_service->id,
                 'name' => $this->delivery_service->name
             ],
+            'approved' => ($this->approved === 1),
             'orders' => $orders_array
         ];
     }

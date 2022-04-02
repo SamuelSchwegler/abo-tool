@@ -21,15 +21,18 @@ class DatabaseSeeder extends Seeder
     {
         $pickup = DeliveryService::create([
             'name' => 'Abholung in Hünibach',
-            'pickup' => 1
+            'pickup' => 1,
+            'days' => ['sat']
         ]);
 
         $post = DeliveryService::create([
             'name' => 'Post',
+            'days' => ['mon']
         ]);
 
         $velo = DeliveryService::create([
             'name' => 'Velokurier',
+            'days' => ['tue']
         ]);
 
         DB::table('postcodes')->insert([

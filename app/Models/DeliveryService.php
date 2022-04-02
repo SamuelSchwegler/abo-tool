@@ -9,6 +9,10 @@ class DeliveryService extends Model
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'days' => 'array'
+    ];
+
     public function postcodes(): HasMany
     {
         return $this->hasMany(Postcode::class)->orderBy('postcode');
@@ -23,6 +27,9 @@ class DeliveryService extends Model
     {
         return [
             'name' => ['required'],
+            'days' => ['required', 'array', 'min:1'],
+            'days.*' => ['required', 'string'],
+            'deadline_distance' => ['required', 'min:0', 'max:14', 'numeric']
         ];
     }
 }

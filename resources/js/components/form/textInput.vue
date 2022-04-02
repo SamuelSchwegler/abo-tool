@@ -22,7 +22,7 @@ export default {
         }, name: {
             type: String
         }, value: {
-            type: String
+            type: [String, Number]
         }, error: {
             type: Object,
             default: function () {

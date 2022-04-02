@@ -30,22 +30,19 @@ class DeliverySeeder extends Seeder
         $end = $date->copy()->addMonths(3);
 
         while ($date->lte($end)) {
-            $delivery1 = Delivery::create([
-                'date' => $date,
-                'deadline' => $date->copy()->subDays(1),
-                'delivery_service_id' => DeliveryService::inRandomOrder()->first()->id,
-            ]);
+            foreach(DeliveryService::all() as $service) {
+                if(in_array(strtolower($date->locale('en')->isoFormat('ddd')), $service->days)) {
+                    $delivery = Delivery::create([
+                        'date' => $date,
+                        'deadline' => $date->copy()->subDays($service->deadline_distance),
+                        'delivery_service_id' => $service->id,
+                        'approved' => $date->lt(now()->addWeeks(2)),
+                        'updated_at' => $date->copy()->subDays(15)
+                    ]);
+                }
+            }
 
-            $date->addDays(2);
-
-            $delivery2 = Delivery::create([
-                'date' => $date,
-                'deadline' => $date->copy()->subDays(1),
-                'delivery_service_id' => DeliveryService::inRandomOrder()->where('id', '!=', $delivery1->delivery_service_id)->first()->id,
-            ]);
-
-            $date->addDays(5);
-
+            $date->addDay();
         }
 
         foreach($paidBuys as $buy) {
