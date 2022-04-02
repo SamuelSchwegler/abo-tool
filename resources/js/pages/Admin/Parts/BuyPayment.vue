@@ -4,7 +4,9 @@
             {{ buy.id }}
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-            {{ buy.customer.name }}
+            <router-link :to="'/customer/' + buy.customer.id" class="text-indigo-600 hover:text-indigo-900">
+                {{ buy.customer.name }}
+            </router-link>
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             {{ buy.bundle.name }}
@@ -67,7 +69,6 @@ export default {
 }
 </script>
 
-<style src="@vueform/toggle/themes/default.css"></style>
 <style scoped>
 
 </style>

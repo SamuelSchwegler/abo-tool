@@ -13,6 +13,7 @@ import ResetPassword from "../pages/auth/ResetPassword";
 import Deliveries from "../pages/Admin/Deliveries";
 import Customers from "../pages/Admin/Customers";
 import Delivery from "../pages/Admin/Delivery";
+import Customer from "../pages/Admin/Customer";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -133,6 +134,18 @@ export const routes = [
         name: 'customers',
         path: '/customers',
         component: Customers,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage customers')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'customer',
+        path: '/customer/:id',
+        component: Customer,
         beforeEnter: (to, from, next) => {
             if (window.Laravel.isLoggedIn && can('manage customers')) {
                 next();

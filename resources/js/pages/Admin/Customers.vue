@@ -32,7 +32,10 @@
                         <tr v-for="(person, personIdx) in customers" :key="person.email"
                             :class="personIdx % 2 === 0 ? undefined : 'bg-gray-50'">
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                {{ person.name }}
+                                <router-link :to="'/customer/' + person.id"
+                                             class="text-indigo-600 hover:text-indigo-900">
+                                    {{ person.name }}
+                                </router-link>
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                 <a :href="'mailto:' + person.mail" class="text-indigo-600 hover:text-indigo-900">

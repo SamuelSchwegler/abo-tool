@@ -17,4 +17,11 @@ class CustomerController extends Controller
             'customers' => CustomerResource::collection(Customer::orderBy('last_name')->orderBy('first_name')->get())
         ]);
     }
+
+    public function customer(Customer $customer): Response
+    {
+        return response([
+            'customer' => CustomerResource::make($customer)
+        ]);
+    }
 }

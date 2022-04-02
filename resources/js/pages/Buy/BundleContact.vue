@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="box">
-            <customer :customer="user.customer" :errors="errors"></customer>
+            <customer-data :customer="user.customer" :errors="errors"></customer-data>
             <fieldset>
                 <legend class="sr-only">Plan</legend>
                 <div class="space-y-5">
@@ -60,7 +60,7 @@
 
 <script>
 import Bundle from "../../components/Bundle";
-import Customer from "../../components/parts/Customer";
+import CustomerData from "../../components/parts/CustomerData";
 import AddressVue from "../../components/parts/Address";
 import ProgressSteps from "../../components/parts/ProgressSteps";
 import TextInput from "../../components/form/textInput";
@@ -72,7 +72,7 @@ export default {
     name: "BundleBuy",
     components: {
         ProgressSteps, Alert, LoginModal, LoginCredentials,
-        Bundle, Customer, AddressVue, TextInput
+        Bundle, CustomerData, AddressVue, TextInput
     },
 
     data: function () {

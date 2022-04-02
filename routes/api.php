@@ -63,5 +63,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/delivery/{delivery}/toggle-approved', [DeliveryController::class, 'toggleApproved']);
 
     Route::get('/customers', [CustomerController::class, 'customers']);
-
+    Route::get('/customer/{customer}', [CustomerController::class, 'customer']);
 });
