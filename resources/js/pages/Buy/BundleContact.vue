@@ -1,7 +1,7 @@
 <template>
     <progress-steps :steps="steps"></progress-steps>
     <div class="grid grid-cols-2 gap-4" :key="bundleBuyKey">
-        <div class="box">
+        <div class="box bg-white">
             <h3 class="title">Ihre Bestellung</h3>
             <bundle :bundle="bundle" v-if="bundle.hasOwnProperty('id')"></bundle>
             <div v-if="!isLoggedIn" class="mt-5">
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="box">
+        <div class="box bg-white">
             <customer-data :customer="user.customer" :errors="errors"></customer-data>
             <fieldset>
                 <legend class="sr-only">Plan</legend>
@@ -60,13 +60,13 @@
 
 <script>
 import Bundle from "../../components/Bundle";
-import CustomerData from "../../components/parts/CustomerData";
-import AddressVue from "../../components/parts/Address";
-import ProgressSteps from "../../components/parts/ProgressSteps";
 import TextInput from "../../components/form/textInput";
 import Alert from "../../components/parts/Alert";
 import LoginModal from "../../components/parts/LoginModal";
 import LoginCredentials from "../../components/parts/LoginCredentials";
+import ProgressSteps from "../parts/ProgressSteps";
+import CustomerData from "../parts/CustomerData";
+import AddressVue from "../parts/Address";
 
 export default {
     name: "BundleBuy",

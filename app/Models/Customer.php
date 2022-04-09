@@ -80,6 +80,19 @@ class Customer extends Model
         return $this->first_name.' '.$this->last_name;
     }
 
+    public function getDeliveryOptionAttribute(): string
+    {
+        $delivery = $this->delivery_address;
+        $billing = $this->billing_address;
+        if(is_null($delivery)) {
+            return 'pickup';
+        } elseif($delivery->id === $billing?->id) {
+            return 'match';
+        } else {
+            return 'split';
+        }
+    }
+
     public function delivery_address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'delivery_address_id');
