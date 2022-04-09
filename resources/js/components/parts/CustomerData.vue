@@ -20,7 +20,7 @@
 import TextInput from "../form/textInput";
 
 export default {
-    name: "Customer",
+    name: "CustomerData",
     components: {
         TextInput
     },

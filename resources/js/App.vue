@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Navigation from "./components/parts/Navigation";
+import Navigation from "./pages/parts/Navigation";
 
 export default {
     name: "App",

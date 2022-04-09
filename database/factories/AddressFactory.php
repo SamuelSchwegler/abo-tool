@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Postcode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class AddressFactory extends Factory
     {
         return [
             'street' => $this->faker->streetAddress(),
-            'postcode' => $this->faker->postcode(),
+            'postcode' => $this->faker->randomElement([$this->faker->postcode(), Postcode::inRandomOrder()->first()->postcode]),
             'city' => $this->faker->city(),
         ];
     }

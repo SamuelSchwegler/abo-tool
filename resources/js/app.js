@@ -14,9 +14,20 @@ const store = createStore({
     plugins: [createPersistedState()],
 });
 
-const app = createApp(App)
+const can = (can) => {
+    if (window.Laravel.permissions.length > 0) {
+        return window.Laravel.permissions.some(r => can.includes(r))
+    }
+
+    return false;
+};
+
+const app = createApp(App);
+app.config.globalProperties.can = can;
 app.config.globalProperties.$axios = axios;
 app.use(router)
 app.use(Notifications);
-//app.use(store);
-app.mount('#app')
+
+
+
+app.mount('#app');

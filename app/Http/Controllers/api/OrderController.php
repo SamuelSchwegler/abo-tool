@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Exceptions\OrderEditException;
+use App\Exceptions\DeliveryException;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CustomerResource;
 use App\Http\Resources\OrderResource;
+use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -16,12 +18,16 @@ use function response;
 
 class OrderController extends Controller
 {
-    public function orders()
+    public function orders(?Customer $customer = null)
     {
-        $user = Auth::user();
-        $customer = $user->customer;
+        if(is_null($customer)) {
+            $user = Auth::user();
+            $customer = $user->customer;
+        }
+
 
         return \response([
+            'customer' => CustomerResource::make($customer),
             'orders' => OrderResource::collection(OrderResource::collection($customer?->next_orders ?? collect([]))),
             'product_balances' => $customer->productBalances()
         ]);
@@ -31,13 +37,13 @@ class OrderController extends Controller
      * @param Order $order
      * @param Request $request
      * @return Response|Application|ResponseFactory
-     * @throws OrderEditException
+     * @throws DeliveryException
      */
     public function update(Order $order, Request $request): Response|Application|ResponseFactory
     {
         assertNotNull($order);
         if ($order->deadlinePassed()) {
-            throw OrderEditException::deadlineHasPassed($order);
+            throw DeliveryException::deadlineHasPassed($order->delivery);
         }
 
         $validated = $request->validate([
@@ -50,12 +56,12 @@ class OrderController extends Controller
 
     /**
      * Abmeldung einer Bestellung regeln
-     * @throws OrderEditException
+     * @throws DeliveryException
      */
     public function toggleCancel(Order $order): Response|Application|ResponseFactory
     {
         if ($order->deadlinePassed()) {
-            throw OrderEditException::deadlineHasPassed($order);
+            throw DeliveryException::deadlineHasPassed($order->delivery);
         }
         $order->update([
             'canceled' => !$order->canceled

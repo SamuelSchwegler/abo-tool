@@ -11,6 +11,7 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
 
     public ?User $admin;
+    public ?User $customer;
 
     protected static bool $seeded = false;
 
@@ -25,5 +26,6 @@ abstract class TestCase extends BaseTestCase
         }
 
         $this->admin = User::where('email', 'demo@webtheke.ch')->first();
+        $this->customer = User::role('customer')->first();
     }
 }

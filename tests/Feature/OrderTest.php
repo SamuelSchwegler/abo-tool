@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Exceptions\OrderEditException;
+use App\Exceptions\DeliveryException;
 use App\Models\Delivery;
 use App\Models\Order;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -49,9 +49,15 @@ class OrderTest extends TestCase
     public function test_toggleCancel()  {
         $this->actingAs($this->admin);
 
+        $delivery = Delivery::factory()->create([
+            'deadline' => now()->addDay(),
+        ]);
         $order = Order::factory()->create([
+            'delivery_id' => $delivery->id,
+            'depository' => '',
             'canceled' => true
         ]);
+
         $response = $this->patch('/api/order/'.$order->id.'/toggle-cancel');
         $response->assertOk();
 

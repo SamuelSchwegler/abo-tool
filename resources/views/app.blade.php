@@ -19,13 +19,15 @@
     @php
         $user_auth_data = [
             'isLoggedIn' => true,
-            'user' =>  \App\Http\Resources\UserResource::make(Auth::user())
+            'user' =>  \App\Http\Resources\UserResource::make(Auth::user()),
+            'permissions' => auth()->user()->getAllPermissions()->flatten()->pluck('name')->toArray()
         ];
     @endphp
 @else
     @php
         $user_auth_data = [
-            'isLoggedIn' => false
+            'isLoggedIn' => false,
+            'permissions' => []
         ];
     @endphp
 @endif

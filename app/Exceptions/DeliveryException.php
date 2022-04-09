@@ -2,15 +2,13 @@
 
 namespace App\Exceptions;
 
-use App\Models\Order;
-use Carbon\Carbon;
+use App\Models\Delivery;
 use Exception;
 
-class OrderEditException extends Exception
+class DeliveryException extends Exception
 {
-    public static function deadlineHasPassed(Order $order): OrderEditException
+    public static function deadlineHasPassed(Delivery $delivery): DeliveryException
     {
-        $delivery = $order->delivery;
         return new static("Die Bestellung lässt sich nicht mehr bearbeiten, da die Abmeldefrist am ".$delivery->deadline->format('d.m.Y')." abgelaufen ist.");
     }
 }

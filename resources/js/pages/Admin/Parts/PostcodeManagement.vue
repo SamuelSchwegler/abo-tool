@@ -1,5 +1,5 @@
 <template>
-    <div class="box">
+    <div class="box bg-white">
         <h3 class="title">Postleitzahlen</h3>
         <div class="postcodes">
             <span class="postcode inline-block rounded-full bg-violet text-sm text-white px-4 py-2 mr-2 mb-2"
