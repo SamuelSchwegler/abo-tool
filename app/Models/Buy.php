@@ -36,9 +36,9 @@ class Buy extends Model
         // Who will receive the payment and to which bank account?
         $qrBill->setCreditor(
             QrBill\DataGroup\Element\CombinedAddress::create(
-                'Robert Schneider AG',
+                $setting->name,
                 $setting->address->street,
-                $setting->address->postcode.' '.$setting->address->city,
+                $setting->address->postcode . ' ' . $setting->address->city,
                 'CH'
             ));
 
@@ -86,7 +86,7 @@ class Buy extends Model
         // Optionally, add some human-readable information about what the bill is for.
         $qrBill->setAdditionalInformation(
             QrBill\DataGroup\Element\AdditionalInformation::create(
-                'Rechnung '.$this->id
+                'Rechnung ' . $this->id
             )
         );
 
@@ -94,11 +94,11 @@ class Buy extends Model
         $qr_code_path = storage_path('app/bills/qr_codes');
 
         try {
-            $qrBill->getQrCode()->writeFile($qr_code_path.'/qr.png');
-            $qrBill->getQrCode()->writeFile($qr_code_path.'/qr.svg');
+            $qrBill->getQrCode()->writeFile($qr_code_path . '/qr.png');
+            $qrBill->getQrCode()->writeFile($qr_code_path . '/qr.svg');
         } catch (Exception $e) {
             foreach ($qrBill->getViolations() as $violation) {
-                echo $violation->getMessage()."\n";
+                echo $violation->getMessage() . "\n";
             }
             exit;
         }
