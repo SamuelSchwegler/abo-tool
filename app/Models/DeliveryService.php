@@ -38,7 +38,8 @@ class DeliveryService extends Model
         ];
     }
 
-    public function customers() {
+    public function customers()
+    {
         return Customer::leftJoin('addresses', 'addresses.id', 'customers.delivery_address_id')
             ->leftJoin('postcodes', 'postcodes.postcode', 'addresses.postcode')
             ->leftJoin('delivery_services', 'delivery_services.id', 'postcodes.delivery_service_id')
@@ -47,14 +48,25 @@ class DeliveryService extends Model
     }
 
     /**
-     * @param null $db
      * @return Attribute
      */
-    protected function deliveryCost($db = null): Attribute
+    protected function deliveryCost(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value/100,
-            set: fn ($value) => $value*100,
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
+    }
+
+    /**
+     * Gibt den passenden Lieferdienst für eine Postleitzahl zurück
+     * @param string $postcode
+     * @return ?DeliveryService
+     */
+    public static function findServiceForPostcode(string $postcode): ?DeliveryService
+    {
+        return self::whereHas('postcodes', function ($query) use ($postcode) {
+            $query->where('postcode', $postcode);
+        })->first();
     }
 }

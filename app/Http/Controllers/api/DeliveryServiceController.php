@@ -20,7 +20,8 @@ class DeliveryServiceController extends Controller
         ]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validated = $request->validate(DeliveryService::rules());
 
         $service = DeliveryService::create($validated);
@@ -76,5 +77,19 @@ class DeliveryServiceController extends Controller
             'message' => 'ok',
             'service' => new DeliveryServiceResource($service),
         ], 200);
+    }
+
+    public function postcodeDeliveryService(Request $request): Response|Application|ResponseFactory
+    {
+        $validated = $request->validate([
+            'postcode' => ['required']
+        ]);
+
+        $service = DeliveryService::findServiceForPostcode($validated['postcode']) ?? DeliveryService::where('pickup', 1)->first();
+
+        return \response([
+            'msg' => 'ok',
+            'service' => new DeliveryServiceResource($service)
+        ]);
     }
 }

@@ -10,6 +10,9 @@
                 </h1>
                 <div class="text-lg font-semibold text-slate-500">
                     {{ bundle.formatted_price }} CHF
+                    <span v-if="delivery_cost !== null" class="whitespace-nowrap">
+                        + Lieferkosten {{ delivery_cost }} CHF
+                    </span>
                 </div>
             </div>
             <div class="flex space-x-4 my-6 text-sm font-medium" v-if="allowOrder">
@@ -26,7 +29,18 @@
 <script>
 export default {
     name: "Bundle",
-    props: ['bundle', 'allowOrder'],
+    props: {
+        bundle: {
+            type: Object
+        },
+        allowOrder: {
+            type: Boolean
+        },
+        delivery_cost: {
+            type: Number,
+            default: null
+        }
+    }
 }
 </script>
 

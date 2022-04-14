@@ -53,6 +53,13 @@ class DeliveryServiceTest extends TestCase
         self::assertEquals(1, $service1->postcodes->count());
         self::assertEquals(0, $service2->postcodes->count());
 
+        // Test Postcode
+        $response = $this->json('get', '/api/postcode-delivery-service', [
+            'postcode' => $postcode
+        ]);
+        $response->assertOk();
+        self::assertEquals($service1->id, $response->json(['service'])['id']);
+
         $response = $this->post('/api/delivery-service/'.$service2->id.'/add/', [
             'postcode' => $postcode,
         ]);
@@ -64,6 +71,13 @@ class DeliveryServiceTest extends TestCase
         self::assertEquals($postcode_count + 1, Postcode::count());
         self::assertEquals(0, $service1->postcodes->count());
         self::assertEquals(1, $service2->postcodes->count());
+
+        // Test Postcode
+        $response = $this->json('get', '/api/postcode-delivery-service', [
+            'postcode' => $postcode
+        ]);
+        $response->assertOk();
+        self::assertEquals($service2->id, $response->json(['service'])['id']);
 
         $response = $this->post('/api/delivery-service/'.$service2->id.'/remove/', [
             'postcode' => $postcode,
@@ -85,7 +99,7 @@ class DeliveryServiceTest extends TestCase
             'name' => 'alt',
         ]);
 
-        $response = $this->patch('/api/delivery-service/'.$service->id, [
+        $response = $this->json('patch', '/api/delivery-service/'.$service->id, [
             'name' => 'neu',
             'days' => ['sat'],
             'deadline_distance' => 1

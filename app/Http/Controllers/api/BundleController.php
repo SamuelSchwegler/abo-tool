@@ -11,6 +11,7 @@ use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\User;
 use App\Notifications\SendInvoice;
+use App\Rules\DeliveryPossibleToPostcode;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -67,7 +68,7 @@ class BundleController extends Controller
             'delivery_address' => ['required', 'array'],
             'delivery_address.street' => ['required', 'string'],
             'delivery_address.postcode' => ['required', 'string'],
-            'delivery_address.city' => ['required', 'string']
+            'delivery_address.city' => ['required', 'string'],
         ];
 
         $billingAddressRules = [
@@ -79,6 +80,7 @@ class BundleController extends Controller
 
         switch ($request->delivery_option) {
             case "match":
+                $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
                 $deliveryAddressValidated = $request->validate($deliveryAddressRules);
 
                 $address = Address::create($deliveryAddressValidated['delivery_address']);
@@ -99,6 +101,7 @@ class BundleController extends Controller
                 ];
                 break;
             case "split":
+                $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
                 $deliveryAddressValidated = $request->validate($deliveryAddressRules);
                 $billingAddressValidated = $request->validate($billingAddressRules);
 
@@ -123,11 +126,14 @@ class BundleController extends Controller
         }
         $user->refresh(); // customer für user nachladen
 
+        $service = $customer->delivery_service();
+
         $buy = Buy::create([
             'customer_id' => $customer->id,
             'bundle_id' => $bundle->id,
             'price' => $bundle->price,
-            'issued' => now()
+            'issued' => now(),
+            'delivery_cost' => $service->delivery_cost * $bundle->deliveries
         ]);
 
         try {

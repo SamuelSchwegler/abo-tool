@@ -41,8 +41,11 @@
             </fieldset>
             <div v-if="delivery_option !== 'pickup'" class="mt-5">
                 <h4>Lieferadresse</h4>
-                <address-vue :address="user.customer.delivery_address" class="mt-5"
-                             :errors="delivery_address_errors"></address-vue>
+                <address-vue v-on:postcodeChanged="getDeliveryService" :address="user.customer.delivery_address"
+                             class="mt-5" :errors="delivery_address_errors"></address-vue>
+                <alert v-if="!delivery_service.pickup && delivery_service.delivery_cost > 0"
+                       :text="'Die Lieferkosten betragen pro Lieferung ' + delivery_service.delivery_cost+ ' CHF'"></alert>
+                <alert v-if="delivery_service.pickup" :text="'Für diese PLZ wird keine Lieferung angeboten'"></alert>
             </div>
             <div v-if="delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
@@ -126,7 +129,8 @@ export default {
                 password: ''
             },
             delivery_address_errors: [],
-            billing_address_errors: []
+            billing_address_errors: [],
+            delivery_service: {}
         }
     },
     methods: {
@@ -137,9 +141,10 @@ export default {
                 this.user.customer.delivery_address = {}
             }
 
+            this.user.customer.delivery_option = this.delivery_option;
+
             this.$axios.post(`/api/bundle/${this.$route.params.id}/buy`, {
-                pickup: this.delivery_option === "pickup",
-                delivery_option: this.delivery_option,
+                pickup: (this.delivery_option === "pickup"),
                 ...this.user.customer,
                 ...this.credentials
             }).then(response => {
@@ -165,6 +170,7 @@ export default {
         },
         changeDeliveryOption: function (id) {
             this.delivery_option = id;
+            this.getDeliveryService();
         },
         openLoginModal: function () {
             this.show_loginModal = true;
@@ -175,6 +181,18 @@ export default {
             this.user = user;
             this.isLoggedIn = true;
             this.bundleBuyKey++;
+        },
+        async getDeliveryService() {
+            let postcode = this.user.customer.delivery_address.postcode;
+            if (postcode.length > 0) {
+                await axios.get('/api/postcode-delivery-service', {
+                    params: {
+                        postcode: this.user.customer.delivery_address.postcode
+                    }
+                }).then(response => {
+                    this.delivery_service = response.data.service;
+                });
+            }
         }
     },
     created() {
@@ -185,6 +203,8 @@ export default {
             .catch(function (error) {
                 console.log(error);
             });
+
+        this.getDeliveryService();
     }
 }
 </script>

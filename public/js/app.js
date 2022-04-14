@@ -20180,7 +20180,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Bundle",
-  props: ['bundle', 'allowOrder']
+  props: {
+    bundle: {
+      type: Object
+    },
+    allowOrder: {
+      type: Boolean
+    },
+    delivery_cost: {
+      type: Number,
+      "default": null
+    }
+  }
 });
 
 /***/ }),
@@ -21449,14 +21460,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _components_Bundle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/Bundle */ "./resources/js/components/Bundle.vue");
-/* harmony import */ var _components_form_textInput__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/form/textInput */ "./resources/js/components/form/textInput.vue");
-/* harmony import */ var _components_parts_Alert__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/parts/Alert */ "./resources/js/components/parts/Alert.vue");
-/* harmony import */ var _components_parts_LoginModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/parts/LoginModal */ "./resources/js/components/parts/LoginModal.vue");
-/* harmony import */ var _components_parts_LoginCredentials__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/parts/LoginCredentials */ "./resources/js/components/parts/LoginCredentials.vue");
-/* harmony import */ var _parts_ProgressSteps__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../parts/ProgressSteps */ "./resources/js/pages/parts/ProgressSteps.vue");
-/* harmony import */ var _parts_CustomerData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../parts/CustomerData */ "./resources/js/pages/parts/CustomerData.vue");
-/* harmony import */ var _parts_Address__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../parts/Address */ "./resources/js/pages/parts/Address.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Bundle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Bundle */ "./resources/js/components/Bundle.vue");
+/* harmony import */ var _components_form_textInput__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/form/textInput */ "./resources/js/components/form/textInput.vue");
+/* harmony import */ var _components_parts_Alert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/parts/Alert */ "./resources/js/components/parts/Alert.vue");
+/* harmony import */ var _components_parts_LoginModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/parts/LoginModal */ "./resources/js/components/parts/LoginModal.vue");
+/* harmony import */ var _components_parts_LoginCredentials__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/parts/LoginCredentials */ "./resources/js/components/parts/LoginCredentials.vue");
+/* harmony import */ var _parts_ProgressSteps__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../parts/ProgressSteps */ "./resources/js/pages/parts/ProgressSteps.vue");
+/* harmony import */ var _parts_CustomerData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../parts/CustomerData */ "./resources/js/pages/parts/CustomerData.vue");
+/* harmony import */ var _parts_Address__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../parts/Address */ "./resources/js/pages/parts/Address.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -21474,14 +21493,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "BundleBuy",
   components: {
-    ProgressSteps: _parts_ProgressSteps__WEBPACK_IMPORTED_MODULE_5__["default"],
-    Alert: _components_parts_Alert__WEBPACK_IMPORTED_MODULE_2__["default"],
-    LoginModal: _components_parts_LoginModal__WEBPACK_IMPORTED_MODULE_3__["default"],
-    LoginCredentials: _components_parts_LoginCredentials__WEBPACK_IMPORTED_MODULE_4__["default"],
-    Bundle: _components_Bundle__WEBPACK_IMPORTED_MODULE_0__["default"],
-    CustomerData: _parts_CustomerData__WEBPACK_IMPORTED_MODULE_6__["default"],
-    AddressVue: _parts_Address__WEBPACK_IMPORTED_MODULE_7__["default"],
-    TextInput: _components_form_textInput__WEBPACK_IMPORTED_MODULE_1__["default"]
+    ProgressSteps: _parts_ProgressSteps__WEBPACK_IMPORTED_MODULE_6__["default"],
+    Alert: _components_parts_Alert__WEBPACK_IMPORTED_MODULE_3__["default"],
+    LoginModal: _components_parts_LoginModal__WEBPACK_IMPORTED_MODULE_4__["default"],
+    LoginCredentials: _components_parts_LoginCredentials__WEBPACK_IMPORTED_MODULE_5__["default"],
+    Bundle: _components_Bundle__WEBPACK_IMPORTED_MODULE_1__["default"],
+    CustomerData: _parts_CustomerData__WEBPACK_IMPORTED_MODULE_7__["default"],
+    AddressVue: _parts_Address__WEBPACK_IMPORTED_MODULE_8__["default"],
+    TextInput: _components_form_textInput__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     var delivery_options = [{
@@ -21543,7 +21562,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         password: ''
       },
       delivery_address_errors: [],
-      billing_address_errors: []
+      billing_address_errors: [],
+      delivery_service: {}
     };
   },
   methods: {
@@ -21556,9 +21576,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.user.customer.delivery_address = {};
       }
 
+      this.user.customer.delivery_option = this.delivery_option;
       this.$axios.post("/api/bundle/".concat(this.$route.params.id, "/buy"), _objectSpread(_objectSpread({
-        pickup: this.delivery_option === "pickup",
-        delivery_option: this.delivery_option
+        pickup: this.delivery_option === "pickup"
       }, this.user.customer), this.credentials)).then(function (response) {
         var buy = response.data.buy;
 
@@ -21585,6 +21605,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     changeDeliveryOption: function changeDeliveryOption(id) {
       this.delivery_option = id;
+      this.getDeliveryService();
     },
     openLoginModal: function openLoginModal() {
       this.show_loginModal = true;
@@ -21595,16 +21616,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.user = user;
       this.isLoggedIn = true;
       this.bundleBuyKey++;
+    },
+    getDeliveryService: function getDeliveryService() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var postcode;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                postcode = _this2.user.customer.delivery_address.postcode;
+
+                if (!(postcode.length > 0)) {
+                  _context.next = 4;
+                  break;
+                }
+
+                _context.next = 4;
+                return axios.get('/api/postcode-delivery-service', {
+                  params: {
+                    postcode: _this2.user.customer.delivery_address.postcode
+                  }
+                }).then(function (response) {
+                  _this2.delivery_service = response.data.service;
+                });
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   },
   created: function created() {
-    var _this2 = this;
+    var _this3 = this;
 
     this.$axios.get("/api/bundle/".concat(this.$route.params.id)).then(function (response) {
-      _this2.bundle = response.data.data;
+      _this3.bundle = response.data.data;
     })["catch"](function (error) {
       console.log(error);
     });
+    this.getDeliveryService();
   }
 });
 
@@ -21972,6 +22027,12 @@ __webpack_require__.r(__webpack_exports__);
   props: ['address', "errors"],
   components: {
     textInput: _components_form_textInput__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  emits: ['postcodeChanged'],
+  methods: {
+    postcodeChanged: function postcodeChanged() {
+      this.$emit('postcodeChanged', this.address.postcode);
+    }
   }
 });
 
@@ -22263,22 +22324,28 @@ var _hoisted_6 = {
 };
 var _hoisted_7 = {
   key: 0,
-  "class": "flex space-x-4 my-6 text-sm font-medium"
+  "class": "whitespace-nowrap"
 };
 var _hoisted_8 = {
+  key: 0,
+  "class": "flex space-x-4 my-6 text-sm font-medium"
+};
+var _hoisted_9 = {
   "class": "flex-auto flex space-x-4"
 };
 
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Bestellen ");
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Bestellen ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.bundle.name), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.bundle.formatted_price) + " CHF ", 1
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.bundle.formatted_price) + " CHF ", 1
   /* TEXT */
-  )]), $props.allowOrder ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+  ), $props.delivery_cost !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_7, " + Lieferkosten " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.delivery_cost) + " CHF ", 1
+  /* TEXT */
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), $props.allowOrder ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: {
       name: 'bundle.buy',
       params: {
@@ -22288,7 +22355,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_9];
+      return [_hoisted_10];
     }),
     _: 1
     /* STABLE */
@@ -24202,7 +24269,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "box"
+  "class": "box bg-white"
 };
 
 var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
@@ -24212,7 +24279,7 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_3 = {
-  "class": "box"
+  "class": "box bg-white"
 };
 
 var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
@@ -24245,10 +24312,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "grid grid-cols-2 gap-4",
     key: $data.billKey
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_bundle, {
-    bundle: $data.buy.bundle
+    bundle: $data.buy.bundle,
+    delivery_cost: $data.buy.delivery_cost
   }, null, 8
   /* PROPS */
-  , ["bundle"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Sie erhalten eine Email an " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.buy.customer.user.email) + " mit der Rechnung für Ihre Bestellung.", 1
+  , ["bundle", "delivery_cost"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Sie erhalten eine Email an " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.buy.customer.user.email) + " mit der Rechnung für Ihre Bestellung.", 1
   /* TEXT */
   ), _hoisted_6])])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
@@ -24419,12 +24487,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }), 128
   /* KEYED_FRAGMENT */
   ))])]), _ctx.delivery_option !== 'pickup' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_address_vue, {
+    onPostcodeChanged: $options.getDeliveryService,
     address: _ctx.user.customer.delivery_address,
     "class": "mt-5",
     errors: _ctx.delivery_address_errors
   }, null, 8
   /* PROPS */
-  , ["address", "errors"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.delivery_option !== 'match' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_address_vue, {
+  , ["onPostcodeChanged", "address", "errors"]), !_ctx.delivery_service.pickup && _ctx.delivery_service.delivery_cost > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_alert, {
+    key: 0,
+    text: 'Die Lieferkosten betragen pro Lieferung ' + _ctx.delivery_service.delivery_cost + ' CHF'
+  }, null, 8
+  /* PROPS */
+  , ["text"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.delivery_service.pickup ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_alert, {
+    key: 1,
+    text: 'Für diese PLZ wird keine Lieferung angeboten'
+  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.delivery_option !== 'match' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_address_vue, {
     address: _ctx.user.customer.billing_address,
     errors: _ctx.billing_address_errors
   }, null, 8
@@ -25047,10 +25124,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     value: $props.address.postcode,
     label: "PLZ",
+    onChange: $options.postcodeChanged,
     error: $props.errors['postcode']
   }, null, 8
   /* PROPS */
-  , ["modelValue", "value", "error"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+  , ["modelValue", "value", "onChange", "error"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
     name: "city",
     modelValue: $props.address.city,
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {

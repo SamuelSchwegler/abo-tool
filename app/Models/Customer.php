@@ -17,15 +17,18 @@ class Customer extends Model
 
     protected $guarded = ['id'];
 
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function orders(): HasMany {
+    public function orders(): HasMany
+    {
         return $this->hasMany(Order::class);
     }
 
-    public function buys(): HasMany {
+    public function buys(): HasMany
+    {
         return $this->hasMany(Buy::class);
     }
 
@@ -33,7 +36,7 @@ class Customer extends Model
     {
         return DB::table('buys')->where('buys.customer_id', '=', $this->id)->where('buys.paid', 1)
             ->leftJoin('bundles', 'buys.bundle_id', 'bundles.id')
-            ->leftJoin('products','products.id', 'bundles.product_id')
+            ->leftJoin('products', 'products.id', 'bundles.product_id')
             ->groupBy('products.id')
             ->selectRaw('products.id as product_id, products.name, SUM(bundles.deliveries) as total_deliveries')->get();
     }
@@ -41,7 +44,7 @@ class Customer extends Model
     public function productOrders(): Collection
     {
         return DB::table('orders')->where('orders.customer_id', $this->id)
-            ->leftJoin('products','products.id', 'orders.product_id')
+            ->leftJoin('products', 'products.id', 'orders.product_id')
             ->leftJoin('deliveries', 'deliveries.id', 'orders.delivery_id')
             ->where('canceled', 0)
             ->groupBy('orders.product_id')
@@ -55,12 +58,12 @@ class Customer extends Model
     public function productBalances(): Collection
     {
         $balances = [];
-        foreach($this->productBuys() as $buy) {
+        foreach ($this->productBuys() as $buy) {
             $order = $this->productOrders()->where('product_id', $buy->product_id)->first();
             $balance = $buy;
-            $balance->total_deliveries = (int) $buy->total_deliveries;
-            $balance->ordered = (int) $order?->ordered ?? 0;
-            $balance->planned = (int) $order?->planned ?? 0;
+            $balance->total_deliveries = (int)$buy->total_deliveries;
+            $balance->ordered = (int)$order?->ordered ?? 0;
+            $balance->planned = (int)$order?->planned ?? 0;
             $balance->balance = $balance->total_deliveries - $balance->ordered;
 
             // todo calculate Expected end
@@ -70,23 +73,25 @@ class Customer extends Model
         return collect($balances);
     }
 
-    public function next_orders(): HasMany {
+    public function next_orders(): HasMany
+    {
         return $this->orders()->whereHas('delivery', function ($query) {
             $query->where('date', '>=', now()->subDay());
         })->limit(Order::PREVIEW_OFFSET);
     }
 
-    public function getNameAttribute(): string {
-        return $this->first_name.' '.$this->last_name;
+    public function getNameAttribute(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     public function getDeliveryOptionAttribute(): string
     {
         $delivery = $this->delivery_address;
         $billing = $this->billing_address;
-        if(is_null($delivery)) {
+        if (is_null($delivery)) {
             return 'pickup';
-        } elseif($delivery->id === $billing?->id) {
+        } elseif ($delivery->id === $billing?->id) {
             return 'match';
         } else {
             return 'split';
@@ -107,15 +112,18 @@ class Customer extends Model
      * Gibt Lieferservice für Adresse des Kundens, falls diese nicht in den Lieferzonen ist wird Selbstabholung gewählt
      * @return mixed
      */
-    public function delivery_service() {
-        $postcode = $this->delivery_address->postcode;
-
-        return DeliveryService::whereHas('postcodes', function ($query) use ($postcode) {
-           $query->where('postcode', $postcode);
-        })->first() ?? DeliveryService::where('pickup', 1)->first();
+    public function delivery_service()
+    {
+        $postcode = $this->delivery_address?->postcode;
+        $pickup = DeliveryService::where('pickup', 1)->first();
+        if(is_null($postcode)) {
+            return $pickup;
+        }
+        return DeliveryService::findServiceForPostcode($postcode) ?? $pickup;
     }
 
-    public static function rules(): array {
+    public static function rules(): array
+    {
         return [
             'first_name' => ['required', 'string'],
             'last_name' => ['required', 'string'],

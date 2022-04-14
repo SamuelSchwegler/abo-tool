@@ -65,16 +65,20 @@ class BuyController extends Controller
             'items' => [
                 [
                     'name' => $buy->bundle->name,
-                    'price' => number_format($buy->price / 100, 2, '.', '\'') . ' CHF'
+                    'single_price' => number_format($buy->price / 100 / $buy->bundle->deliveries, 2, '.', '\'') . ' CHF',
+                    'total_price' => number_format($buy->price / 100, 2, '.', '\'') . ' CHF',
+                    'count' => $buy->bundle->deliveries
                 ],
                 [
                     'name' => 'Lieferkosten',
-                    'price' => '12.00 CHF'
+                    'single_price' => number_format($buy->delivery_cost / $buy->bundle->deliveries, 2, '.', '\'').' CHF',
+                    'total_price' => $buy->delivery_cost . ' CHF',
+                    'count' => $buy->bundle->deliveries
                 ]
             ],
             'meta' => [
                 'issue_date' => $buy->issued->format('d.m.Y'),
-                'total_price' => number_format(($buy->price / 100) + 12, 2, '.', '\'') . ' CHF',
+                'total_price' => $buy->total_cost . ' CHF',
                 'summary_text' => 'Sämtliche Produkte sind Bio-zertifiziert: Bio-Zertifizierung: CH-BIO 006 | Betrieb-Nr: 1396
 Steuernummer: 109.681.257'
             ]

@@ -37,6 +37,8 @@ Route::get('bundle/{bundle}', [BundleController::class, 'bundle']);
 
 Route::post('bundle/{bundle}/buy', [BundleController::class, 'submitBuy']);
 
+Route::get('/postcode-delivery-service', [DeliveryServiceController::class, 'postcodeDeliveryService']);
+
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('orders', [OrderController::class, 'orders']);
@@ -54,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('delivery-services', [DeliveryServiceController::class, 'services']);
     Route::patch('/delivery-service/{service}/', [DeliveryServiceController::class, 'update']);
     Route::post('/delivery-service/', [DeliveryServiceController::class, 'store']);
+
 
     Route::post('/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
     Route::post('/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);

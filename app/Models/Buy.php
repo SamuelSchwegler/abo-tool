@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\TraitUuid;
 use Exception;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -68,7 +69,7 @@ class Buy extends Model
         $qrBill->setPaymentAmountInformation(
             QrBill\DataGroup\Element\PaymentAmountInformation::create(
                 'CHF',
-                $this->price / 100
+                $this->total_cost
             ));
 
         // Add payment reference
@@ -112,5 +113,24 @@ class Buy extends Model
     public function getFormatedPriceAttribute(): string
     {
         return number_format($this->price / 100, 2, '.', '\'');
+    }
+
+    /**
+     * @return Attribute
+     */
+    protected function deliveryCost(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => number_format($value / 100, 2, '.', '\''),
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTotalCostAttribute(): string
+    {
+        return number_format($this->delivery_cost + $this->price / 100, 2, '.', '\'');
     }
 }

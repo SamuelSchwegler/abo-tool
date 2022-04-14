@@ -30,19 +30,25 @@
     <p>Ihre Bestellung vom {{$meta['issue_date']}}:</p>
     <table border="1" cellpadding="6">
         <tr>
-            <td>Bezeichnung</td>
-            <td>MwSt</td>
-            <td style="text-align: right">Gesamt</td>
+            <td width="40%">Bezeichnung</td>
+            <td width="20%" style="text-align: right">Preis</td>
+            <td width="10%">Anzahl</td>
+            <td width="10%">MwSt</td>
+            <td width="20%" style="text-align: right">Gesamt</td>
         </tr>
         @foreach($items as $item)
             <tr>
                 <td>{{$item['name']}}</td>
+                <td  style="text-align: right">{{$item['single_price']}}</td>
+                <td>{{$item['count']}}</td>
                 <td>{{$item['vat'] ?? '0.00'}}</td>
-                <td style="text-align: right">{{$item['price']}}</td>
+                <td style="text-align: right">{{$item['total_price']}}</td>
             </tr>
         @endforeach
         <tr>
             <td><b>Total</b></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td style="text-align: right"><b>{{$meta['total_price']}}</b></td>
         </tr>

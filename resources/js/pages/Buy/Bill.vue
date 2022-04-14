@@ -1,11 +1,11 @@
 <template>
     <progress-steps :steps="steps"></progress-steps>
     <div class="grid grid-cols-2 gap-4" :key="billKey">
-        <div class="box">
+        <div class="box bg-white">
             <h3 class="title">Ihre Bestellung</h3>
-            <bundle :bundle="buy.bundle"></bundle>
+            <bundle :bundle="buy.bundle" :delivery_cost="buy.delivery_cost"></bundle>
         </div>
-        <div class="box">
+        <div class="box bg-white">
             <h3 class="title">Bezahlung</h3>
             <p>Besten Dank für Ihre Bestellung.</p>
             <p>Sie erhalten eine Email an {{ buy.customer.user.email }} mit der Rechnung für Ihre Bestellung.</p>
