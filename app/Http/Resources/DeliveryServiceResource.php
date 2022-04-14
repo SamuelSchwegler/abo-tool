@@ -40,7 +40,8 @@ class DeliveryServiceResource extends JsonResource
             'days' => $this->days,
             'pickup' => ($this->pickup === 1),
             'deadline_distance' => $this->deadline_distance,
-            'unapproved_deliveries' => $unapproved_array
+            'unapproved_deliveries' => $unapproved_array,
+            'delivery_cost' => $this->delivery_cost
         ];
     }
 }

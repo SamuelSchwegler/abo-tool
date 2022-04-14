@@ -25,12 +25,12 @@ class DatabaseSeeder extends Seeder
             'days' => ['sat']
         ]);
 
-        $post = DeliveryService::create([
+        $post = DeliveryService::factory()->create([
             'name' => 'Post',
             'days' => ['mon']
         ]);
 
-        $velo = DeliveryService::create([
+        $velo = DeliveryService::factory()->create([
             'name' => 'Velokurier',
             'days' => ['tue']
         ]);

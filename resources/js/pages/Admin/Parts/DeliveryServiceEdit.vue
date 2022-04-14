@@ -30,6 +30,11 @@
                             :value="deadline_distance" :error="errors['deadline_distance']"
                             @change="updateDeliveryService"></text-input>
             </div>
+            <div>
+                <text-input name="delivery_cost" label="Kosten / Lieferung in CHF" v-model="delivery_cost" :value="delivery_cost"
+                            :error="errors['delivery_cost']" @change="updateDeliveryService"></text-input>
+
+            </div>
             <div class="col-span-1" v-if="service === null">
                 <button class="btn bg-green w-full mt-6" @click="updateDeliveryService">Erstellen</button>
             </div>
@@ -88,6 +93,7 @@ export default {
             deadline_distance: (this.service !== null) ? this.service.deadline_distance : 2,
             errors: [],
             unapproved_deliveries: (this.service !== null) ? this.service.unapproved_deliveries : [],
+            delivery_cost: (this.service !== null) ? this.service.delivery_cost : 0,
             key: 0
         }
     },
@@ -96,7 +102,8 @@ export default {
             let data = {
                 'name': this.name,
                 'days': this.delivery_days,
-                'deadline_distance': this.deadline_distance
+                'deadline_distance': this.deadline_distance,
+                'delivery_cost': this.delivery_cost
             }
             if (this.service === null) {
                 await axios.post(`/api/delivery-service/`, data).then(response => {

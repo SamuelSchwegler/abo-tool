@@ -47,7 +47,7 @@
             <td style="text-align: right"><b>{{$meta['total_price']}}</b></td>
         </tr>
     </table>
-    <p></p>
+    <p>{{$meta['summary_text']}}</p>
 </div>
 </body>
 </html>

@@ -73,7 +73,9 @@ class BuyController extends Controller
             ],
             'meta' => [
                 'issue_date' => $buy->issued->format('d.m.Y'),
-                'total_price' => number_format(($buy->price / 100) + 12, 2, '.', '\'') . ' CHF'
+                'total_price' => number_format(($buy->price / 100) + 12, 2, '.', '\'') . ' CHF',
+                'summary_text' => 'Sämtliche Produkte sind Bio-zertifiziert: Bio-Zertifizierung: CH-BIO 006 | Betrieb-Nr: 1396
+Steuernummer: 109.681.257'
             ]
         ])->render();
     }

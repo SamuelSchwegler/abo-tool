@@ -20,6 +20,7 @@ class DeliveryServiceFactory extends Factory
         return [
             'name' => Str::random(),
             'days' => $this->faker->randomElements(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']),
+            'delivery_cost' => $this->faker->randomElement([5,8,10,12])
         ];
     }
 }

@@ -123,6 +123,7 @@ return new class extends Migration {
            $table->boolean('pickup')->default(false);
            $table->json('days')->comment('an welchen Wochentagen soll eine Lieferung ausgelöst werden');
            $table->smallInteger('deadline_distance')->default(2)->comment('wie viel Tage vor der Lieferung soll die Deadline enden.');
+           $table->integer('delivery_cost')->default(0)->comment('faktor 100');
            $table->timestamps();
         });
 

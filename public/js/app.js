@@ -21212,6 +21212,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       deadline_distance: this.service !== null ? this.service.deadline_distance : 2,
       errors: [],
       unapproved_deliveries: this.service !== null ? this.service.unapproved_deliveries : [],
+      delivery_cost: this.service !== null ? this.service.delivery_cost : 0,
       key: 0
     };
   },
@@ -21228,7 +21229,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 data = {
                   'name': _this.name,
                   'days': _this.delivery_days,
-                  'deadline_distance': _this.deadline_distance
+                  'deadline_distance': _this.deadline_distance,
+                  'delivery_cost': _this.delivery_cost
                 };
 
                 if (!(_this.service === null)) {
@@ -24113,9 +24115,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onChange: $options.updateDeliveryService
   }, null, 8
   /* PROPS */
+  , ["modelValue", "value", "error", "onChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+    name: "delivery_cost",
+    label: "Kosten / Lieferung in CHF",
+    modelValue: $data.delivery_cost,
+    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+      return $data.delivery_cost = $event;
+    }),
+    value: $data.delivery_cost,
+    error: $data.errors['delivery_cost'],
+    onChange: $options.updateDeliveryService
+  }, null, 8
+  /* PROPS */
   , ["modelValue", "value", "error", "onChange"])]), $props.service === null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn bg-green w-full mt-6",
-    onClick: _cache[2] || (_cache[2] = function () {
+    onClick: _cache[3] || (_cache[3] = function () {
       return $options.updateDeliveryService && $options.updateDeliveryService.apply($options, arguments);
     })
   }, "Erstellen")])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dl", _hoisted_15, [_hoisted_16, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.unapproved_deliveries, function (delivery, index) {
