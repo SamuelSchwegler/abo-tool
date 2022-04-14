@@ -3,5 +3,7 @@
 !templates/
 !templates/**
 !delivery-notes/
-!bills/
+!bills
+!bills/qr_codes
+!bills/qr_codes/.gitkeep
 !.gitignore

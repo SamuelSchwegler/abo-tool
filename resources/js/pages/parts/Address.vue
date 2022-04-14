@@ -13,7 +13,8 @@
 </template>
 
 <script>
-import textInput from "../form/textInput";
+
+import textInput from "../../components/form/textInput";
 
 export default {
     name: "Address",

@@ -20,7 +20,7 @@ class BuyTest extends TestCase
         $response = $this->get(route('buy.export.bill', $buy));
         $response->assertRedirect();
 
-        $this->actingAs($this->admin);
+        Sanctum::actingAs($this->admin);
         $response = $this->get(route('buy.export.bill', $buy));
         $response->assertDownload();
     }

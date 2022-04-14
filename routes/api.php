@@ -64,4 +64,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/customers', [CustomerController::class, 'customers']);
     Route::get('/customer/{customer}', [CustomerController::class, 'customer']);
+    Route::patch('/customer/{customer}', [CustomerController::class, 'update']);
 });

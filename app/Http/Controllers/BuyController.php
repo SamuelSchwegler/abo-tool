@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Notifications\SendInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use TCPDF;
 use Sprain\SwissQrBill as QrBill;
 

@@ -6,6 +6,7 @@ use App\Traits\TraitUuid;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Sprain\SwissQrBill as QrBill;
 
 class Buy extends Model
@@ -100,6 +101,8 @@ class Buy extends Model
             foreach ($qrBill->getViolations() as $violation) {
                 echo $violation->getMessage() . "\n";
             }
+
+            echo $e->getMessage(); // vorangehend wird nur anderes zeugs gemacht...
             exit;
         }
 

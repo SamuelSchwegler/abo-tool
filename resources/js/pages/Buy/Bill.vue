@@ -22,7 +22,7 @@
 
 <script>
 import Bundle from "../../components/Bundle";
-import ProgressSteps from "../../components/parts/ProgressSteps";
+import ProgressSteps from "../parts/ProgressSteps";
 
 export default {
     name: "Bill",
