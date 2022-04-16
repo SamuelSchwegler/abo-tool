@@ -4,16 +4,15 @@
             <text-input name="first_name" :value="c.first_name" v-model="c.first_name" label="Vorname" :error="errors['first_name']" @change="update"></text-input>
         </div>
         <div>
-            <text-input name="last_name" :value="c.last_name" v-model="c.last_name" label="Nachname" :error="errors['last_name']"></text-input>
+            <text-input name="last_name" :value="c.last_name" v-model="c.last_name" label="Nachname" :error="errors['last_name']" @change="update"></text-input>
         </div>
         <div>
-            <text-input name="company_name" :value="c.company_name" v-model="c.company_name" label="Firma" :error="errors['company_name']"></text-input>
+            <text-input name="company_name" :value="c.company_name" v-model="c.company_name" label="Firma" :error="errors['company_name']" @change="update"></text-input>
         </div>
         <div>
-            <text-input name="phone" :value="c.phone" v-model="c.phone" label="Telefon" :error="errors['phone']"></text-input>
+            <text-input name="phone" :value="c.phone" v-model="c.phone" label="Telefon" :error="errors['phone']" @change="update"></text-input>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -48,21 +47,8 @@ export default {
         }
     },
     methods: {
-        async update() {
-            if(this.editable) {
-                await axios.patch('/api/customer/' + this.$route.params.id, {
-                    first_name: this.c.first_name,
-                    last_name: this.c.last_name,
-                    company_name: this.c.company_name,
-                    phone: this.c.phone
-                }).then(response => {
-                    this.c = response.data.customer;
-
-                    this.$emit('updated', this.c);
-                }).catch(errors => {
-                    console.log(errors);
-                });
-            }
+        update() {
+            this.$emit('updated', this.c);
         },
     }
 }

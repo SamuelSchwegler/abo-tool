@@ -10,4 +10,19 @@ class Address extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public static function rules(string $prefix = ''): array
+    {
+        $rules = [
+            $prefix . (strlen($prefix) > 0 ? '.' : '') . 'street' => ['required', 'string'],
+            $prefix . (strlen($prefix) > 0 ? '.' : '') . 'postcode' => ['required', 'string'],
+            $prefix . (strlen($prefix) > 0 ? '.' : '') . 'city' => ['required', 'string'],
+        ];
+
+        if (strlen($prefix) > 0) {
+            $rules[$prefix] = ['required', 'array'];
+        }
+
+        return $rules;
+    }
 }

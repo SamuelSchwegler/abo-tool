@@ -63,20 +63,9 @@ class BundleController extends Controller
         }
         assertNotNull($user);
         $customerValidated = $request->validate(Customer::rules());
-
-        $deliveryAddressRules = [
-            'delivery_address' => ['required', 'array'],
-            'delivery_address.street' => ['required', 'string'],
-            'delivery_address.postcode' => ['required', 'string'],
-            'delivery_address.city' => ['required', 'string'],
-        ];
-
-        $billingAddressRules = [
-            'billing_address' => ['required', 'array'],
-            'billing_address.street' => ['required', 'string'],
-            'billing_address.postcode' => ['required', 'string'],
-            'billing_address.city' => ['required', 'string']
-        ];
+        $deliveryAddressRules = Address::rules('delivery_address');
+        $billingAddressRules = Address::rules('billing_address');
+        $address_data = [];
 
         switch ($request->delivery_option) {
             case "match":
@@ -109,8 +98,8 @@ class BundleController extends Controller
                 $billing = Address::create($billingAddressValidated['billing_address']);
 
                 $address_data = [
-                    'billing_address_id' => $delivery->id,
-                    'delivery_address_id' => $billing->id
+                    'delivery_address_id' => $delivery->id,
+                    'billing_address_id' => $billing->id
                 ];
         }
 

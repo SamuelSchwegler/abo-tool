@@ -20501,6 +20501,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _parts_CustomerData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../parts/CustomerData */ "./resources/js/pages/parts/CustomerData.vue");
 /* harmony import */ var _parts_Address__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../parts/Address */ "./resources/js/pages/parts/Address.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -20533,7 +20539,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       customer: {},
       key: 0,
       delivery_options: delivery_options,
-      errors: []
+      errors: [],
+      delivery_address_errors: {},
+      billing_address_errors: {}
     };
   },
   methods: {
@@ -20565,8 +20573,68 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.customer = customer;
       this.key++;
     },
+    deliveryAddressUpdated: function deliveryAddressUpdated(address) {
+      this.customer.delivery_address = address;
+    },
+    billingAddressUpdated: function billingAddressUpdated(address) {
+      this.customer.billing_address = address;
+    },
     changeDeliveryOption: function changeDeliveryOption(id) {
+      var old = this.customer.delivery_option;
       this.customer.delivery_option = id;
+
+      if (old === 'pickup' && this.customer.delivery_address === null) {
+        this.customer.delivery_address = this.customer.billing_address;
+      }
+    },
+    update: function update() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.patch('/api/customer/' + _this2.$route.params.id, _objectSpread({}, _this2.customer)).then(function (response) {
+                  _this2.customer = response.data.customer;
+                  _this2.errors = [];
+                  _this2.delivery_address_errors = {};
+                  _this2.billing_address_errors = {};
+
+                  _this2.$notify({
+                    type: "success",
+                    text: 'Bearbeiten erfolgreich'
+                  });
+                })["catch"](function (errors) {
+                  _this2.errors = errors.response.data.errors;
+                  _this2.delivery_address_errors = {
+                    street: _this2.errors['delivery_address.street'],
+                    postcode: _this2.errors['delivery_address.postcode'],
+                    city: _this2.errors['delivery_address.city']
+                  };
+                  _this2.billing_address_errors = {
+                    street: _this2.errors['billing_address.street'],
+                    postcode: _this2.errors['billing_address.postcode'],
+                    city: _this2.errors['billing_address.city']
+                  };
+
+                  _this2.$notify({
+                    type: "danger",
+                    text: 'Es ist ein Fehler aufgetreten'
+                  });
+                });
+
+              case 2:
+                _this2.key++;
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
   },
   created: function created() {
@@ -22024,14 +22092,41 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Address",
-  props: ['address', "errors"],
+  props: {
+    address: {
+      type: Object,
+      "default": function _default() {
+        return {};
+      }
+    },
+    errors: {
+      type: Object,
+      "default": function _default() {
+        return {};
+      }
+    }
+  },
+  data: function data() {
+    return {
+      key: 0
+    };
+  },
   components: {
     textInput: _components_form_textInput__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  emits: ['postcodeChanged'],
+  emits: ['updated', 'postcodeChanged'],
   methods: {
     postcodeChanged: function postcodeChanged() {
       this.$emit('postcodeChanged', this.address.postcode);
+      this.updated();
+    },
+    updated: function updated() {
+      this.$emit('updated', this.address);
+    }
+  },
+  watch: {
+    errors: function errors(value, old) {
+      this.key++;
     }
   }
 });
@@ -22049,20 +22144,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_form_textInput__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/form/textInput */ "./resources/js/components/form/textInput.vue");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var _components_form_textInput__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/form/textInput */ "./resources/js/components/form/textInput.vue");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CustomerData",
   components: {
-    TextInput: _components_form_textInput__WEBPACK_IMPORTED_MODULE_1__["default"]
+    TextInput: _components_form_textInput__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
     customer: {
@@ -22088,39 +22175,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     update: function update() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!_this.editable) {
-                  _context.next = 3;
-                  break;
-                }
-
-                _context.next = 3;
-                return axios.patch('/api/customer/' + _this.$route.params.id, {
-                  first_name: _this.c.first_name,
-                  last_name: _this.c.last_name,
-                  company_name: _this.c.company_name,
-                  phone: _this.c.phone
-                }).then(function (response) {
-                  _this.c = response.data.customer;
-
-                  _this.$emit('updated', _this.c);
-                })["catch"](function (errors) {
-                  console.log(errors);
-                });
-
-              case 3:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      this.$emit('updated', this.c);
     }
   }
 });
@@ -22845,7 +22900,12 @@ var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
+var _hoisted_20 = {
+  "class": "text-center"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _$data$customer$deliv, _$data$customer$billi;
+
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
   var _component_customer_data = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("customer-data");
@@ -22902,17 +22962,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }), 128
   /* KEYED_FRAGMENT */
   ))])]), $data.customer.delivery_option !== 'pickup' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_address_vue, {
-    address: $data.customer.delivery_address,
+    address: (_$data$customer$deliv = $data.customer.delivery_address) !== null && _$data$customer$deliv !== void 0 ? _$data$customer$deliv : {},
     "class": "mt-5",
-    errors: []
+    onUpdated: $options.deliveryAddressUpdated,
+    errors: $data.delivery_address_errors
   }, null, 8
   /* PROPS */
-  , ["address"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.customer.delivery_option !== 'match' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_address_vue, {
-    address: $data.customer.billing_address,
-    errors: []
+  , ["address", "onUpdated", "errors"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.customer.delivery_option !== 'match' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_address_vue, {
+    address: (_$data$customer$billi = $data.customer.billing_address) !== null && _$data$customer$billi !== void 0 ? _$data$customer$billi : {},
+    onUpdated: $options.billingAddressUpdated,
+    errors: $data.billing_address_errors
   }, null, 8
   /* PROPS */
-  , ["address"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64
+  , ["address", "onUpdated", "errors"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    onClick: _cache[0] || (_cache[0] = function () {
+      return $options.update && $options.update.apply($options, arguments);
+    }),
+    "class": "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green hover:bg-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+  }, " Daten Speichern ")])], 64
   /* STABLE_FRAGMENT */
   );
 }
@@ -25091,21 +25159,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "grid gap-4 grid-cols-4 pb-4"
-};
-var _hoisted_2 = {
   "class": "col-span-4"
 };
-var _hoisted_3 = {
+var _hoisted_2 = {
   "class": "col-span-1"
 };
-var _hoisted_4 = {
+var _hoisted_3 = {
   "class": "col-span-3"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_text_input = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("text-input");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+    "class": "grid gap-4 grid-cols-4 pb-4",
+    key: $data.key
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
     name: "street",
     modelValue: $props.address.street,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
@@ -25113,10 +25181,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     value: $props.address.street,
     label: "Strasse",
-    error: $props.errors['street']
+    error: $props.errors['street'],
+    onChange: $options.updated
   }, null, 8
   /* PROPS */
-  , ["modelValue", "value", "error"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+  , ["modelValue", "value", "error", "onChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
     name: "postcode",
     modelValue: $props.address.postcode,
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
@@ -25128,7 +25197,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     error: $props.errors['postcode']
   }, null, 8
   /* PROPS */
-  , ["modelValue", "value", "onChange", "error"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+  , ["modelValue", "value", "onChange", "error"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
     name: "city",
     modelValue: $props.address.city,
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
@@ -25136,10 +25205,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     value: $props.address.city,
     label: "Stadt",
-    error: $props.errors['city']
+    error: $props.errors['city'],
+    onChange: $options.updated
   }, null, 8
   /* PROPS */
-  , ["modelValue", "value", "error"])])]);
+  , ["modelValue", "value", "error", "onChange"])])]);
 }
 
 /***/ }),
@@ -25183,10 +25253,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.c.last_name = $event;
     }),
     label: "Nachname",
-    error: $props.errors['last_name']
+    error: $props.errors['last_name'],
+    onChange: $options.update
   }, null, 8
   /* PROPS */
-  , ["value", "modelValue", "error"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+  , ["value", "modelValue", "error", "onChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
     name: "company_name",
     value: $data.c.company_name,
     modelValue: $data.c.company_name,
@@ -25194,10 +25265,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.c.company_name = $event;
     }),
     label: "Firma",
-    error: $props.errors['company_name']
+    error: $props.errors['company_name'],
+    onChange: $options.update
   }, null, 8
   /* PROPS */
-  , ["value", "modelValue", "error"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+  , ["value", "modelValue", "error", "onChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
     name: "phone",
     value: $data.c.phone,
     modelValue: $data.c.phone,
@@ -25205,10 +25277,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.c.phone = $event;
     }),
     label: "Telefon",
-    error: $props.errors['phone']
+    error: $props.errors['phone'],
+    onChange: $options.update
   }, null, 8
   /* PROPS */
-  , ["value", "modelValue", "error"])])]);
+  , ["value", "modelValue", "error", "onChange"])])]);
 }
 
 /***/ }),

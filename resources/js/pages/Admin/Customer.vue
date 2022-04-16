@@ -22,7 +22,8 @@
                         <div class="flex items-center h-5">
                             <input :id="option.id" :aria-describedby="`${option.id}-description`" name="plan"
                                    type="radio"
-                                   :checked="option.id === customer.delivery_option" @change="changeDeliveryOption(option.id)"
+                                   :checked="option.id === customer.delivery_option"
+                                   @change="changeDeliveryOption(option.id)"
                                    class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"/>
                         </div>
                         <div class="ml-3 text-sm">
@@ -34,14 +35,20 @@
             </fieldset>
             <div v-if="customer.delivery_option !== 'pickup'" class="mt-5">
                 <h4>Lieferadresse</h4>
-                <address-vue :address="customer.delivery_address" class="mt-5"
-                             :errors="[]"></address-vue>
+                <address-vue :address="customer.delivery_address ?? {}" class="mt-5" v-on:updated="deliveryAddressUpdated"
+                             :errors="delivery_address_errors"></address-vue>
             </div>
             <div v-if="customer.delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
-                <address-vue :address="customer.billing_address" :errors="[]"></address-vue>
+                <address-vue :address="customer.billing_address ?? {}"  v-on:updated="billingAddressUpdated" :errors="billing_address_errors"></address-vue>
             </div>
         </div>
+    </div>
+    <div class="text-center">
+        <button type="button" @click="update"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green hover:bg-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Daten Speichern
+        </button>
     </div>
 </template>
 
@@ -64,7 +71,9 @@ export default {
             customer: {},
             key: 0,
             delivery_options: delivery_options,
-            errors: []
+            errors: [],
+            delivery_address_errors: {},
+            billing_address_errors: {},
         }
     },
     methods: {
@@ -78,9 +87,47 @@ export default {
             this.customer = customer;
             this.key++;
         },
-        changeDeliveryOption: function (id) {
-            this.customer.delivery_option = id;
+        deliveryAddressUpdated(address) {
+            this.customer.delivery_address = address;
         },
+        billingAddressUpdated(address) {
+            this.customer.billing_address = address;
+        },
+        changeDeliveryOption: function (id) {
+            let old = this.customer.delivery_option;
+            this.customer.delivery_option = id;
+
+            if (old === 'pickup' && this.customer.delivery_address === null) {
+                this.customer.delivery_address = this.customer.billing_address
+            }
+        },
+        async update() {
+            await axios.patch('/api/customer/' + this.$route.params.id, {
+                ...this.customer,
+            }).then(response => {
+                this.customer = response.data.customer;
+                this.errors = [];
+                this.delivery_address_errors = {};
+                this.billing_address_errors = {};
+                this.$notify({type: "success", text: 'Bearbeiten erfolgreich'});
+            }).catch(errors => {
+                this.errors = errors.response.data.errors;
+
+                this.delivery_address_errors = {
+                    street: this.errors['delivery_address.street'],
+                    postcode: this.errors['delivery_address.postcode'],
+                    city: this.errors['delivery_address.city']
+                }
+
+                this.billing_address_errors = {
+                    street: this.errors['billing_address.street'],
+                    postcode: this.errors['billing_address.postcode'],
+                    city: this.errors['billing_address.city']
+                }
+                this.$notify({type: "danger", text: 'Es ist ein Fehler aufgetreten'});
+            });
+            this.key++;
+        }
     },
     created() {
         this.load();
