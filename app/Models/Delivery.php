@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
+use ZipArchive;
 
 class Delivery extends Model
 {
@@ -27,5 +29,27 @@ class Delivery extends Model
     public function deadlinePassed(): bool
     {
         return $this->deadline->lt(now());
+    }
+
+    /**
+     * @return string Pfad des Zip Ordners
+     */
+    public function exportDeliveryNotes(): string
+    {
+        $path = storage_path('app/delivery-notes/delivery-notes_' . $this->id . '.zip');
+        if (file_exists($path)) {
+            unlink($path);
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($path, ZipArchive::CREATE) === TRUE) {
+            Log::info('open');
+            foreach ($this->orders as $order) {
+                $zip->addFile($order->exportDeliveryNote(), $order->deliveryNoteName());
+            }
+            $zip->close();
+        }
+
+        return $path;
     }
 }

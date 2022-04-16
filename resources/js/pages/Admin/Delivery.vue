@@ -37,7 +37,7 @@
                                         <span class="ml-2 flex-1 w-0 truncate"> lieferschein.zip </span>
                                     </div>
                                     <div class="ml-4 flex-shrink-0">
-                                        <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> Lieferscheine </a>
+                                        <a :href="'/export/delivery-notes/' + $route.params.id" class="font-medium text-indigo-600 hover:text-indigo-500"> Lieferscheine </a>
                                     </div>
                                 </li>
                             </ul>
