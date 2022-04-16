@@ -25,4 +25,15 @@ class Address extends Model
 
         return $rules;
     }
+
+    public static function messages(string $prefix = ''): array
+    {
+        $messages = [
+            $prefix . (strlen($prefix) > 0 ? '.' : '') . 'street.required' => 'Strasse muss ausgefüllt sein',
+            $prefix . (strlen($prefix) > 0 ? '.' : '') . 'postcode.required' => 'Postleitzahl muss ausgefüllt sein',
+            $prefix . (strlen($prefix) > 0 ? '.' : '') . 'city.required' => 'Ort muss ausgefüllt sein',
+        ];
+
+        return $messages;
+    }
 }

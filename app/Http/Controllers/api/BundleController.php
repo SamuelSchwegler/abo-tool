@@ -72,7 +72,7 @@ class BundleController extends Controller
                 $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
                 $deliveryAddressValidated = $request->validate($deliveryAddressRules);
 
-                $address = Address::create($deliveryAddressValidated['delivery_address']);
+                $address = Address::create($deliveryAddressValidated['delivery_address'], Address::messages('delivery_address'));
 
                 $address_data = [
                     'billing_address_id' => $address->id,
@@ -82,7 +82,7 @@ class BundleController extends Controller
             case "pickup":
                 $billingAddressValidated = $request->validate($billingAddressRules);
 
-                $address = Address::create($billingAddressValidated['billing_address']);
+                $address = Address::create($billingAddressValidated['billing_address'], Address::messages('billing_address'));
 
                 $address_data = [
                     'billing_address_id' => $address->id,
@@ -91,8 +91,8 @@ class BundleController extends Controller
                 break;
             case "split":
                 $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
-                $deliveryAddressValidated = $request->validate($deliveryAddressRules);
-                $billingAddressValidated = $request->validate($billingAddressRules);
+                $deliveryAddressValidated = $request->validate($deliveryAddressRules, Address::messages('delivery_address'));
+                $billingAddressValidated = $request->validate($billingAddressRules, Address::messages('billing_address'));
 
                 $delivery = Address::create($deliveryAddressValidated['delivery_address']);
                 $billing = Address::create($billingAddressValidated['billing_address']);

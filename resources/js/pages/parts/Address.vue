@@ -9,7 +9,7 @@
                         @change="postcodeChanged" :error="errors['postcode']"></text-input>
         </div>
         <div class="col-span-3">
-            <text-input name="city" v-model="address.city" :value="address.city" label="Stadt"
+            <text-input name="city" v-model="address.city" :value="address.city" label="Ort"
                         :error="errors['city']" @change="updated"></text-input>
         </div>
     </div>

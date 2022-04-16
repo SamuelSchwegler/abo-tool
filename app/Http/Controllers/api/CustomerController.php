@@ -33,7 +33,6 @@ class CustomerController extends Controller
 
     public function update(Customer $customer, Request $request): Response|Application|ResponseFactory
     {
-        Log::info($request->all());
         $customerValidated = $request->validate(Customer::rules());
         $deliveryAddressRules = Address::rules('delivery_address');
         $billingAddressRules = Address::rules('billing_address');
@@ -42,7 +41,7 @@ class CustomerController extends Controller
         switch ($request->delivery_option) {
             case "match":
                 $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
-                $deliveryAddressValidated = $request->validate($deliveryAddressRules);
+                $deliveryAddressValidated = $request->validate($deliveryAddressRules, Address::messages('delivery_address'));
 
                 $address = Address::create($deliveryAddressValidated['delivery_address']);
 
@@ -52,7 +51,7 @@ class CustomerController extends Controller
                 ];
                 break;
             case "pickup":
-                $billingAddressValidated = $request->validate($billingAddressRules);
+                $billingAddressValidated = $request->validate($billingAddressRules, Address::messages('billing_address'));
                 $address = Address::create($billingAddressValidated['billing_address']);
 
                 $address_data = [
@@ -62,14 +61,11 @@ class CustomerController extends Controller
                 break;
             case "split":
                 $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
-                $deliveryAddressValidated = $request->validate($deliveryAddressRules);
-                $billingAddressValidated = $request->validate($billingAddressRules);
-
-                Log::info($billingAddressValidated);
+                $deliveryAddressValidated = $request->validate($deliveryAddressRules, Address::messages('delivery_address'));
+                $billingAddressValidated = $request->validate($billingAddressRules, Address::messages('billing_address'));
 
                 $delivery = Address::create($deliveryAddressValidated['delivery_address']);
                 $billing = Address::create($billingAddressValidated['billing_address']);
-                Log::info($billing);
 
                 $address_data = [
                     'delivery_address_id' => $delivery->id,

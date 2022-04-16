@@ -41,7 +41,7 @@
             </fieldset>
             <div v-if="delivery_option !== 'pickup'" class="mt-5">
                 <h4>Lieferadresse</h4>
-                <address-vue v-on:postcodeChanged="getDeliveryService" :address="user.customer.delivery_address"
+                <address-vue v-on:postcodeChanged="getDeliveryService" :address="user.customer.delivery_address ?? {}"
                              class="mt-5" :errors="delivery_address_errors"></address-vue>
                 <alert v-if="!delivery_service.pickup && delivery_service.delivery_cost > 0"
                        :text="'Die Lieferkosten betragen pro Lieferung ' + delivery_service.delivery_cost+ ' CHF'"></alert>
@@ -49,7 +49,8 @@
             </div>
             <div v-if="delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
-                <address-vue :address="user.customer.billing_address" :errors="billing_address_errors"></address-vue>
+                <address-vue :address="user.customer.billing_address ?? {}"
+                             :errors="billing_address_errors"></address-vue>
             </div>
         </div>
     </div>
@@ -108,7 +109,8 @@ export default {
             user = {
                 customer: {
                     delivery_address: {},
-                    billing_address: {}
+                    billing_address: {},
+                    delivery_options: 'match'
                 }
             }
         }
@@ -117,7 +119,7 @@ export default {
             bundle: {},
             delivery_options: delivery_options,
             steps: steps,
-            delivery_option: 'match',
+            delivery_option: user.customer.delivery_option,
             isLoggedIn: window.Laravel.isLoggedIn,
             user: user,
             show_loginModal: false,
