@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap);
 .toggle-container{display:inline-block}.toggle-container:focus{outline:none;box-shadow:0 0 0 var(--toggle-ring-width,3px) var(--toggle-ring-color,rgba(16,185,129,.18823529411764706))}.toggle{display:flex;width:var(--toggle-width,3rem);height:var(--toggle-height,1.25rem);border-radius:999px;position:relative;cursor:pointer;transition:all .3s;align-items:center;box-sizing:content-box;border:var(--toggle-border,.125rem) solid;font-size:var(--toggle-font-size,.75rem);line-height:1}.toggle-on{background:var(--toggle-bg-on,#10b981);border-color:var(--toggle-border-on,#10b981);justify-content:flex-start;color:var(--toggle-text-on,#fff)}.toggle-off{background:var(--toggle-bg-off,#e5e7eb);border-color:var(--toggle-border-off,#e5e7eb);justify-content:flex-end;color:var(--toggle-text-off,#374151)}.toggle-on-disabled{background:var(--toggle-bg-on-disabled,#d1d5db);border-color:var(--toggle-border-on-disabled,#d1d5db);justify-content:flex-start;color:var(--toggle-text-on-disabled,#9ca3af);cursor:not-allowed}.toggle-off-disabled{background:var(--toggle-bg-off-disabled,#e5e7eb);border-color:var(--toggle-border-off-disabled,#e5e7eb);justify-content:flex-end;color:var(--toggle-text-off-disabled,#9ca3af);cursor:not-allowed}.toggle-handle{display:inline-block;background:var(--toggle-handle-enabled,#fff);width:20px;height:20px;top:0;border-radius:50%;position:absolute;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:var(--toggle-duration,.15s)}.toggle-handle-on{left:100%;transform:translateX(-100%)}.toggle-handle-off{left:0}.toggle-handle-on-disabled{left:100%;transform:translateX(-100%);background:var(--toggle-handle-disabled,#f3f4f6)}.toggle-handle-off-disabled{left:0;background:var(--toggle-handle-disabled,#f3f4f6)}.toggle-label{text-align:center;width:calc(var(--toggle-width, 3.25rem) - var(--toggle-height, 1.25rem));box-sizing:border-box;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 /*
-! tailwindcss v3.0.23 | MIT License | https://tailwindcss.com
+! tailwindcss v3.0.24 | MIT License | https://tailwindcss.com
 */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -565,6 +565,10 @@ select{
   left: 0px;
   right: 0px;
 }
+.inset-y-0{
+  top: 0px;
+  bottom: 0px;
+}
 .left-1\/2{
   left: 50%;
 }
@@ -678,6 +682,9 @@ select{
 .mr-2{
   margin-right: 0.5rem;
 }
+.mt-10{
+  margin-top: 2.5rem;
+}
 .block{
   display: block;
 }
@@ -726,6 +733,15 @@ select{
 .h-10{
   height: 2.5rem;
 }
+.h-12{
+  height: 3rem;
+}
+.h-20{
+  height: 5rem;
+}
+.max-h-60{
+  max-height: 15rem;
+}
 .min-h-screen{
   min-height: 100vh;
 }
@@ -762,8 +778,17 @@ select{
 .w-40{
   width: 10rem;
 }
+.w-12{
+  width: 3rem;
+}
+.w-px{
+  width: 1px;
+}
 .min-w-full{
   min-width: 100%;
+}
+.min-w-0{
+  min-width: 0px;
 }
 .max-w-7xl{
   max-width: 80rem;
@@ -829,6 +854,12 @@ select{
 }
 .cursor-pointer{
   cursor: pointer;
+}
+.select-none{
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 .appearance-none{
   -webkit-appearance: none;
@@ -922,6 +953,11 @@ select{
   margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
 }
+.space-x-3 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.75rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+}
 .divide-y > :not([hidden]) ~ :not([hidden]){
   --tw-divide-y-reverse: 0;
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -948,6 +984,9 @@ select{
 .divide-gray-50 > :not([hidden]) ~ :not([hidden]){
   --tw-divide-opacity: 1;
   border-color: rgb(249 250 251 / var(--tw-divide-opacity));
+}
+.overflow-auto{
+  overflow: auto;
 }
 .overflow-hidden{
   overflow: hidden;
@@ -1073,6 +1112,9 @@ select{
 .bg-gray-100{
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+.bg-transparent{
+  background-color: transparent;
 }
 .bg-opacity-75{
   --tw-bg-opacity: 0.75;
@@ -1203,6 +1245,18 @@ select{
 }
 .pt-6{
   padding-top: 1.5rem;
+}
+.pr-32{
+  padding-right: 8rem;
+}
+.pr-7{
+  padding-right: 1.75rem;
+}
+.pr-10{
+  padding-right: 2.5rem;
+}
+.pr-9{
+  padding-right: 2.25rem;
 }
 .text-left{
   text-align: left;
@@ -1615,6 +1669,11 @@ select{
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
+.focus\:ring-1:focus{
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
 .focus\:ring-inset:focus{
   --tw-ring-inset: inset;
 }
@@ -1716,6 +1775,9 @@ select{
   .sm\:mt-6{
     margin-top: 1.5rem;
   }
+  .sm\:ml-4{
+    margin-left: 1rem;
+  }
   .sm\:block{
     display: block;
   }
@@ -1743,11 +1805,17 @@ select{
   .sm\:w-full{
     width: 100%;
   }
+  .sm\:min-w-0{
+    min-width: 0px;
+  }
   .sm\:max-w-lg{
     max-width: 32rem;
   }
   .sm\:max-w-md{
     max-width: 28rem;
+  }
+  .sm\:max-w-3xl{
+    max-width: 48rem;
   }
   .sm\:flex-1{
     flex: 1 1 0%;
@@ -1757,6 +1825,9 @@ select{
   }
   .sm\:flex-none{
     flex: none;
+  }
+  .sm\:flex-shrink-0{
+    flex-shrink: 0;
   }
   .sm\:translate-y-0{
     --tw-translate-y: 0px;
@@ -1780,6 +1851,9 @@ select{
   }
   .sm\:grid-cols-3{
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .sm\:grid-cols-1{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
   .sm\:items-center{
     align-items: center;
@@ -1867,6 +1941,12 @@ select{
   .md\:flex-1{
     flex: 1 1 0%;
   }
+  .md\:grid-cols-1{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .md\:grid-cols-2{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .md\:justify-start{
     justify-content: flex-start;
   }
@@ -1901,6 +1981,9 @@ select{
   }
   .lg\:flex-1{
     flex: 1 1 0%;
+  }
+  .lg\:grid-cols-2{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .lg\:px-8{
     padding-left: 2rem;

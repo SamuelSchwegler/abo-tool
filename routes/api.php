@@ -6,6 +6,7 @@ use App\Http\Controllers\api\BuyController;
 use App\Http\Controllers\api\CustomerController;
 use App\Http\Controllers\api\DeliveryController;
 use App\Http\Controllers\api\DeliveryServiceController;
+use App\Http\Controllers\api\ItemController;
 use App\Http\Controllers\api\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/deliveries', [DeliveryController::class, 'deliveries']);
     Route::get('/delivery/{delivery}', [DeliveryController::class, 'delivery']);
     Route::patch('/delivery/{delivery}/toggle-approved', [DeliveryController::class, 'toggleApproved']);
+
+    // delivery items
+    Route::post('/delivery/{delivery}/item/{item}', [DeliveryController::class, 'addItem']);
+
+    Route::get('/items', [ItemController::class,'items']);
 
     Route::get('/customers', [CustomerController::class, 'customers']);
     Route::get('/customer/{customer}', [CustomerController::class, 'customer']);

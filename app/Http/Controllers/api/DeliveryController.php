@@ -8,6 +8,7 @@ use App\Http\Resources\DeliveryResource;
 use App\Http\Resources\DeliveryServiceResource;
 use App\Models\Delivery;
 use App\Models\DeliveryService;
+use App\Models\Item;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class DeliveryController extends Controller
             $deliveries = $deliveries->whereIn('delivery_service_id', $validated['delivery_service_ids']);
         }
 
-        if(isset($validated['order_by'])) {
+        if (isset($validated['order_by'])) {
             $deliveries = $deliveries->orderBy($validated['order_by']);
         } else {
             $deliveries = $deliveries->orderBy('date');
@@ -44,7 +45,8 @@ class DeliveryController extends Controller
         ]);
     }
 
-    public function delivery(Delivery $delivery) {
+    public function delivery(Delivery $delivery)
+    {
         return response([
             'delivery' => DeliveryResource::make($delivery)
         ]);
@@ -57,7 +59,7 @@ class DeliveryController extends Controller
      */
     public function toggleApproved(Delivery $delivery): Response|Application|ResponseFactory
     {
-        if($delivery->deadlinePassed()) {
+        if ($delivery->deadlinePassed()) {
             throw DeliveryException::deadlineHasPassed($delivery);
         }
 
@@ -66,5 +68,15 @@ class DeliveryController extends Controller
         ]);
 
         return $this->delivery($delivery);
+    }
+
+    public function addItem(Delivery $delivery, Item $item): Response|Application|ResponseFactory
+    {
+        $delivery->items()->attach($item->id);
+
+        return \response([
+            'msg' => 'ok',
+            'delivery' => DeliveryResource::make($delivery)
+        ]);
     }
 }

@@ -31,6 +31,14 @@ class DeliveryResource extends JsonResource
             ];
         }
 
+        $items_array = [];
+        foreach($this->items as $item) {
+            $items_array[] = [
+                'id' => $item->id,
+                'name' => $item->name
+            ];
+        }
+
         return [
             'id' => $this->id,
             'date' => [
@@ -48,7 +56,8 @@ class DeliveryResource extends JsonResource
                 'name' => $this->delivery_service->name
             ],
             'approved' => ($this->approved === 1),
-            'orders' => $orders_array
+            'orders' => $orders_array,
+            'items' => $items_array
         ];
     }
 }

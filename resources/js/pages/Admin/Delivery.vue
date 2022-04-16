@@ -5,7 +5,7 @@
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <router-link to="/deliveries" type="button"
-                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-green px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                 Zu allen Lieferungen
             </router-link>
         </div>
@@ -17,7 +17,10 @@
                 <dl class="sm:divide-y sm:divide-gray-200">
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-3">
                         <dt class="text-sm font-medium text-gray-500">Liederdienst</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ delivery.delivery_service.name }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{
+                                delivery.delivery_service.name
+                            }}
+                        </dd>
                     </div>
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-3">
                         <dt class="text-sm font-medium text-gray-500">Datum</dt>
@@ -25,7 +28,10 @@
                     </div>
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-3">
                         <dt class="text-sm font-medium text-gray-500">Stichtag</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ delivery.deadline['d.m.Y'] }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{
+                                delivery.deadline['d.m.Y']
+                            }}
+                        </dd>
                     </div>
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-3" v-if="delivery.orders.length > 0">
                         <dt class="text-sm font-medium text-gray-500">Download</dt>
@@ -33,11 +39,12 @@
                             <ul role="list" class="border border-gray-200 rounded-md divide-y divide-gray-200">
                                 <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
                                     <div class="w-0 flex-1 flex items-center">
-                                        <PaperClipIcon class="flex-shrink-0 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                        <PaperClipIcon class="flex-shrink-0 h-5 w-5 text-gray-400" aria-hidden="true"/>
                                         <span class="ml-2 flex-1 w-0 truncate"> lieferschein.zip </span>
                                     </div>
                                     <div class="ml-4 flex-shrink-0">
-                                        <a :href="'/export/delivery-notes/' + $route.params.id" class="font-medium text-indigo-600 hover:text-indigo-500"> Lieferscheine </a>
+                                        <a :href="'/export/delivery-notes/' + $route.params.id"
+                                           class="font-medium text-indigo-600 hover:text-indigo-500"> Lieferscheine </a>
                                     </div>
                                 </li>
                             </ul>
@@ -51,15 +58,26 @@
             <table class="min-w-full divide-y divide-gray-300" v-if="delivery.orders.length > 0">
                 <thead class="bg-gray-50">
                 <tr>
-                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                        Name
+                    </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Produkt</th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Abstellort</th>
                 </tr>
                 </thead>
                 <tbody class="bg-white">
-                <tr v-for="(order, orderIdx) in delivery.orders" :key="order.id" :class="orderIdx % 2 === 0 ? undefined : 'bg-gray-50'">
-                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ order.customer.name }}</td>
-                    <td class="whitespace-nowrap px-3 py-3.5 text-sm font-medium text-gray-900">{{ order.product.name }}</td>
+                <tr v-for="(order, orderIdx) in delivery.orders" :key="order.id"
+                    :class="orderIdx % 2 === 0 ? undefined : 'bg-gray-50'">
+                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                        <router-link :to="'/customer/' + order.customer.id"
+                                     class="text-indigo-600 hover:text-indigo-900">
+                            {{ order.customer.name }}
+                        </router-link>
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-3.5 text-sm font-medium text-gray-900">{{
+                            order.product.name
+                        }}
+                    </td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ order.depository }}</td>
                 </tr>
                 </tbody>
@@ -67,19 +85,24 @@
             <p v-else>Momentan gibt es noch keine Bestellungen für diese Lieferung.</p>
         </div>
     </div>
+    <div class="box bg-white">
+        <delivery-items :delivery-items="delivery.items" :key="'delivery_items_' + deliveryItemsKey"></delivery-items>
+    </div>
 </template>
 
 <script>
 import {PaperClipIcon} from "@heroicons/vue/solid";
+import DeliveryItems from "./DeliveryItems";
 
 export default {
     name: "Delivery",
     components: {
-        PaperClipIcon
+        PaperClipIcon, DeliveryItems
     },
     data() {
         return {
-            delivery: {}
+            delivery: {},
+            deliveryItemsKey: 0
         }
     },
     methods: {
@@ -87,6 +110,7 @@ export default {
             this.$axios.get(`/api/delivery/${this.$route.params.id}`)
                 .then(response => {
                     this.delivery = response.data.delivery;
+                    this.deliveryItemsKey++;
                 })
                 .catch(function (error) {
                     console.log(error);

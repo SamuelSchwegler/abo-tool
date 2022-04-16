@@ -31,6 +31,10 @@ class Delivery extends Model
         return $this->deadline->lt(now());
     }
 
+    public function items() {
+        return $this->belongsToMany(Item::class);
+    }
+
     /**
      * @return string Pfad des Zip Ordners
      */

@@ -1,6 +1,6 @@
 <template>
     <progress-steps :steps="steps"></progress-steps>
-    <div class="grid grid-cols-2 gap-4" :key="bundleBuyKey">
+    <div class="grid lg:grid-cols-2 grid-cols-1 gap-4" :key="bundleBuyKey">
         <div class="box bg-white">
             <h3 class="title">Ihre Bestellung</h3>
             <bundle :bundle="bundle" v-if="bundle.hasOwnProperty('id')"></bundle>

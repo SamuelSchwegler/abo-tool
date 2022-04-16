@@ -61,6 +61,17 @@ class Order extends Model
         $template->setValue('customer_postcode', $billing_address->postcode);
         $template->setValue('customer_city', $billing_address->city);
 
+        // Items
+        $item_rows = [];
+        foreach($this->delivery->items as $item) {
+            $item_rows[] = [
+                'item_count' => 1,
+                'item_name' => $item->name,
+                'item_origin' => $item->item_origin->name
+            ];
+        }
+        $template->cloneRowAndSetValues('item_count', $item_rows);
+
         // todo: soll es PDF sein?
         $output = storage_path('app/delivery-notes/delivery-note_' . $this->id . '.docx');
         $template->saveAs($output);

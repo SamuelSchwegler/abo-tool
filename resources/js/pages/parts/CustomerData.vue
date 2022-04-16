@@ -1,5 +1,5 @@
 <template>
-    <div class="grid gap-4 grid-cols-2 pb-4" :key="key">
+    <div class="grid gap-4 md:grid-cols-2 grid-cols-1 pb-4" :key="key">
         <div>
             <text-input name="first_name" :value="c.first_name" v-model="c.first_name" label="Vorname" :error="errors['first_name']" @change="update"></text-input>
         </div>
