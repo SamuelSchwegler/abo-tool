@@ -119,20 +119,20 @@ return new class extends Migration {
         });
 
         Schema::create('delivery_services', function (Blueprint $table) {
-           $table->bigIncrements('id');
-           $table->string('name');
-           $table->boolean('pickup')->default(false);
-           $table->json('days')->comment('an welchen Wochentagen soll eine Lieferung ausgelöst werden');
-           $table->smallInteger('deadline_distance')->default(2)->comment('wie viel Tage vor der Lieferung soll die Deadline enden.');
-           $table->integer('delivery_cost')->default(0)->comment('faktor 100');
-           $table->timestamps();
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->boolean('pickup')->default(false);
+            $table->json('days')->comment('an welchen Wochentagen soll eine Lieferung ausgelöst werden');
+            $table->smallInteger('deadline_distance')->default(2)->comment('wie viel Tage vor der Lieferung soll die Deadline enden.');
+            $table->integer('delivery_cost')->default(0)->comment('faktor 100');
+            $table->timestamps();
         });
 
         Schema::create('postcodes', function (Blueprint $table) {
-           $table->bigIncrements('id');
-           $table->string('postcode')->unique();
-           $table->foreignId('delivery_service_id');
-           $table->timestamps();
+            $table->bigIncrements('id');
+            $table->string('postcode')->unique();
+            $table->foreignId('delivery_service_id');
+            $table->timestamps();
         });
 
         Schema::create('settings', function (Blueprint $table) {
@@ -142,6 +142,27 @@ return new class extends Migration {
             $table->string('besr_id')->nullable();
             $table->string('iban')->nullable();
             $table->timestamps();
+        });
+
+        Schema::create('item_origins', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('own')->default(true);
+            $table->timestamps();
+        });
+
+        // Elemente die in einer Lieferung sind
+        Schema::create('items', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('item_origin_id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        // Pivot Tabelle
+        Schema::create('delivery_item', function (Blueprint $table) {
+            $table->foreignId('delivery_id');
+            $table->foreignId('item_id');
         });
     }
 

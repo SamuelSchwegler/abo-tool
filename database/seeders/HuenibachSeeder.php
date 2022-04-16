@@ -5,8 +5,11 @@ namespace Database\Seeders;
 use App\Models\Address;
 use App\Models\Bundle;
 use App\Models\DeliveryService;
+use App\Models\Item;
+use App\Models\ItemOrigin;
 use App\Models\Product;
 use App\Models\Setting;
+use Database\Factories\ItemFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -67,5 +70,8 @@ class HuenibachSeeder extends Seeder
             'besr_id' => '',
             'iban' => 'CH5330790016597781328'
         ]);
+
+        ItemOrigin::factory()->count(3)->create();
+        Item::factory()->count(10)->create();
     }
 }
