@@ -129,8 +129,12 @@ class DeliveryTest extends TestCase
 
     public function test_exportDeliveryNotes()
     {
+        if(env('SKIP_POTENTIAL_ERROR_TESTS', false)) {
+            $this->markTestSkipped('word probleme');
+        }
         $this->actingAs($this->admin);
         $delivery = Delivery::has('orders')->inRandomOrder()->first();
+        self::assertNotNull($delivery);
 
         $response = $this->get(route('delivery-notes.export', $delivery));
         $response->assertOk();
