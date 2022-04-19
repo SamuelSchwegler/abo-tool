@@ -1,7 +1,7 @@
 name: Tests
 on:
   push:
-    branches-ignore: [develop, master, next, hotfix, fix, api-central, single_reg]
+    branches-ignore: [develop, main]
 
 jobs:
   phpunit:

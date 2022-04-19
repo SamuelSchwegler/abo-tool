@@ -12,7 +12,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.1
+        image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: ubuntu
           MYSQL_DATABASE: circle_test
@@ -51,16 +51,6 @@ jobs:
         run: |
           php artisan config:clear
           vendor/bin/phpunit --testdox
-
-      - name: Slack Failure Notification
-        if: ${{ failure() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: (some) tests have failed! :this-is-fine-fire:"}'  ${{ secrets.SLACK_WEBHOOK }}
-
-      - name: Slack Success Notification
-        if: ${{ success() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: all tests passed! :catjam:"}'  ${{ secrets.SLACK_WEBHOOK }}
 
   create-deployment-artifacts:
     name: Create deployment artifacts
