@@ -38,7 +38,6 @@ jobs:
 
       - name: Copy Enviroment and prepare enviroment
         run: |
-          rm .env.testing
           cp .env.online_testing .env.testing
           php artisan key:generate
 
