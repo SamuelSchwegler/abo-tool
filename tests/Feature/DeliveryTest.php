@@ -126,4 +126,14 @@ class DeliveryTest extends TestCase
         self::assertEquals(0, $customer->orders->count());
         self::assertEquals(0, $delivery->orders->count());
     }
+
+    public function test_exportDeliveryNotes()
+    {
+        $this->actingAs($this->admin);
+        $delivery = Delivery::has('orders')->inRandomOrder()->first();
+
+        $response = $this->get(route('delivery-notes.export', $delivery));
+        $response->assertOk();
+        //$response->assertDownload();
+    }
 }

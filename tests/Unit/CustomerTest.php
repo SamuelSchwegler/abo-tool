@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Address;
 use App\Models\Buy;
 use App\Models\Customer;
+use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Postcode;
 use Illuminate\Support\Str;
@@ -15,7 +16,8 @@ class CustomerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function test_deliveryService() {
+    public function test_deliveryService()
+    {
         $postcode = random_int(1000, 9999);
 
         $delivery = Address::factory()->create([
@@ -34,22 +36,23 @@ class CustomerTest extends TestCase
         self::assertEquals($service->id, $customer->delivery_service()->id);
     }
 
-    public function test_productBalances() {
+    public function test_productBalances()
+    {
         $customer = Customer::factory()->create();
 
-        self::assertEquals(0, $customer->productBalances()->count());
+        self::assertEquals(0, sizeof($customer->productBalances()));
 
         $buy = Buy::factory()->create([
             'customer_id' => $customer->id,
             'paid' => 0
         ]);
 
-        self::assertEquals(0, $customer->productBalances()->count());
+        self::assertEquals(0, sizeof($customer->productBalances()));
 
         $buy->update([
             'paid' => 1
         ]);
 
-        self::assertEquals(1, $customer->productBalances()->count());
+        self::assertEquals(1, sizeof($customer->productBalances()));
     }
 }

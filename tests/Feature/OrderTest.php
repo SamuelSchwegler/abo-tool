@@ -70,11 +70,4 @@ class OrderTest extends TestCase
         $order->refresh();
         self::assertEquals(1, $order->canceled);
     }
-
-    public function test_exportDeliveryNote() {
-        $order = Order::inRandomOrder()->first();
-
-        $response = $this->get(route('delivery-note.export', $order));
-        $response->assertDownload();
-    }
 }
