@@ -1,0 +1,298 @@
+name: Deploy Prod Application
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  phpunit:
+    name: Run PHP Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    services:
+      mysql:
+        image: mysql:8.1
+        env:
+          MYSQL_ROOT_PASSWORD: ubuntu
+          MYSQL_DATABASE: circle_test
+        ports:
+          - '8888:3306'
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure PHP 8.1
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 8.1
+          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+
+      - name: create test database
+        uses: ./.github/actions/setup-mysql
+
+      - name: Composer install
+        run: |
+          composer install --no-interaction --prefer-dist
+
+      - name: Copy Enviroment and prepare enviroment
+        run: |
+          cp .env.testing_online .env
+          php artisan key:generate
+
+      - name: Migrate and Seed
+        run: |
+          php artisan migrate:fresh
+          php artisan db:seed
+          php artisan passport:keys
+
+      - name: Run Tests
+        run: |
+          php artisan config:clear
+          vendor/bin/phpunit --testdox
+
+      - name: Slack Failure Notification
+        if: ${{ failure() }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: (some) tests have failed! :this-is-fine-fire:"}'  ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Slack Success Notification
+        if: ${{ success() }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: all tests passed! :catjam:"}'  ${{ secrets.SLACK_WEBHOOK }}
+
+  create-deployment-artifacts:
+    name: Create deployment artifacts
+    needs: [phpunit]
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure PHP 8.1
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 8.1
+          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+
+      - name: Composer install
+        run: |
+          composer install --no-dev --no-interaction --prefer-dist
+
+      - name: Compile CSS and Javascript
+        run: |
+          npm install
+          npm run prod
+
+      - name: Create deployment artifact
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        run: tar -czf "${GITHUB_SHA}".tar.gz --exclude=*.git --exclude=node_modules *
+
+      - name: Store artifact for distribution
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-build
+          path: ${{ github.sha }}.tar.gz
+
+      - name: Export deployment matrix
+        id: export-deployment-matrix
+        run: |
+          JSON="$(cat ./deployment-config-prod.json)"
+          JSON="${JSON//'%'/'%25'}"
+          JSON="${JSON//$'\n'/'%0A'}"
+          JSON="${JSON//$'\r'/'%0D'}"
+          echo "::set-output name=deployment-matrix::$JSON"
+
+  prepare-release-on-servers:
+    name: "${{ matrix.server.name }}: Prepare release"
+    runs-on: ubuntu-latest
+    needs:  create-deployment-artifacts
+    strategy:
+      matrix:
+        server: ${{ fromJson(needs.create-deployment-artifacts.outputs.deployment-matrix) }}
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: app-build
+      - name: Upload
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          password: ${{ secrets.HOSTTECH_PW }}
+          port: ${{ matrix.server.port }}
+          source: ${{ github.sha }}.tar.gz
+          target: ${{ matrix.server.path }}/artifacts
+      - name: Extract archive and create directories
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          password: ${{ secrets.HOSTTECH_PW }}
+          port: ${{ matrix.server.port }}
+          envs: GITHUB_SHA
+          script: |
+
+            # Create a new directory with the commit hash as the directory name
+            mkdir -p "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
+
+            # Extract the tar file into our release directory
+            tar xzf ${{ matrix.server.path }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
+
+            # Create Laravel storage directories and set permissions
+            rm -rf ${{ matrix.server.path }}/releases/${GITHUB_SHA}/storage
+            mkdir -p ${{ matrix.server.path }}/storage/{app,public,framework,logs}
+            mkdir -p ${{ matrix.server.path }}/storage/framework/{cache,sessions,testing,views,laravel-excel}
+            # chmod -R 0775 ${{ matrix.server.path }}/storage
+      - name: disable app
+        uses: appleboy/ssh-action@master
+        continue-on-error: true
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          RELEASE_PATH: ${{ matrix.server.path }}/releases/${{ github.sha }}
+          ACTIVE_RELEASE_PATH: ${{ matrix.server.path }}/current
+          STORAGE_PATH: ${{ matrix.server.path }}/storage
+          BASE_PATH: ${{ matrix.server.path }}
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          password: ${{ secrets.HOSTTECH_PW }}
+          port: ${{ matrix.server.port }}
+          envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH
+          script: |
+            php ${ACTIVE_RELEASE_PATH}/artisan down --render="errors::maintenance"
+  run-before-hooks:
+    name: "${{ matrix.server.name }}: Before hook"
+    runs-on: ubuntu-latest
+    needs: [ create-deployment-artifacts, prepare-release-on-servers ]
+    strategy:
+      matrix:
+        server: ${{ fromJson(needs.create-deployment-artifacts.outputs.deployment-matrix) }}
+    steps:
+      - name: Run before hooks
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          RELEASE_PATH: ${{ matrix.server.path }}/releases/${{ github.sha }}
+          ACTIVE_RELEASE_PATH: ${{ matrix.server.path }}/current
+          STORAGE_PATH: ${{ matrix.server.path }}/storage
+          BASE_PATH: ${{ matrix.server.path }}
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          password: ${{ secrets.HOSTTECH_PW }}
+          port: ${{ matrix.server.port }}
+          envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH
+          script: |
+            ${{ matrix.server.beforeHooks }}
+  activate-release:
+    name: "${{ matrix.server.name }}: Activate release"
+    runs-on: ubuntu-latest
+    needs: [ create-deployment-artifacts, prepare-release-on-servers, run-before-hooks ]
+    strategy:
+      matrix:
+        server: ${{ fromJson(needs.create-deployment-artifacts.outputs.deployment-matrix) }}
+    steps:
+      - name: Activate release
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          RELEASE_PATH: ${{ matrix.server.path }}/releases/${{ github.sha }}
+          ACTIVE_RELEASE_PATH: ${{ matrix.server.path }}/current
+          STORAGE_PATH: ${{ matrix.server.path }}/storage
+          BASE_PATH: ${{ matrix.server.path }}
+          LARAVEL_ENV: ${{ secrets[matrix.server.env] }}
+          DB_DATABASE: ${{ matrix.server.database }}
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          password: ${{ secrets.HOSTTECH_PW }}
+          port: ${{ matrix.server.port }}
+          envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH,ENV_PATH,LARAVEL_ENV
+          script: |
+            printf "%s" "$LARAVEL_ENV" > "${BASE_PATH}/.env"
+
+            if [ -n "${DB_DATABASE}" ]; then
+              sed -i 's/DB_DATABASE=.*/DB_DATABASE=${DB_DATABASE}/' ${BASE_PATH}/.env
+            fi
+
+            ln -s -f ${BASE_PATH}/.env $RELEASE_PATH
+            ln -s -f $STORAGE_PATH $RELEASE_PATH
+            ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
+            sudo service php8.1-fpm reload
+      - name: Slack Failure Notification
+        if: ${{ failure() }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment failed! :strahlenwarnzeichen:"}'  ${{ secrets.SLACK_WEBHOOK }}
+
+  run-after-hooks:
+    name: "${{ matrix.server.name }}: After hook"
+    runs-on: ubuntu-latest
+    needs: [ create-deployment-artifacts, prepare-release-on-servers, run-before-hooks, activate-release ]
+    strategy:
+      matrix:
+        server: ${{ fromJson(needs.create-deployment-artifacts.outputs.deployment-matrix) }}
+    steps:
+      - name: Run after hooks
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          RELEASE_PATH: ${{ matrix.server.path }}/releases/${{ github.sha }}
+          ACTIVE_RELEASE_PATH: ${{ matrix.server.path }}/current
+          STORAGE_PATH: ${{ matrix.server.path }}/storage
+          BASE_PATH: ${{ matrix.server.path }}
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          password: ${{ secrets.HOSTTECH_PW }}
+          port: ${{ matrix.server.port }}
+          envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH
+          script: |
+            ${{ matrix.server.afterHooks }}
+
+      - name: Slack Failure Notification
+        if: ${{ failure() }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment failed! :strahlenwarnzeichen:"}'  ${{ secrets.SLACK_WEBHOOK }}
+
+  clean-up:
+    name: "${{ matrix.server.name }}: Clean up"
+    runs-on: ubuntu-latest
+    needs: [ create-deployment-artifacts, prepare-release-on-servers, run-before-hooks, activate-release, run-after-hooks ]
+    strategy:
+      matrix:
+        server: ${{ fromJson(needs.create-deployment-artifacts.outputs.deployment-matrix) }}
+    steps:
+      - name: Run after hooks
+        uses: appleboy/ssh-action@master
+        env:
+          RELEASES_PATH: ${{ matrix.server.path }}/releases
+          ARTIFACTS_PATH: ${{ matrix.server.path }}/artifacts
+          ACTIVE_RELEASE_PATH: ${{ matrix.server.path }}/current
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          password: ${{ secrets.HOSTTECH_PW }}
+          port: ${{ matrix.server.port }}
+          envs: RELEASES_PATH, ACTIVE_RELEASE_PATH, ARTIFACTS_PATH
+          script: |
+            cd $RELEASES_PATH && ls -t -1 | tail -n +6 | xargs rm -rf
+            cd $ARTIFACTS_PATH && ls -t -1 | tail -n +6 | xargs rm -rf
+
+            php ${ACTIVE_RELEASE_PATH}/artisan storage:link
+            php ${ACTIVE_RELEASE_PATH}/artisan up
+      - name: Slack Failure Notification
+        if: ${{ failure() }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment failed on ${{ matrix.server.name }}! :strahlenwarnzeichen:"}'  ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Slack Success Notification
+        if: ${{ success() }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment successfull finished on ${{ matrix.server.name }}! :elmofire:"}'  ${{ secrets.SLACK_WEBHOOK }}

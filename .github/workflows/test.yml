@@ -1,0 +1,60 @@
+name: Tests
+on:
+  push:
+    branches-ignore: [develop, master, next, hotfix, fix, api-central, single_reg]
+
+jobs:
+  phpunit:
+    name: Run PHP Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ubuntu
+          MYSQL_DATABASE: circle_test
+        ports:
+          - '8888:3306'
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure PHP 8.0
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 8.0
+          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+
+      - name: create test database
+        uses: ./.github/actions/setup-mysql
+
+      - name: Composer install
+        env:
+          COMPONENTS_AT: ${{ secrets.COMPONENTS_AT }}
+        run: |
+          composer config -g github-oauth.github.com ${COMPONENTS_AT}
+          composer install --no-interaction --prefer-dist
+      - name: Copy Enviroment and prepare enviroment
+        run: |
+          cp .env.testing_online .env
+          php artisan key:generate
+      - name: Migrate and Seed
+        run: |
+          php artisan migrate:fresh
+          php artisan db:seed
+          php artisan passport:keys
+      - name: Run Tests
+        run: |
+          php artisan config:clear
+          vendor/bin/phpunit --testdox
+      - name: Slack Failure Notification
+        if: ${{ failure() }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: (some) tests have failed! :this-is-fine-fire:"}'  ${{ secrets.SLACK_WEBHOOK }}
+      - name: Slack Success Notification
+        if: ${{ success() }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: all tests passed! :catjam:"}'  ${{ secrets.SLACK_WEBHOOK }}

@@ -1,0 +1,12 @@
+[
+    {
+        "name": "vServerHosttech - prod",
+        "ip": "213.167.227.127",
+        "username": "nespresso",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "php /var/www/abo-tool/current/artisan migrate --force",
+        "path": "/var/www/abo-tool",
+        "env": "PROD_ENV"
+    }
+]
