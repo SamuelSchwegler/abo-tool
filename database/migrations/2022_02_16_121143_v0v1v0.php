@@ -108,7 +108,8 @@ return new class extends Migration {
         });
 
         Schema::create('buys', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id');
+            $table->integer('bill_number')->startingValue(2000)->autoIncrement();
             $table->foreignId('customer_id');
             $table->foreignId('bundle_id');
             $table->integer('price')->comment(' / 100');
@@ -116,6 +117,10 @@ return new class extends Migration {
             $table->boolean('paid')->default(false);
             $table->timestamp('issued');
             $table->timestamps();
+
+            $table->index(['bill_number']);
+            $table->dropPrimary('bill_number');
+            $table->primary(['id']);
         });
 
         Schema::create('delivery_services', function (Blueprint $table) {

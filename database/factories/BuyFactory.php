@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Bundle;
+use App\Models\Buy;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +24,7 @@ class BuyFactory extends Factory
             'customer_id' => Customer::inRandomOrder()->first()->id,
             'bundle_id' => $bundle->id,
             'price' => $bundle->price,
-            'delivery_cost' => $this->faker->randomElement([0, 0, 5, 8, 10, 12]),
+            'delivery_cost' => 12 * $this->faker->randomElement([0, 0, 5, 8, 10, 12]),
             'paid' => $this->faker->boolean(),
             'issued' => $this->faker->dateTimeBetween('- 3 months', 'now')
         ];

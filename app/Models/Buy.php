@@ -76,7 +76,7 @@ class Buy extends Model
         // This is what you will need to identify incoming payments.
         $referenceNumber = QrBill\Reference\QrPaymentReferenceGenerator::generate(
             '210000',  // You receive this number from your bank (BESR-ID). Unless your bank is PostFinance, in that case use NULL.
-            '313947143000901' // A number to match the payment with your internal data, e.g. an invoice number
+            $this->bill_number // A number to match the payment with your internal data, e.g. an invoice number
         );
 
         $qrBill->setPaymentReference(
@@ -88,7 +88,7 @@ class Buy extends Model
         // Optionally, add some human-readable information about what the bill is for.
         $qrBill->setAdditionalInformation(
             QrBill\DataGroup\Element\AdditionalInformation::create(
-                'Rechnung ' . $this->id
+                'Rechnungsnr: ' . $this->bill_number
             )
         );
 
@@ -132,5 +132,11 @@ class Buy extends Model
     protected function getTotalCostAttribute(): string
     {
         return number_format($this->delivery_cost + $this->price / 100, 2, '.', '\'');
+    }
+
+    public function getTotalVatAttribute(): string
+    {
+        $value = $this->delivery_cost * 0.077;
+        return number_format($value, 2, '.', '\'');
     }
 }

@@ -46,6 +46,13 @@
             </tr>
         @endforeach
         <tr>
+            <td>inkl MWST</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right"><b>{{$meta['total_vat']}}</b></td>
+        </tr>
+        <tr>
             <td><b>Total</b></td>
             <td></td>
             <td></td>

@@ -55,9 +55,9 @@ class Customer extends Model
 
     /**
      * Zusammenfassung über Kontostand für die Produkte (noch offene Lieferungen)
-     * @return Collection
+     * @return array
      */
-    public function productBalances(): Collection
+    public function productBalances(): array
     {
         $balances = [];
         foreach ($this->productBuys() as $buy) {
@@ -69,10 +69,10 @@ class Customer extends Model
             $balance->balance = $balance->total_deliveries - $balance->ordered;
 
             // todo calculate Expected end
-            $balances[] = $balance;
+            $balances[$buy->product_id] = $balance;
         }
 
-        return collect($balances);
+        return $balances;
     }
 
     public function next_orders(): HasMany

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\Exception\CopyFileException;
 use PhpOffice\PhpWord\Exception\CreateTemporaryFileException;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class Order extends Model
@@ -52,30 +54,40 @@ class Order extends Model
     {
         $path = storage_path('app/templates/delivery_note.docx');
         $template = new TemplateProcessor($path);
-
         $customer = $this->customer;
+        $delivery_address = $customer->delivery_address;
         $billing_address = $customer->billing_address;
 
+        $template->setValue('today', now()->format('d.m.Y'));
+        $template->setValue('delivery_service', $this->delivery->delivery_service->name);
+        $template->setValue('delivery_date', $this->delivery->date->format('d.m.Y'));
+        $template->setValue('depository', $this->depository);
+        $template->setValue('product_name', $this->product->name);
+        $template->setValue('open_deliveries', $customer->productBalances()[$this->product_id]->balance);
+
+        $settings = Setting::first();
+        $template->setValue('company_postcode', $settings->address->city);
+        $template->setValue('company_city', $settings->address->city);
+
         $template->setValue('customer_name', $customer->name);
-        $template->setValue('customer_street', $billing_address->street);
-        $template->setValue('customer_postcode', $billing_address->postcode);
-        $template->setValue('customer_city', $billing_address->city);
+        $template->setValue('customer_street', $delivery_address?->street ?? $billing_address->street);
+        $template->setValue('customer_postcode', $delivery_address?->postcode ?? $billing_address->postcode);
+        $template->setValue('customer_city', $delivery_address?->city ?? $billing_address->city);
 
         // Items
         $item_rows = [];
-        foreach($this->delivery->items as $item) {
+        foreach ($this->delivery->items as $item) {
             $item_rows[] = [
-                'item_count' => 1,
                 'item_name' => $item->name,
                 'item_origin' => $item->item_origin->name
             ];
         }
-        $template->cloneRowAndSetValues('item_count', $item_rows);
+        $template->cloneRowAndSetValues('item_name', $item_rows);
 
         // todo: soll es PDF sein?
-        $output = storage_path('app/delivery-notes/delivery-note_' . $this->id . '.docx');
-        $template->saveAs($output);
+        $word_output = storage_path('app/delivery-notes/delivery-note_' . $this->id . '.docx');
+        $template->saveAs($word_output);
 
-        return $output;
+        return $word_output;
     }
 }

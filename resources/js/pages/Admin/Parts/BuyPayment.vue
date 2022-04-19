@@ -1,7 +1,7 @@
 <template>
     <tr :key="key">
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-            {{ buy.id }}
+            {{ buy.bill_number }}
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             <router-link :to="'/customer/' + buy.customer.id" class="text-indigo-600 hover:text-indigo-900">

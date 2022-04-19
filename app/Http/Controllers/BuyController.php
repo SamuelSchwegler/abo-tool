@@ -49,6 +49,7 @@ class BuyController extends Controller
         $setting = Setting::first();
         $customer = $buy->customer;
         $billing_address = $customer->billing_address;
+
         return view('export.bill_head')->with([
             'issuer' => [
                 'name' => $setting->name,
@@ -71,14 +72,16 @@ class BuyController extends Controller
                 ],
                 [
                     'name' => 'Lieferkosten',
-                    'single_price' => number_format($buy->delivery_cost / $buy->bundle->deliveries, 2, '.', '\'').' CHF',
+                    'single_price' => number_format($buy->delivery_cost / $buy->bundle->deliveries, 2, '.', '\'') . ' CHF',
                     'total_price' => $buy->delivery_cost . ' CHF',
+                    'vat' => '7.70',
                     'count' => $buy->bundle->deliveries
                 ]
             ],
             'meta' => [
                 'issue_date' => $buy->issued->format('d.m.Y'),
                 'total_price' => $buy->total_cost . ' CHF',
+                'total_vat' => $buy->total_vat . ' CHF',
                 'summary_text' => 'Sämtliche Produkte sind Bio-zertifiziert: Bio-Zertifizierung: CH-BIO 006 | Betrieb-Nr: 1396
 Steuernummer: 109.681.257'
             ]

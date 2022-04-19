@@ -16,6 +16,7 @@ class BuyResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'bill_number' => $this->bill_number,
             'customer' => [
                 'id' => $this->customer->id,
                 'name' => $this->customer->name,
