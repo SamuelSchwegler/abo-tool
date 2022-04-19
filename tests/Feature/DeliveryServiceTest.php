@@ -21,7 +21,8 @@ class DeliveryServiceTest extends TestCase
         $response = $this->post('/api/delivery-service', [
             'name' => Str::random(),
             'days' => ['sat'],
-            'deadline_distance' => 1
+            'deadline_distance' => 1,
+            'delivery_cost' => 5
         ]);
 
         $response->assertSessionDoesntHaveErrors();
@@ -29,7 +30,8 @@ class DeliveryServiceTest extends TestCase
         self::assertEquals($count + 1, DeliveryService::count());
     }
 
-    public function test_addRemovePostcode() {
+    public function test_addRemovePostcode()
+    {
         $this->actingAs($this->admin);
 
         $postcode_count = Postcode::count();
@@ -41,7 +43,7 @@ class DeliveryServiceTest extends TestCase
         ]);
         $postcode = $this->faker->numberBetween(1000, 9999);
 
-        $response = $this->post('/api/delivery-service/'.$service1->id.'/add/', [
+        $response = $this->post('/api/delivery-service/' . $service1->id . '/add/', [
             'postcode' => $postcode,
         ]);
         $response->assertSessionDoesntHaveErrors();
@@ -60,7 +62,7 @@ class DeliveryServiceTest extends TestCase
         $response->assertOk();
         self::assertEquals($service1->id, $response->json(['service'])['id']);
 
-        $response = $this->post('/api/delivery-service/'.$service2->id.'/add/', [
+        $response = $this->post('/api/delivery-service/' . $service2->id . '/add/', [
             'postcode' => $postcode,
         ]);
         $response->assertSessionDoesntHaveErrors();
@@ -79,7 +81,7 @@ class DeliveryServiceTest extends TestCase
         $response->assertOk();
         self::assertEquals($service2->id, $response->json(['service'])['id']);
 
-        $response = $this->post('/api/delivery-service/'.$service2->id.'/remove/', [
+        $response = $this->post('/api/delivery-service/' . $service2->id . '/remove/', [
             'postcode' => $postcode,
         ]);
         $response->assertSessionDoesntHaveErrors();
@@ -92,17 +94,19 @@ class DeliveryServiceTest extends TestCase
         self::assertEquals(0, $service2->postcodes->count());
     }
 
-    public function test_Update() {
+    public function test_Update()
+    {
         $this->actingAs($this->admin);
 
         $service = DeliveryService::factory()->create([
             'name' => 'alt',
         ]);
 
-        $response = $this->json('patch', '/api/delivery-service/'.$service->id, [
+        $response = $this->json('patch', '/api/delivery-service/' . $service->id, [
             'name' => 'neu',
             'days' => ['sat'],
-            'deadline_distance' => 1
+            'deadline_distance' => 1,
+            'delivery_cost' => 10
         ]);
         $service->refresh();
         $response->assertOk();
