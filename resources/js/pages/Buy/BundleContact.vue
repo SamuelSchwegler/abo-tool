@@ -81,9 +81,9 @@ export default {
 
     data: function () {
         const delivery_options = [
-            {id: 'match', name: 'Liefer und Rechnungsadresse stimmen überein', description: ''},
-            {id: 'split', name: 'Unterschiedliche Rechnungs und Lieferadresse', description: ''},
-            {id: 'pickup', name: 'Lieferung wird direkt vor Ort in Hünibach abgeholt', description: ''},
+            {id: 'match', name: 'Liefer- und Rechnungsadresse stimmen überein', description: ''},
+            {id: 'split', name: 'Unterschiedliche Liefer- und Rechnungsadresse', description: ''},
+            {id: 'pickup', name: 'Ich hole mein Gemüse im Bioladen der Gartenbauschule Hünibach ab', description: ''},
         ]
 
         const steps = [
