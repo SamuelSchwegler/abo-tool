@@ -216,11 +216,6 @@ jobs:
             ln -s -f $STORAGE_PATH $RELEASE_PATH
             ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
             sudo service php8.1-fpm reload
-      - name: Slack Failure Notification
-        if: ${{ failure() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment failed! :strahlenwarnzeichen:"}'  ${{ secrets.SLACK_WEBHOOK }}
-
   run-after-hooks:
     name: "${{ matrix.server.name }}: After hook"
     runs-on: ubuntu-latest
@@ -245,11 +240,6 @@ jobs:
           envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH
           script: |
             ${{ matrix.server.afterHooks }}
-
-      - name: Slack Failure Notification
-        if: ${{ failure() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment failed! :strahlenwarnzeichen:"}'  ${{ secrets.SLACK_WEBHOOK }}
 
   clean-up:
     name: "${{ matrix.server.name }}: Clean up"
@@ -277,12 +267,3 @@ jobs:
 
             php ${ACTIVE_RELEASE_PATH}/artisan storage:link
             php ${ACTIVE_RELEASE_PATH}/artisan up
-      - name: Slack Failure Notification
-        if: ${{ failure() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment failed on ${{ matrix.server.name }}! :strahlenwarnzeichen:"}'  ${{ secrets.SLACK_WEBHOOK }}
-
-      - name: Slack Success Notification
-        if: ${{ success() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment successfull finished on ${{ matrix.server.name }}! :elmofire:"}'  ${{ secrets.SLACK_WEBHOOK }}
