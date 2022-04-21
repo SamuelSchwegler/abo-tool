@@ -61,7 +61,7 @@ class BundleController extends Controller
 
             Auth::login($user);
         }
-        assertNotNull($user);
+
         $customerValidated = $request->validate(Customer::rules());
         $deliveryAddressRules = Address::rules('delivery_address');
         $billingAddressRules = Address::rules('billing_address');

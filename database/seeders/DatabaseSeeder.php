@@ -54,14 +54,14 @@ class DatabaseSeeder extends Seeder
             ]);
         });
         $admin = User::factory()->create([
-            'email' => 'demo@webtheke.ch',
-            'password' => bcrypt('1234'),
+            'email' => 'admin@webtheke.ch',
+            'password' => bcrypt('admin'),
         ]);
         $admin->assignRole('admin');
 
         $customer = User::factory()->create([
-            'email' => 'demo-user@webtheke.ch',
-            'password' => bcrypt('Demo!User19*Test'),
+            'email' => 'kunde@webtheke.ch',
+            'password' => bcrypt('kunde'),
         ]);
         $customer->assignRole('customer');
 

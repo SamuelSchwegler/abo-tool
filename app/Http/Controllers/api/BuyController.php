@@ -21,8 +21,6 @@ class BuyController extends Controller
     }
 
     public function update(Buy $buy, Request $request) {
-        assertNotNull($buy);
-
         $validated = $request->validate([
             'paid' => ['nullable', 'boolean']
         ]);
