@@ -63,7 +63,10 @@ class Order extends Model
         $template->setValue('delivery_date', $this->delivery->date->format('d.m.Y'));
         $template->setValue('depository', $this->depository);
         $template->setValue('product_name', $this->product->name);
-        $template->setValue('open_deliveries', $customer->productBalances()[$this->product_id]->balance);
+
+        $balances = $customer->productBalances();
+        $balance = array_key_exists($this->product_id, $balances) ? $balances[$this->product_id]->balance : 0;
+        $template->setValue('open_deliveries', $balance);
 
         $settings = Setting::first();
         $template->setValue('company_postcode', $settings->address->city);

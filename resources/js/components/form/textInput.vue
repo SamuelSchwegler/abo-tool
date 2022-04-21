@@ -3,7 +3,7 @@
         <label :for="name" v-bind:class="{'text-red-500': hasError}"
                class="block text-sm font-medium text-gray-700">{{ label }}</label>
         <div class="mt-1 relative rounded-md shadow-sm">
-            <input type="text" :name="name" v-model="input" @input="onChanged"
+            <input :type="type" :name="name" v-model="input" @input="onChanged"
                    v-bind:class="{'border-red-500': hasError}"
                    class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"/>
         </div>
@@ -28,6 +28,10 @@ export default {
             default: function () {
                 return {}
             }
+        },
+        type: {
+            type: String,
+            default: "text"
         }
     },
     data() {

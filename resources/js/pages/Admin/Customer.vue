@@ -4,6 +4,10 @@
             <h1 class="page-title">{{ customer.name }}</h1>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <router-link :to="'/customer/' + customer.id + '/orders'" type="button"
+                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet mr-3 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+                Zur Bestellübersicht
+            </router-link>
             <router-link to="/customers" type="button"
                          class="inline-flex items-center justify-center rounded-md border border-transparent bg-green px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                 Zu allen Kunden
@@ -35,12 +39,14 @@
             </fieldset>
             <div v-if="customer.delivery_option !== 'pickup'" class="mt-5">
                 <h4>Lieferadresse</h4>
-                <address-vue :address="customer.delivery_address ?? {}" class="mt-5" v-on:updated="deliveryAddressUpdated"
+                <address-vue :address="customer.delivery_address ?? {}" class="mt-5"
+                             v-on:updated="deliveryAddressUpdated"
                              :errors="delivery_address_errors"></address-vue>
             </div>
             <div v-if="customer.delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
-                <address-vue :address="customer.billing_address ?? {}"  v-on:updated="billingAddressUpdated" :errors="billing_address_errors"></address-vue>
+                <address-vue :address="customer.billing_address ?? {}" v-on:updated="billingAddressUpdated"
+                             :errors="billing_address_errors"></address-vue>
             </div>
         </div>
     </div>

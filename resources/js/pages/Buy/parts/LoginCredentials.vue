@@ -4,13 +4,14 @@
                     :error="errors['email']"></text-input>
     </div>
     <div>
-        <text-input name="password" v-model="credentials.password" label="Passwort"
+        <text-input name="password" v-model="credentials.password" type="password" label="Passwort"
                     :error="errors['password']"></text-input>
     </div>
 </template>
 
 <script>
-import TextInput from "../form/textInput";
+
+import TextInput from "../../../components/form/textInput";
 
 export default {
     name: "LoginCredentials",

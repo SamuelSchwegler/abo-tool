@@ -12,7 +12,7 @@
                     CHF {{ bundle.formatted_price }}<br>
                     {{bundle.deliveries}} Lieferungen à CHF {{bundle.price_per_delivery}}<br>
                     <span v-if="delivery_cost !== null" class="whitespace-nowrap">
-                        + Lieferkosten {{ delivery_cost }} CHF
+                        zzgl. Lieferkosten CHF {{ delivery_cost }}
                     </span>
                     <span v-else>
                         exkl. Lieferkosten
@@ -21,7 +21,7 @@
             </div>
             <div class="flex space-x-4 my-6 text-sm font-medium" v-if="allowOrder">
                 <div class="flex-auto flex space-x-4">
-                    <router-link :to="{name: 'bundle.buy', params: { id: bundle.id }}" class='btn inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest  active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150'>
+                    <router-link :to="{name: 'bundle.buy', params: { id: bundle.id }}"  class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                         Bestellen
                     </router-link>
                 </div>

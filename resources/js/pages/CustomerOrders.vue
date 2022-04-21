@@ -5,7 +5,7 @@
             <p class="mt-2 text-sm text-gray-700">Überblick über Bestellungen.</p>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <router-link to="/customers" type="button" class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Zur Kundenübersicht</router-link>
+            <router-link :to="'/customer/' + customer.id" type="button" class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Zum Kundenkonto</router-link>
         </div>
     </div>
     <div class="mt-4 grid lg:grid-cols-2 grid-cols-1 gap-4">
@@ -29,38 +29,43 @@
                 </tbody>
             </table>
         </div>
-        <div class="box bg-white">
-            <h3 class="title">Meine Abos</h3>
-            <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key"
-                   v-if="Object.entries(product_balances).length > 0">
-                <thead>
-                <tr>
-                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                        Abo
-                    </th>
-                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                        Guthaben
-                    </th>
-                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                        davon geplant
-                    </th>
-                </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-slate-800">
-                <tr v-for="[index, balance] in Object.entries(product_balances)">
-                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                        {{ balance.name }}
-                    </td>
-                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                        {{ balance.balance }}
-                    </td>
-                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                        {{ balance.planned }}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <alert v-else :text="'Momentan ist noch kein Guthaben für Bestellungen freigeschaltet.'"></alert>
+        <div>
+            <div class="box bg-white">
+                <h3 class="title">Meine Abos</h3>
+                <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key"
+                       v-if="Object.entries(product_balances).length > 0">
+                    <thead>
+                    <tr>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                            Abo
+                        </th>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                            Guthaben
+                        </th>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                            bereits geplant
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-slate-800">
+                    <tr v-for="[index, balance] in Object.entries(product_balances)">
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                            {{ balance.name }}
+                        </td>
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                            {{ balance.balance }}
+                        </td>
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                            {{ balance.planned }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <alert v-else :text="'Momentan ist noch kein Guthaben für Bestellungen freigeschaltet.'"></alert>
+            </div>
+            <div class="box bg-white" v-if="orders.length > 0">
+                <p>Sie haben die Möglichkeit ihre Lieferungen auszusetzen. Dazu können Sie den Schalter neben der Lieferung klicken.</p>
+            </div>
         </div>
     </div>
 </template>

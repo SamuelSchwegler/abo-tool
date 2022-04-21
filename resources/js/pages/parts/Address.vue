@@ -47,6 +47,7 @@ export default {
     methods: {
         postcodeChanged() {
             this.$emit('postcodeChanged', this.address.postcode);
+            delete this.errors['postcode'];
             this.updated();
         },
         updated() {

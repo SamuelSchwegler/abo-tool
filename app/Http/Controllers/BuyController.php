@@ -66,22 +66,22 @@ class BuyController extends Controller
             'items' => [
                 [
                     'name' => $buy->bundle->name,
-                    'single_price' => number_format($buy->price / 100 / $buy->bundle->deliveries, 2, '.', '\'') . ' CHF',
-                    'total_price' => number_format($buy->price / 100, 2, '.', '\'') . ' CHF',
+                    'single_price' => 'CHF '.number_format($buy->price / 100 / $buy->bundle->deliveries, 2, '.', '\''),
+                    'total_price' => 'CHF '.number_format($buy->price / 100, 2, '.', '\''),
                     'count' => $buy->bundle->deliveries
                 ],
                 [
                     'name' => 'Lieferkosten',
-                    'single_price' => number_format($buy->delivery_cost / $buy->bundle->deliveries, 2, '.', '\'') . ' CHF',
-                    'total_price' => $buy->delivery_cost . ' CHF',
+                    'single_price' => 'CHF '.number_format($buy->delivery_cost / $buy->bundle->deliveries, 2, '.', '\''),
+                    'total_price' => 'CHF '. $buy->delivery_cost,
                     'vat' => '7.70',
                     'count' => $buy->bundle->deliveries
                 ]
             ],
             'meta' => [
                 'issue_date' => $buy->issued->format('d.m.Y'),
-                'total_price' => $buy->total_cost . ' CHF',
-                'total_vat' => $buy->total_vat . ' CHF',
+                'total_price' => 'CHF '.$buy->total_cost,
+                'total_vat' => 'CHF '. $buy->total_vat,
                 'summary_text' => 'Sämtliche Produkte sind Bio-zertifiziert: Bio-Zertifizierung: CH-BIO 006 | Betrieb-Nr: 1396
 Steuernummer: 109.681.257'
             ]

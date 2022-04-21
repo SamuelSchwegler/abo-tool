@@ -11,7 +11,7 @@
                     <login-credentials :credentials="credentials" :errors="errors"></login-credentials>
                     <div>
                         <button type="button" @click="openLoginModal"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-violet hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Ich habe bereits ein Konto
                         </button>
                     </div>
@@ -65,12 +65,12 @@
 <script>
 import TextInput from "../../components/form/textInput";
 import Alert from "../../components/parts/Alert";
-import LoginModal from "../../components/parts/LoginModal";
-import LoginCredentials from "../../components/parts/LoginCredentials";
 import ProgressSteps from "../parts/ProgressSteps";
 import CustomerData from "../parts/CustomerData";
 import AddressVue from "../parts/Address";
 import Bundle from "../parts/Bundle";
+import LoginModal from "./parts/LoginModal";
+import LoginCredentials from "./parts/LoginCredentials";
 
 export default {
     name: "BundleBuy",
@@ -81,9 +81,9 @@ export default {
 
     data: function () {
         const delivery_options = [
-            {id: 'match', name: 'Liefer und Rechnungsadresse stimmen überein', description: ''},
-            {id: 'split', name: 'Unterschiedliche Rechnungs und Lieferadresse', description: ''},
-            {id: 'pickup', name: 'Lieferung wird direkt vor Ort in Hünibach abgeholt', description: ''},
+            {id: 'match', name: 'Liefer- und Rechnungsadresse stimmen überein', description: ''},
+            {id: 'split', name: 'Unterschiedliche Liefer- und Rechnungsadresse', description: ''},
+            {id: 'pickup', name: 'Ich hole mein Gemüse im Bioladen der Gartenbauschule Hünibach ab', description: ''},
         ]
 
         const steps = [
@@ -172,6 +172,19 @@ export default {
         },
         changeDeliveryOption: function (id) {
             this.delivery_option = id;
+            if ((id === 'match' || id === 'split') && this.user.customer.delivery_address === null) {
+                this.user.customer.delivery_address = {
+                    street: '',
+                    city: '',
+                    postcode: ''
+                }
+            } else if ((id === 'pickup' || id === 'split') && this.user.customer.billing_address === null) {
+                this.user.customer.billing_address = {
+                    street: '',
+                    city: '',
+                    postcode: ''
+                }
+            }
             this.getDeliveryService();
         },
         openLoginModal: function () {

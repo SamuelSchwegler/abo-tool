@@ -30,7 +30,6 @@ Route::middleware('auth')->group(function() {
     Route::get('export/buy/{buy}/bill', [BuyController::class, 'exportBill'])->name('buy.export.bill');
     Route::get('export/delivery-note/{order}', [OrderController::class, 'exportDeliveryNote'])->name('delivery-note.export');
     Route::get('export/delivery-notes/{delivery}', [DeliveryController::class, 'exportDeliveryNotes'])->name('delivery-notes.export');
-
 });
 
 Route::get('/{any}', function (){

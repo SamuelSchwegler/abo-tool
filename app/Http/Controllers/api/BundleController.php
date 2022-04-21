@@ -70,9 +70,9 @@ class BundleController extends Controller
         switch ($request->delivery_option) {
             case "match":
                 $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
-                $deliveryAddressValidated = $request->validate($deliveryAddressRules);
+                $deliveryAddressValidated = $request->validate($deliveryAddressRules, Address::messages('delivery_address'));
 
-                $address = Address::create($deliveryAddressValidated['delivery_address'], Address::messages('delivery_address'));
+                $address = Address::create($deliveryAddressValidated['delivery_address']);
 
                 $address_data = [
                     'billing_address_id' => $address->id,
@@ -80,9 +80,9 @@ class BundleController extends Controller
                 ];
                 break;
             case "pickup":
-                $billingAddressValidated = $request->validate($billingAddressRules);
+                $billingAddressValidated = $request->validate($billingAddressRules, Address::messages('billing_address'));
 
-                $address = Address::create($billingAddressValidated['billing_address'], Address::messages('billing_address'));
+                $address = Address::create($billingAddressValidated['billing_address']);
 
                 $address_data = [
                     'billing_address_id' => $address->id,
