@@ -8,10 +8,14 @@
                 <h1 class="flex-auto text-lg font-semibold text-slate-900">
                     {{ bundle.name }}
                 </h1>
-                <div class="text-lg font-semibold text-slate-500">
-                    {{ bundle.formatted_price }} CHF
+                <div class="text-md font-semibold text-slate-500">
+                    CHF {{ bundle.formatted_price }}<br>
+                    {{bundle.deliveries}} Lieferungen à CHF {{bundle.price_per_delivery}}<br>
                     <span v-if="delivery_cost !== null" class="whitespace-nowrap">
                         + Lieferkosten {{ delivery_cost }} CHF
+                    </span>
+                    <span v-else>
+                        exkl. Lieferkosten
                     </span>
                 </div>
             </div>
