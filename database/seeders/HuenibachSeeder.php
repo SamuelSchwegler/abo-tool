@@ -4,14 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Address;
 use App\Models\Bundle;
-use App\Models\DeliveryService;
 use App\Models\Item;
 use App\Models\ItemOrigin;
 use App\Models\Product;
 use App\Models\Setting;
-use Database\Factories\ItemFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class HuenibachSeeder extends Seeder
 {
@@ -49,7 +46,7 @@ class HuenibachSeeder extends Seeder
             'deliveries' => 6,
             'price' => 264,
             'product_id' => $gross->id,
-            'trial' => true
+            'trial' => true,
         ]);
 
         Bundle::create([
@@ -57,20 +54,20 @@ class HuenibachSeeder extends Seeder
             'deliveries' => 6,
             'price' => 174,
             'product_id' => $klein->id,
-            'trial' => true
+            'trial' => true,
         ]);
 
         $address = Address::create([
             'street' => 'Chartreusestrasse 7',
             'postcode' => '3626',
-            'city' => 'Hünibach'
+            'city' => 'Hünibach',
         ]);
 
         Setting::create([
             'name' => 'Gartenbauschule Huenibach',
             'address_id' => $address->id,
             'besr_id' => '',
-            'iban' => 'CH5330790016597781328'
+            'iban' => 'CH5330790016597781328',
         ]);
 
         ItemOrigin::factory()->count(3)->create();

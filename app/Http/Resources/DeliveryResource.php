@@ -21,11 +21,11 @@ class DeliveryResource extends JsonResource
                 'id' => $order->id,
                 'customer' => [
                     'id' => $order->customer->id,
-                    'name' => $order->customer->name
+                    'name' => $order->customer->name,
                 ],
                 'product' => [
                     'id' => $order->product->id,
-                    'name' => $order->product->name
+                    'name' => $order->product->name,
                 ],
                 'depository' => $this->depository ?? '',
             ];
@@ -35,7 +35,7 @@ class DeliveryResource extends JsonResource
         foreach($this->items as $item) {
             $items_array[] = [
                 'id' => $item->id,
-                'name' => $item->name
+                'name' => $item->name,
             ];
         }
 
@@ -45,19 +45,19 @@ class DeliveryResource extends JsonResource
                 'd.m.Y' => $this->date->format('d.m.Y'),
                 'Y-m-d' => $this->date->format('Y-m-d'),
                 'weekday' => $this->date->isoFormat('dddd'),
-                'passed' => today()->gt($this->date)
+                'passed' => today()->gt($this->date),
             ],
             'deadline' => [
                 'd.m.Y' => $this->deadline->format('d.m.Y'),
-                'Y-m-d' => $this->deadline->format('Y-m-d')
+                'Y-m-d' => $this->deadline->format('Y-m-d'),
             ],
             'delivery_service' => [
                 'id' => $this->delivery_service->id,
-                'name' => $this->delivery_service->name
+                'name' => $this->delivery_service->name,
             ],
             'approved' => ($this->approved === 1),
             'orders' => $orders_array,
-            'items' => $items_array
+            'items' => $items_array,
         ];
     }
 }

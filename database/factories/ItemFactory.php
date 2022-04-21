@@ -23,9 +23,9 @@ class ItemFactory extends Factory
                 'Eier', 'Krautstiel gelb', 'Krautstiel rot', 'Spinat', 'Peperoni Grün', 'Peperoni Gelb',
                 'Peperoni Rot', 'Alpkäse', 'Dörraprikosen', 'Walnüsse', 'Holunderblütensirup', 'Tomaten',
                 'Cherry Tomaten', 'Kopfsalat', 'Kopfsalat Rot', 'Batavia Grün', 'Nüsslisalat', 'Rüebli',
-                'Kirschen', 'Apfel Boskop', 'Honig', 'Himbeeren', 'Erdbeeren', 'Stachelbeeren', 'Johanisbeeren'
+                'Kirschen', 'Apfel Boskop', 'Honig', 'Himbeeren', 'Erdbeeren', 'Stachelbeeren', 'Johanisbeeren',
             ]),
-            'item_origin_id' => ItemOrigin::inRandomOrder()->first()->id
+            'item_origin_id' => ItemOrigin::inRandomOrder()->first()->id,
         ];
     }
 }

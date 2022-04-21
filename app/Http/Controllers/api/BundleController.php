@@ -12,7 +12,6 @@ use App\Models\Customer;
 use App\Models\User;
 use App\Notifications\SendInvoice;
 use App\Rules\DeliveryPossibleToPostcode;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -21,7 +20,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Mailer\Exception\TransportException;
-use function PHPUnit\Framework\assertNotNull;
 
 class BundleController extends Controller
 {
@@ -36,10 +34,10 @@ class BundleController extends Controller
     }
 
     /**
-     * Zahlung mit allen Daten absenden
+     * Zahlung mit allen Daten absenden.
      *
-     * @param Bundle $bundle
-     * @param Request $request
+     * @param  Bundle  $bundle
+     * @param  Request  $request
      * @return Application|ResponseFactory|Response
      */
     public function submitBuy(Bundle $bundle, Request $request)
@@ -51,12 +49,12 @@ class BundleController extends Controller
         } else {
             $userValidated = $request->validate([
                 'email' => ['required', 'string', 'unique:users,email'],
-                'password' => ['required', 'string']
+                'password' => ['required', 'string'],
             ]);
 
             $user = User::create([
                 'email' => $userValidated['email'],
-                'password' => Hash::make($userValidated['password'])
+                'password' => Hash::make($userValidated['password']),
             ]);
 
             Auth::login($user);
@@ -68,7 +66,7 @@ class BundleController extends Controller
         $address_data = [];
 
         switch ($request->delivery_option) {
-            case "match":
+            case 'match':
                 $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
                 $deliveryAddressValidated = $request->validate($deliveryAddressRules, Address::messages('delivery_address'));
 
@@ -76,10 +74,10 @@ class BundleController extends Controller
 
                 $address_data = [
                     'billing_address_id' => $address->id,
-                    'delivery_address_id' => $address->id
+                    'delivery_address_id' => $address->id,
                 ];
                 break;
-            case "pickup":
+            case 'pickup':
                 $billingAddressValidated = $request->validate($billingAddressRules, Address::messages('billing_address'));
 
                 $address = Address::create($billingAddressValidated['billing_address']);
@@ -89,7 +87,7 @@ class BundleController extends Controller
                     'delivery_address_id' => null,
                 ];
                 break;
-            case "split":
+            case 'split':
                 $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
                 $deliveryAddressValidated = $request->validate($deliveryAddressRules, Address::messages('delivery_address'));
                 $billingAddressValidated = $request->validate($billingAddressRules, Address::messages('billing_address'));
@@ -99,7 +97,7 @@ class BundleController extends Controller
 
                 $address_data = [
                     'delivery_address_id' => $delivery->id,
-                    'billing_address_id' => $billing->id
+                    'billing_address_id' => $billing->id,
                 ];
         }
 
@@ -122,7 +120,7 @@ class BundleController extends Controller
             'bundle_id' => $bundle->id,
             'price' => $bundle->price,
             'issued' => now(),
-            'delivery_cost' => $service->delivery_cost * $bundle->deliveries
+            'delivery_cost' => $service->delivery_cost * $bundle->deliveries,
         ]);
 
         try {

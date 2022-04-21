@@ -14,7 +14,7 @@ class DeliveryService extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'days' => 'array'
+        'days' => 'array',
     ];
 
     public function postcodes(): HasMany
@@ -34,7 +34,7 @@ class DeliveryService extends Model
             'days' => ['required', 'array', 'min:1'],
             'days.*' => ['required', 'string'],
             'deadline_distance' => ['required', 'min:0', 'max:14', 'numeric'],
-            'delivery_cost' => ['required', 'min:0', 'max:9999', 'numeric']
+            'delivery_cost' => ['required', 'min:0', 'max:9999', 'numeric'],
         ];
     }
 
@@ -53,14 +53,15 @@ class DeliveryService extends Model
     protected function deliveryCost(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value / 100,
-            set: fn($value) => $value * 100,
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100,
         );
     }
 
     /**
-     * Gibt den passenden Lieferdienst für eine Postleitzahl zurück
-     * @param string $postcode
+     * Gibt den passenden Lieferdienst für eine Postleitzahl zurück.
+     *
+     * @param  string  $postcode
      * @return ?DeliveryService
      */
     public static function findServiceForPostcode(string $postcode): ?DeliveryService

@@ -23,7 +23,7 @@ class DeliveryController extends Controller
             'start' => ['nullable', 'date_format:Y-m-d'],
             'delivery_service_ids' => ['nullable', 'array'],
             'delivery_service_ids.*' => ['required', 'exists:delivery_services,id'],
-            'order_by' => ['nullable', Rule::in('date', 'deadline')]
+            'order_by' => ['nullable', Rule::in('date', 'deadline')],
         ]);
 
         $deliveries = Delivery::query();
@@ -39,22 +39,24 @@ class DeliveryController extends Controller
         } else {
             $deliveries = $deliveries->orderBy('date');
         }
+
         return response([
             'deliveries' => DeliveryResource::collection($deliveries->get()),
-            'delivery_services' => DeliveryServiceResource::collection(DeliveryService::all())
+            'delivery_services' => DeliveryServiceResource::collection(DeliveryService::all()),
         ]);
     }
 
     public function delivery(Delivery $delivery)
     {
         return response([
-            'delivery' => DeliveryResource::make($delivery)
+            'delivery' => DeliveryResource::make($delivery),
         ]);
     }
 
     /**
-     * @param Delivery $delivery
+     * @param  Delivery  $delivery
      * @return Response|Application|ResponseFactory
+     *
      * @throws DeliveryException
      */
     public function toggleApproved(Delivery $delivery): Response|Application|ResponseFactory
@@ -64,7 +66,7 @@ class DeliveryController extends Controller
         }
 
         $delivery->update([
-            'approved' => !$delivery->approved
+            'approved' => ! $delivery->approved,
         ]);
 
         return $this->delivery($delivery);
@@ -76,7 +78,7 @@ class DeliveryController extends Controller
 
         return \response([
             'msg' => 'ok',
-            'delivery' => DeliveryResource::make($delivery)
+            'delivery' => DeliveryResource::make($delivery),
         ]);
     }
 }

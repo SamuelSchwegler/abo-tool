@@ -40,13 +40,13 @@ class Delivery extends Model
      */
     public function exportDeliveryNotes(): string
     {
-        $path = storage_path('app/delivery-notes/delivery-notes_' . $this->id . '.zip');
+        $path = storage_path('app/delivery-notes/delivery-notes_'.$this->id.'.zip');
         if (file_exists($path)) {
             unlink($path);
         }
 
         $zip = new ZipArchive();
-        if ($zip->open($path, ZipArchive::CREATE) === TRUE) {
+        if ($zip->open($path, ZipArchive::CREATE) === true) {
             Log::info('open');
             foreach ($this->orders as $order) {
                 $zip->addFile($order->exportDeliveryNote(), $order->deliveryNoteName());

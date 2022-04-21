@@ -2,11 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Exceptions\DeliveryException;
 use App\Models\Delivery;
 use App\Models\Order;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class OrderTest extends TestCase
@@ -25,11 +22,11 @@ class OrderTest extends TestCase
         ]);
         $order = Order::factory()->create([
             'delivery_id' => $delivery->id,
-            'depository' => ''
+            'depository' => '',
         ]);
 
-        $response = $this->patch('/api/order/'. $order->id, [
-            'depository' => 'Komm wir gehen'
+        $response = $this->patch('/api/order/'.$order->id, [
+            'depository' => 'Komm wir gehen',
         ]);
         $response->assertOk();
         $order->refresh();
@@ -39,14 +36,14 @@ class OrderTest extends TestCase
         $delivery->update(['deadline' => now()->subMinute()]);
         $order->refresh();
 
-        $response = $this->patch('/api/order/'. $order->id, [
-            'depository' => 'Komm wir gehen'
+        $response = $this->patch('/api/order/'.$order->id, [
+            'depository' => 'Komm wir gehen',
         ]);
         self::assertTrue($order->deadlinePassed());
         $response->assertStatus(500); // exception
     }
 
-    public function test_toggleCancel()  {
+    public function test_toggleCancel() {
         $this->actingAs($this->admin);
 
         $delivery = Delivery::factory()->create([
@@ -55,7 +52,7 @@ class OrderTest extends TestCase
         $order = Order::factory()->create([
             'delivery_id' => $delivery->id,
             'depository' => '',
-            'canceled' => true
+            'canceled' => true,
         ]);
 
         $response = $this->patch('/api/order/'.$order->id.'/toggle-cancel');

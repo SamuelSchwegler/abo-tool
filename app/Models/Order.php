@@ -5,11 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\Exception\CopyFileException;
 use PhpOffice\PhpWord\Exception\CreateTemporaryFileException;
-use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class Order extends Model
@@ -42,11 +39,12 @@ class Order extends Model
 
     public function deliveryNoteName(): string
     {
-        return str_replace(' ', '_', $this->customer->name) . '_' . $this->id . '.docx';
+        return str_replace(' ', '_', $this->customer->name).'_'.$this->id.'.docx';
     }
 
     /**
      * @return string Pfad zum File
+     *
      * @throws CopyFileException
      * @throws CreateTemporaryFileException
      */
@@ -82,13 +80,13 @@ class Order extends Model
         foreach ($this->delivery->items as $item) {
             $item_rows[] = [
                 'item_name' => $item->name,
-                'item_origin' => $item->item_origin->name
+                'item_origin' => $item->item_origin->name,
             ];
         }
         $template->cloneRowAndSetValues('item_name', $item_rows);
 
         // todo: soll es PDF sein?
-        $word_output = storage_path('app/delivery-notes/delivery-note_' . $this->id . '.docx');
+        $word_output = storage_path('app/delivery-notes/delivery-note_'.$this->id.'.docx');
         $template->saveAs($word_output);
 
         return $word_output;

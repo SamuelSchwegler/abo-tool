@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
@@ -58,7 +57,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/delivery-service/{service}/', [DeliveryServiceController::class, 'update']);
     Route::post('/delivery-service/', [DeliveryServiceController::class, 'store']);
 
-
     Route::post('/delivery-service/{service}/add/', [DeliveryServiceController::class, 'apiAddPostcode']);
     Route::post('/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);
 
@@ -69,7 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // delivery items
     Route::post('/delivery/{delivery}/item/{item}', [DeliveryController::class, 'addItem']);
 
-    Route::get('/items', [ItemController::class,'items']);
+    Route::get('/items', [ItemController::class, 'items']);
 
     Route::get('/customers', [CustomerController::class, 'customers']);
     Route::get('/customer/{customer}', [CustomerController::class, 'customer']);

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Address;
-use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\DeliveryService;
 use App\Models\User;
@@ -22,17 +21,17 @@ class DatabaseSeeder extends Seeder
         $pickup = DeliveryService::create([
             'name' => 'Abholung in Hünibach',
             'pickup' => 1,
-            'days' => ['sat']
+            'days' => ['sat'],
         ]);
 
         $post = DeliveryService::factory()->create([
             'name' => 'Post',
-            'days' => ['mon']
+            'days' => ['mon'],
         ]);
 
         $velo = DeliveryService::factory()->create([
             'name' => 'Velokurier',
-            'days' => ['tue']
+            'days' => ['tue'],
         ]);
 
         DB::table('postcodes')->insert([
@@ -50,7 +49,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create()->each(function ($user) {
             $user->assignRole('customer');
             Customer::factory()->create([
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ]);
         });
         $admin = User::factory()->create([

@@ -22,7 +22,7 @@ class DeliveryServiceTest extends TestCase
             'name' => Str::random(),
             'days' => ['sat'],
             'deadline_distance' => 1,
-            'delivery_cost' => 5
+            'delivery_cost' => 5,
         ]);
 
         $response->assertSessionDoesntHaveErrors();
@@ -36,14 +36,14 @@ class DeliveryServiceTest extends TestCase
 
         $postcode_count = Postcode::count();
         $service1 = DeliveryService::factory()->create([
-            'name' => 'Postcode Adder'
+            'name' => 'Postcode Adder',
         ]);
         $service2 = DeliveryService::factory()->create([
-            'name' => 'Postcode Adder 2'
+            'name' => 'Postcode Adder 2',
         ]);
         $postcode = $this->faker->numberBetween(1000, 9999);
 
-        $response = $this->post('/api/delivery-service/' . $service1->id . '/add/', [
+        $response = $this->post('/api/delivery-service/'.$service1->id.'/add/', [
             'postcode' => $postcode,
         ]);
         $response->assertSessionDoesntHaveErrors();
@@ -57,12 +57,12 @@ class DeliveryServiceTest extends TestCase
 
         // Test Postcode
         $response = $this->json('get', '/api/postcode-delivery-service', [
-            'postcode' => $postcode
+            'postcode' => $postcode,
         ]);
         $response->assertOk();
         self::assertEquals($service1->id, $response->json(['service'])['id']);
 
-        $response = $this->post('/api/delivery-service/' . $service2->id . '/add/', [
+        $response = $this->post('/api/delivery-service/'.$service2->id.'/add/', [
             'postcode' => $postcode,
         ]);
         $response->assertSessionDoesntHaveErrors();
@@ -76,12 +76,12 @@ class DeliveryServiceTest extends TestCase
 
         // Test Postcode
         $response = $this->json('get', '/api/postcode-delivery-service', [
-            'postcode' => $postcode
+            'postcode' => $postcode,
         ]);
         $response->assertOk();
         self::assertEquals($service2->id, $response->json(['service'])['id']);
 
-        $response = $this->post('/api/delivery-service/' . $service2->id . '/remove/', [
+        $response = $this->post('/api/delivery-service/'.$service2->id.'/remove/', [
             'postcode' => $postcode,
         ]);
         $response->assertSessionDoesntHaveErrors();
@@ -102,11 +102,11 @@ class DeliveryServiceTest extends TestCase
             'name' => 'alt',
         ]);
 
-        $response = $this->json('patch', '/api/delivery-service/' . $service->id, [
+        $response = $this->json('patch', '/api/delivery-service/'.$service->id, [
             'name' => 'neu',
             'days' => ['sat'],
             'deadline_distance' => 1,
-            'delivery_cost' => 10
+            'delivery_cost' => 10,
         ]);
         $service->refresh();
         $response->assertOk();

@@ -23,13 +23,13 @@ class DeliveryTest extends TestCase
     public function test_deliveries() {
         Sanctum::actingAs($this->admin);
 
-        $response = $this->json('get','/api/deliveries');
+        $response = $this->json('get', '/api/deliveries');
         $response->assertOk();
 
-        $response = $this->json('get','/api/deliveries?start='.now()->format('Y-m-d').'&order_by=deadline');
+        $response = $this->json('get', '/api/deliveries?start='.now()->format('Y-m-d').'&order_by=deadline');
         $response->assertOk();
 
-        $response = $this->json('get','/api/deliveries?start='.now()->format('Y-m-d').'&delivery_service_ids[]='.DeliveryService::inRandomOrder()->first()->id);
+        $response = $this->json('get', '/api/deliveries?start='.now()->format('Y-m-d').'&delivery_service_ids[]='.DeliveryService::inRandomOrder()->first()->id);
         $response->assertOk();
     }
 
@@ -38,13 +38,13 @@ class DeliveryTest extends TestCase
 
         Sanctum::actingAs($this->admin);
 
-        $response = $this->json('get','/api/delivery/'.$delivery->id);
+        $response = $this->json('get', '/api/delivery/'.$delivery->id);
         $response->assertOk();
     }
 
     public function test_createDeliveriesJob() {
         $service = DeliveryService::factory([
-            'days' => ['sun']
+            'days' => ['sun'],
         ])->create();
 
         self::assertEquals(0, $service->deliveries->count());
@@ -60,9 +60,9 @@ class DeliveryTest extends TestCase
 
     public function test_toggleApproved() {
         $delivery = Delivery::factory()->create([
-           'approved' => false,
+            'approved' => false,
             'deadline' => now()->addDays(3),
-            'date' => now()->addDays(5)
+            'date' => now()->addDays(5),
         ]);
         Queue::fake();
         Sanctum::actingAs($this->admin);
@@ -86,14 +86,14 @@ class DeliveryTest extends TestCase
         $postcode = $this->faker->postcode();
         Postcode::create([
             'postcode' => $postcode,
-            'delivery_service_id' => $service->id
+            'delivery_service_id' => $service->id,
         ]);
 
         $delivery_address = Address::factory()->create([
-            'postcode' => $postcode
+            'postcode' => $postcode,
         ]);
         $customer = Customer::factory()->create([
-            'delivery_address_id' => $delivery_address->id
+            'delivery_address_id' => $delivery_address->id,
         ]);
 
         $service->refresh();
@@ -103,13 +103,13 @@ class DeliveryTest extends TestCase
         // Test Job
         self::assertEquals(0, $customer->orders->count());
         $buy = Buy::factory()->create([
-            'customer_id' => $customer->id
+            'customer_id' => $customer->id,
         ]);
         $delivery = Delivery::factory()->create([
             'delivery_service_id' => $service->id,
             'approved' => false,
             'deadline' => now()->addDays(3),
-            'date' => now()->addDays(5)
+            'date' => now()->addDays(5),
         ]);
 
         DeliveryCreateOrders::dispatch($delivery);

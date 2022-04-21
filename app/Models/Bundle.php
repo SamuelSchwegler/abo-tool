@@ -12,7 +12,7 @@ class Bundle extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'trial' => 'boolean'
+        'trial' => 'boolean',
     ];
 
     public function buys(): HasMany
@@ -38,8 +38,8 @@ class Bundle extends Model
     protected function price(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value / 100,
-            set: fn($value) => $value * 100,
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100,
         );
     }
 }

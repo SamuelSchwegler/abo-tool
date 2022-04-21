@@ -26,7 +26,7 @@ class DeliveryPossibleToPostcode implements Rule
      */
     public function passes($attribute, $value)
     {
-        return !is_null(DeliveryService::findServiceForPostcode($value));
+        return ! is_null(DeliveryService::findServiceForPostcode($value));
     }
 
     /**

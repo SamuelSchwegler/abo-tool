@@ -17,7 +17,7 @@ class ItemOriginFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->randomElement(['Eigenanbau', 'Bio (Schweiz)', 'Bio (Spanien)', 'Honduras'])
+            'name' => $this->faker->randomElement(['Eigenanbau', 'Bio (Schweiz)', 'Bio (Spanien)', 'Honduras']),
         ];
     }
 }

@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use App\Jobs\CreateOrdersForBuy;
 use App\Models\Buy;
 use App\Models\Customer;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -29,7 +27,7 @@ class BuyTest extends TestCase
     {
         $customer = Customer::factory()->create();
         $buy = Buy::factory([
-            'customer_id' => $customer->id
+            'customer_id' => $customer->id,
         ])->create();
 
         self::assertEquals(0, $customer->orders->count());
@@ -43,26 +41,26 @@ class BuyTest extends TestCase
     public function test_update()
     {
         $buy = Buy::factory([
-            'paid' => false
+            'paid' => false,
         ])->create();
         Queue::fake();
 
-        $response = $this->json('patch', '/api/buy/' . $buy->id, [
-            'paid' => true
+        $response = $this->json('patch', '/api/buy/'.$buy->id, [
+            'paid' => true,
         ]);
         $response->assertStatus(401); // unauthorized
 
         Sanctum::actingAs($this->admin);
-        $response = $this->json('patch', '/api/buy/' . $buy->id, [
-            'paid' => true
+        $response = $this->json('patch', '/api/buy/'.$buy->id, [
+            'paid' => true,
         ]);
         $response->assertOk();
         Queue::assertPushed(CreateOrdersForBuy::class);
         $buy->refresh();
         self::assertEquals(1, $buy->paid);
 
-        $response = $this->json('patch', '/api/buy/' . $buy->id, [
-            'paid' => false
+        $response = $this->json('patch', '/api/buy/'.$buy->id, [
+            'paid' => false,
         ]);
         $response->assertOk();
         $buy->refresh();

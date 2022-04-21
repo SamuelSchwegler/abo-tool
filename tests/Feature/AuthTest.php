@@ -4,12 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -23,19 +21,19 @@ class AuthTest extends TestCase
 
         $user = User::factory()->create([
             'email' => $email,
-            'password' => bcrypt($password)
+            'password' => bcrypt($password),
         ]);
 
         $response = $this->post('/api/login', [
-           'email' => $email,
-            'password' => 'nenenen ne'
+            'email' => $email,
+            'password' => 'nenenen ne',
         ]);
         $response->assertJson(['success' => false]);
         self::assertFalse(Auth::check());
 
         $response = $this->post('/api/login', [
             'email' => $email,
-            'password' => $password
+            'password' => $password,
         ]);
         $response->assertJson(['success' => true]);
         self::assertTrue(Auth::check());
@@ -53,7 +51,7 @@ class AuthTest extends TestCase
         $response->assertStatus(422);
 
         $response = $this->json('post', '/api/forgot-password', [
-            'email' => $user->email
+            'email' => $user->email,
         ]);
         $response->assertStatus(200);
         Notification::assertSentTo($user, ResetPassword::class);
@@ -68,7 +66,7 @@ class AuthTest extends TestCase
             'token' => $token,
             'email' => $user->email,
             'password' => $password,
-            'password_confirmation' => $password
+            'password_confirmation' => $password,
         ]);
         $response->assertOk();
         $user->refresh();

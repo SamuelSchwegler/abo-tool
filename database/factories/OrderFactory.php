@@ -23,7 +23,7 @@ class OrderFactory extends Factory
             'delivery_id' => Delivery::inRandomOrder()->first()->id,
             'customer_id' => Customer::inRandomOrder()->first()->id,
             'product_id' => Product::inRandomOrder()->first()->id,
-            'canceled' => $this->faker->randomElement([false, false, false, true])
+            'canceled' => $this->faker->randomElement([false, false, false, true]),
         ];
     }
 }

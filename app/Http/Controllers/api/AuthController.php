@@ -4,10 +4,8 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +18,7 @@ use function response;
 class AuthController extends Controller
 {
     /**
-     * Login
+     * Login.
      */
     public function login(Request $request)
     {
@@ -41,13 +39,14 @@ class AuthController extends Controller
         $response = [
             'success' => $success,
             'message' => $message,
-            'user' => Auth::check() ? UserResource::make(Auth::user()) : []
+            'user' => Auth::check() ? UserResource::make(Auth::user()) : [],
         ];
+
         return response()->json($response);
     }
 
     /**
-     * Logout
+     * Logout.
      */
     public function logout(Request $request): JsonResponse
     {
@@ -66,6 +65,7 @@ class AuthController extends Controller
             'success' => $success,
             'message' => $message,
         ];
+
         return response()->json($response);
     }
 
@@ -94,7 +94,7 @@ class AuthController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
                 $user->forceFill([
-                    'password' => Hash::make($password)
+                    'password' => Hash::make($password),
                 ])->setRememberToken(Str::random(60));
 
                 $user->save();

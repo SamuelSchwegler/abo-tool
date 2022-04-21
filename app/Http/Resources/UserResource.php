@@ -15,21 +15,22 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $customer = $this->customer;
+
         return [
             'id' => $this->id,
             'email' => $this->email,
-            'customer' => !is_null($customer) ? CustomerResource::make($customer) : [
+            'customer' => ! is_null($customer) ? CustomerResource::make($customer) : [
                 'delivery_address' => [
                     'street' => '',
                     'postcode' => '',
-                    'city' => ''
+                    'city' => '',
                 ],
                 'billing_address' => [
                     'street' => '',
                     'postcode' => '',
-                    'city' => ''
-                ]
-            ]
+                    'city' => '',
+                ],
+            ],
         ];
     }
 }

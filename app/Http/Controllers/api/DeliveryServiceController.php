@@ -16,7 +16,7 @@ class DeliveryServiceController extends Controller
     public function services(): Response|Application|ResponseFactory
     {
         return response([
-            'services' => DeliveryServiceResource::collection(DeliveryService::all())
+            'services' => DeliveryServiceResource::collection(DeliveryService::all()),
         ]);
     }
 
@@ -27,7 +27,7 @@ class DeliveryServiceController extends Controller
         $service = DeliveryService::create($validated);
 
         return \response([
-            'service' => DeliveryServiceResource::make($service)
+            'service' => DeliveryServiceResource::make($service),
         ]);
     }
 
@@ -82,14 +82,14 @@ class DeliveryServiceController extends Controller
     public function postcodeDeliveryService(Request $request): Response|Application|ResponseFactory
     {
         $validated = $request->validate([
-            'postcode' => ['required']
+            'postcode' => ['required'],
         ]);
 
         $service = DeliveryService::findServiceForPostcode($validated['postcode']) ?? DeliveryService::where('pickup', 1)->first();
 
         return \response([
             'msg' => 'ok',
-            'service' => new DeliveryServiceResource($service)
+            'service' => new DeliveryServiceResource($service),
         ]);
     }
 }

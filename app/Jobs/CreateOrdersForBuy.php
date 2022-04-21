@@ -11,8 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
-use function PHPUnit\Framework\assertNotNull;
 
 class CreateOrdersForBuy implements ShouldQueue
 {
@@ -49,7 +47,7 @@ class CreateOrdersForBuy implements ShouldQueue
             Order::create([
                 'customer_id' => $this->customer->id,
                 'delivery_id' => $delivery->id,
-                'product_id' => $this->buy->bundle->product->id
+                'product_id' => $this->buy->bundle->product->id,
             ]);
 
             $count++;

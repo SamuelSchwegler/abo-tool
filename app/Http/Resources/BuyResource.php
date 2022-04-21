@@ -21,17 +21,17 @@ class BuyResource extends JsonResource
                 'id' => $this->customer->id,
                 'name' => $this->customer->name,
                 'user' => [
-                    'email' => $this->customer->user->email
-                ]
+                    'email' => $this->customer->user->email,
+                ],
             ],
             'price' => $this->formated_price,
             'delivery_cost' => $this->delivery_cost,
             'paid' => $this->paid === 1,
             'created' => [
-                'd.m.Y' => $this->issued->format('d.m.Y')
+                'd.m.Y' => $this->issued->format('d.m.Y'),
             ],
             'age' => $this->issued->diffInDays(now()) + 1,
-            'bundle' => BundleResource::make($this->bundle)
+            'bundle' => BundleResource::make($this->bundle),
         ];
     }
 }

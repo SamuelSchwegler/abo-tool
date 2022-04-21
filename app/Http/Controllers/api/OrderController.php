@@ -25,18 +25,18 @@ class OrderController extends Controller
             $customer = $user->customer;
         }
 
-
         return \response([
             'customer' => CustomerResource::make($customer),
             'orders' => OrderResource::collection(OrderResource::collection($customer?->next_orders ?? collect([]))),
-            'product_balances' => $customer->productBalances()
+            'product_balances' => $customer->productBalances(),
         ]);
     }
 
     /**
-     * @param Order $order
-     * @param Request $request
+     * @param  Order  $order
+     * @param  Request  $request
      * @return Response|Application|ResponseFactory
+     *
      * @throws DeliveryException
      */
     public function update(Order $order, Request $request): Response|Application|ResponseFactory
@@ -47,7 +47,7 @@ class OrderController extends Controller
         }
 
         $validated = $request->validate([
-            'depository' => ['nullable', 'string']
+            'depository' => ['nullable', 'string'],
         ]);
         $order->update($validated);
 
@@ -55,7 +55,8 @@ class OrderController extends Controller
     }
 
     /**
-     * Abmeldung einer Bestellung regeln
+     * Abmeldung einer Bestellung regeln.
+     *
      * @throws DeliveryException
      */
     public function toggleCancel(Order $order): Response|Application|ResponseFactory
@@ -64,7 +65,7 @@ class OrderController extends Controller
             throw DeliveryException::deadlineHasPassed($order->delivery);
         }
         $order->update([
-            'canceled' => !$order->canceled
+            'canceled' => ! $order->canceled,
         ]);
 
         return response(['order' => OrderResource::make($order)]);

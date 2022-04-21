@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\BuyResource;
-use App\Models\Bundle;
 use App\Models\Buy;
 use App\Models\Setting;
-use App\Notifications\SendInvoice;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use TCPDF;
 use Sprain\SwissQrBill as QrBill;
+use TCPDF;
 
 class BuyController extends Controller
 {
@@ -37,7 +31,7 @@ class BuyController extends Controller
             ->getPaymentPart();
 
         // 4. For demo purposes, let's save the generated example in a file
-        $path = storage_path('app/bills/bill_' . $buy->id . '.pdf');
+        $path = storage_path('app/bills/bill_'.$buy->id.'.pdf');
 
         $tcPdf->Output($path, 'F');
 
@@ -68,23 +62,23 @@ class BuyController extends Controller
                     'name' => $buy->bundle->name,
                     'single_price' => 'CHF '.number_format($buy->price / 100 / $buy->bundle->deliveries, 2, '.', '\''),
                     'total_price' => 'CHF '.number_format($buy->price / 100, 2, '.', '\''),
-                    'count' => $buy->bundle->deliveries
+                    'count' => $buy->bundle->deliveries,
                 ],
                 [
                     'name' => 'Lieferkosten',
                     'single_price' => 'CHF '.number_format($buy->delivery_cost / $buy->bundle->deliveries, 2, '.', '\''),
-                    'total_price' => 'CHF '. $buy->delivery_cost,
+                    'total_price' => 'CHF '.$buy->delivery_cost,
                     'vat' => '7.70',
-                    'count' => $buy->bundle->deliveries
-                ]
+                    'count' => $buy->bundle->deliveries,
+                ],
             ],
             'meta' => [
                 'issue_date' => $buy->issued->format('d.m.Y'),
                 'total_price' => 'CHF '.$buy->total_cost,
-                'total_vat' => 'CHF '. $buy->total_vat,
+                'total_vat' => 'CHF '.$buy->total_vat,
                 'summary_text' => 'Sämtliche Produkte sind Bio-zertifiziert: Bio-Zertifizierung: CH-BIO 006 | Betrieb-Nr: 1396
-Steuernummer: 109.681.257'
-            ]
+Steuernummer: 109.681.257',
+            ],
         ])->render();
     }
 }

@@ -23,7 +23,6 @@ trait TraitUuid
         static::creating($creationCallback);
     }
 
-
     /**
      * Override the getIncrementing() function to return false to tell
      * Laravel that the identifier does not auto increment (it's a string).
@@ -34,7 +33,6 @@ trait TraitUuid
     {
         return false;
     }
-
 
     /**
      * Tell laravel that the key type is a string, not an integer.

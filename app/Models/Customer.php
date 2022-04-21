@@ -2,16 +2,12 @@
 
 namespace App\Models;
 
-use App\Rules\DeliveryPossibleToPostcode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class Customer extends Model
 {
@@ -54,7 +50,8 @@ class Customer extends Model
     }
 
     /**
-     * Zusammenfassung über Kontostand für die Produkte (noch offene Lieferungen)
+     * Zusammenfassung über Kontostand für die Produkte (noch offene Lieferungen).
+     *
      * @return array
      */
     public function productBalances(): array
@@ -63,9 +60,9 @@ class Customer extends Model
         foreach ($this->productBuys() as $buy) {
             $order = $this->productOrders()->where('product_id', $buy->product_id)->first();
             $balance = $buy;
-            $balance->total_deliveries = (int)$buy->total_deliveries;
-            $balance->ordered = (int)$order?->ordered ?? 0;
-            $balance->planned = (int)$order?->planned ?? 0;
+            $balance->total_deliveries = (int) $buy->total_deliveries;
+            $balance->ordered = (int) $order?->ordered ?? 0;
+            $balance->planned = (int) $order?->planned ?? 0;
             $balance->balance = $balance->total_deliveries - $balance->ordered;
 
             // todo calculate Expected end
@@ -84,7 +81,7 @@ class Customer extends Model
 
     public function getNameAttribute(): string
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function getDeliveryOptionAttribute(): string
@@ -111,7 +108,8 @@ class Customer extends Model
     }
 
     /**
-     * Gibt Lieferservice für Adresse des Kundens, falls diese nicht in den Lieferzonen ist wird Selbstabholung gewählt
+     * Gibt Lieferservice für Adresse des Kundens, falls diese nicht in den Lieferzonen ist wird Selbstabholung gewählt.
+     *
      * @return mixed
      */
     public function delivery_service()
@@ -121,6 +119,7 @@ class Customer extends Model
         if(is_null($postcode)) {
             return $pickup;
         }
+
         return DeliveryService::findServiceForPostcode($postcode) ?? $pickup;
     }
 
@@ -133,7 +132,7 @@ class Customer extends Model
             'phone' => ['required', 'string'],
             'pickup' => ['nullable', 'boolean'],
             'delivery_address_id' => ['nullable', 'exists:addresses,id'],
-            'billing_address_id' => ['nullable', 'exists:addresses,id']
+            'billing_address_id' => ['nullable', 'exists:addresses,id'],
         ];
     }
 }

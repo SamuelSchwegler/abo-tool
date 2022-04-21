@@ -24,15 +24,15 @@ class BundleTest extends TestCase
         $customer_count = Customer::count();
         $address_count = Address::count();
 
-        $response = $this->json('post', '/api/bundle/' . $bundle->id . '/buy', []);
+        $response = $this->json('post', '/api/bundle/'.$bundle->id.'/buy', []);
         $response->assertStatus(422);
         self::assertEquals($user_count, User::count());
         self::assertEquals($customer_count, Customer::count());
         self::assertFalse(Auth::check());
 
-        $response = $this->json('post', '/api/bundle/' . $bundle->id . '/buy', [
+        $response = $this->json('post', '/api/bundle/'.$bundle->id.'/buy', [
             'email' => $email,
-            'password' => Str::random(8)
+            'password' => Str::random(8),
         ]);
         self::assertTrue(Auth::check());
         $response->assertStatus(422);
@@ -47,15 +47,15 @@ class BundleTest extends TestCase
             'delivery_address' => [
                 'street' => $this->faker->streetAddress(),
                 'postcode' => '111',
-                'city' => $this->faker->city()
-            ]
+                'city' => $this->faker->city(),
+            ],
         ];
 
-        $response = $this->json('post', '/api/bundle/' . $bundle->id . '/buy', $data);
+        $response = $this->json('post', '/api/bundle/'.$bundle->id.'/buy', $data);
         $response->assertStatus(422);
 
         $data['delivery_address']['postcode'] = Postcode::inRandomOrder()->first()->postcode;
-        $response = $this->json('post', '/api/bundle/' . $bundle->id . '/buy', $data);
+        $response = $this->json('post', '/api/bundle/'.$bundle->id.'/buy', $data);
         $response->assertOk();
         self::assertEquals($customer_count + 1, Customer::count());
         self::assertEquals($address_count + 1, Address::count());
@@ -70,10 +70,10 @@ class BundleTest extends TestCase
             'delivery_address' => [
                 'street' => $this->faker->streetAddress(),
                 'postcode' => Postcode::inRandomOrder()->first()->postcode,
-                'city' => $this->faker->city()
-            ]
+                'city' => $this->faker->city(),
+            ],
         ];
-        $response = $this->post('/api/bundle/' . $bundle->id . '/buy', $data);
+        $response = $this->post('/api/bundle/'.$bundle->id.'/buy', $data);
         $response->assertSessionHasErrors(['billing_address']);
 
         $data = [
@@ -84,15 +84,15 @@ class BundleTest extends TestCase
             'delivery_address' => [
                 'street' => $this->faker->streetAddress(),
                 'postcode' => Postcode::inRandomOrder()->first()->postcode,
-                'city' => $this->faker->city()
+                'city' => $this->faker->city(),
             ],
             'billing_address' => [
                 'street' => $this->faker->streetAddress(),
                 'postcode' => $this->faker->postcode(),
-                'city' => $this->faker->city()
-            ]
+                'city' => $this->faker->city(),
+            ],
         ];
-        $response = $this->post('/api/bundle/' . $bundle->id . '/buy', $data);
+        $response = $this->post('/api/bundle/'.$bundle->id.'/buy', $data);
         $response->assertOk();
 
         self::assertEquals($customer_count + 1, Customer::count());
@@ -106,10 +106,10 @@ class BundleTest extends TestCase
             'billing_address' => [
                 'street' => $this->faker->streetAddress(),
                 'postcode' => $this->faker->postcode(),
-                'city' => $this->faker->city()
-            ]
+                'city' => $this->faker->city(),
+            ],
         ];
-        $response = $this->post('/api/bundle/' . $bundle->id . '/buy', $data);
+        $response = $this->post('/api/bundle/'.$bundle->id.'/buy', $data);
         self::assertEquals($customer_count + 1, Customer::count());
         self::assertEquals($address_count + 1, Address::count());
         $response->assertOk();

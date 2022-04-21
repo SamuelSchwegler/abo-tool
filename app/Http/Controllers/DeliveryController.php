@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Delivery;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class DeliveryController extends Controller
