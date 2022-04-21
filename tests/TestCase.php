@@ -25,7 +25,7 @@ abstract class TestCase extends BaseTestCase
             self::$seeded = true;
         }
 
-        $this->admin = User::where('email', 'demo@webtheke.ch')->first();
-        $this->customer = User::role('customer')->first();
+        $this->admin = User::where('email', 'admin@webtheke.ch')->first();
+        $this->customer = User::where('email', 'kunde@webtheke.ch')->first();
     }
 }
