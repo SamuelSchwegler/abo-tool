@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import Bundle from "../../components/Bundle";
 import ProgressSteps from "../parts/ProgressSteps";
+import Bundle from "../parts/Bundle";
 
 export default {
     name: "Bill",

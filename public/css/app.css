@@ -685,12 +685,6 @@ select{
 .mr-2{
   margin-right: 0.5rem;
 }
-.ml-12{
-  margin-left: 3rem;
-}
-.-mt-px{
-  margin-top: -1px;
-}
 .block{
   display: block;
 }
@@ -739,9 +733,6 @@ select{
 .h-6{
   height: 1.5rem;
 }
-.h-16{
-  height: 4rem;
-}
 .max-h-60{
   max-height: 15rem;
 }
@@ -781,9 +772,6 @@ select{
 .w-40{
   width: 10rem;
 }
-.w-8{
-  width: 2rem;
-}
 .min-w-full{
   min-width: 100%;
 }
@@ -795,12 +783,6 @@ select{
 }
 .max-w-md{
   max-width: 28rem;
-}
-.max-w-xl{
-  max-width: 36rem;
-}
-.max-w-6xl{
-  max-width: 72rem;
 }
 .flex-1{
   flex: 1 1 0%;
@@ -1060,9 +1042,6 @@ select{
 .border-b-2{
   border-bottom-width: 2px;
 }
-.border-r{
-  border-right-width: 1px;
-}
 .border-gray-300{
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
@@ -1085,10 +1064,6 @@ select{
 .border-gray-100{
   --tw-border-opacity: 1;
   border-color: rgb(243 244 246 / var(--tw-border-opacity));
-}
-.border-gray-400{
-  --tw-border-opacity: 1;
-  border-color: rgb(156 163 175 / var(--tw-border-opacity));
 }
 .bg-white{
   --tw-bg-opacity: 1;
@@ -1262,9 +1237,6 @@ select{
 .pt-6{
   padding-top: 1.5rem;
 }
-.pt-8{
-  padding-top: 2rem;
-}
 .text-left{
   text-align: left;
 }
@@ -1328,17 +1300,11 @@ select{
 .leading-6{
   line-height: 1.5rem;
 }
-.leading-7{
-  line-height: 1.75rem;
-}
 .tracking-widest{
   letter-spacing: 0.1em;
 }
 .tracking-wide{
   letter-spacing: 0.025em;
-}
-.tracking-wider{
-  letter-spacing: 0.05em;
 }
 .text-gray-500{
   --tw-text-opacity: 1;
@@ -1391,14 +1357,6 @@ select{
 .text-gray-300{
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
-}
-.text-gray-200{
-  --tw-text-opacity: 1;
-  color: rgb(229 231 235 / var(--tw-text-opacity));
-}
-.underline{
-  -webkit-text-decoration-line: underline;
-          text-decoration-line: underline;
 }
 .antialiased{
   -webkit-font-smoothing: antialiased;
@@ -1753,10 +1711,6 @@ select{
     --tw-bg-opacity: 1;
     background-color: rgb(30 41 59 / var(--tw-bg-opacity));
   }
-  .dark\:bg-gray-900{
-    --tw-bg-opacity: 1;
-    background-color: rgb(17 24 39 / var(--tw-bg-opacity));
-  }
   .dark\:text-slate-200{
     --tw-text-opacity: 1;
     color: rgb(226 232 240 / var(--tw-text-opacity));
@@ -1880,9 +1834,6 @@ select{
   .sm\:items-center{
     align-items: center;
   }
-  .sm\:justify-start{
-    justify-content: flex-start;
-  }
   .sm\:justify-between{
     justify-content: space-between;
   }
@@ -1938,9 +1889,6 @@ select{
   }
   .sm\:pr-6{
     padding-right: 1.5rem;
-  }
-  .sm\:pt-0{
-    padding-top: 0px;
   }
   .sm\:align-middle{
     vertical-align: middle;

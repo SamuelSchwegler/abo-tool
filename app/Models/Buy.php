@@ -112,7 +112,7 @@ class Buy extends Model
 
     public function getFormatedPriceAttribute(): string
     {
-        return number_format($this->price / 100, 2, '.', '\'');
+        return number_format($this->price, 2, '.', '\'');
     }
 
     /**
@@ -127,11 +127,22 @@ class Buy extends Model
     }
 
     /**
+     * @return Attribute
+     */
+    protected function price(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    /**
      * @return string
      */
     protected function getTotalCostAttribute(): string
     {
-        return number_format($this->delivery_cost + $this->price / 100, 2, '.', '\'');
+        return number_format($this->delivery_cost + $this->price, 2, '.', '\'');
     }
 
     public function getTotalVatAttribute(): string

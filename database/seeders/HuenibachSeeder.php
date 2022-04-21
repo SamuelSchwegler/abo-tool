@@ -31,31 +31,33 @@ class HuenibachSeeder extends Seeder
         ]);
 
         Bundle::create([
-            'name' => '12er Abo Gross a 44 CHF',
+            'name' => 'Gemüseabo gross',
             'deliveries' => 12,
-            'price' => 52800,
-            'product_id' => $klein->id,
-        ]);
-
-        Bundle::create([
-            'name' => '6er Probe Abo Gross a 44 CHF',
-            'deliveries' => 12,
-            'price' => 26400,
-            'product_id' => $klein->id,
-        ]);
-
-        Bundle::create([
-            'name' => '12er Abo Klein à 29 CHF',
-            'deliveries' => 12,
-            'price' => 34800,
+            'price' => 528,
             'product_id' => $gross->id,
         ]);
 
         Bundle::create([
-            'name' => '6er Probe Abo klein à 29 CHF',
+            'name' => 'Gemüseabo klein',
             'deliveries' => 12,
-            'price' => 17400,
+            'price' => 348,
+            'product_id' => $klein->id,
+        ]);
+
+        Bundle::create([
+            'name' => 'Probeabo gross',
+            'deliveries' => 6,
+            'price' => 264,
             'product_id' => $gross->id,
+            'trial' => true
+        ]);
+
+        Bundle::create([
+            'name' => 'Probeabo klein',
+            'deliveries' => 6,
+            'price' => 174,
+            'product_id' => $klein->id,
+            'trial' => true
         ]);
 
         $address = Address::create([

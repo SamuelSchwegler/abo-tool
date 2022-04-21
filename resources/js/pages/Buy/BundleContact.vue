@@ -63,7 +63,6 @@
 </template>
 
 <script>
-import Bundle from "../../components/Bundle";
 import TextInput from "../../components/form/textInput";
 import Alert from "../../components/parts/Alert";
 import LoginModal from "../../components/parts/LoginModal";
@@ -71,6 +70,7 @@ import LoginCredentials from "../../components/parts/LoginCredentials";
 import ProgressSteps from "../parts/ProgressSteps";
 import CustomerData from "../parts/CustomerData";
 import AddressVue from "../parts/Address";
+import Bundle from "../parts/Bundle";
 
 export default {
     name: "BundleBuy",
