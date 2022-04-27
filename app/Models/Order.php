@@ -67,7 +67,8 @@ class Order extends Model
         $template->setValue('open_deliveries', $balance);
 
         $settings = Setting::first();
-        $template->setValue('company_postcode', $settings->address->city);
+        $template->setValue('company_street', $settings->address->street);
+        $template->setValue('company_postcode', $settings->address->postcode);
         $template->setValue('company_city', $settings->address->city);
 
         $template->setValue('customer_name', $customer->name);

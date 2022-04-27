@@ -1,6 +1,6 @@
 <template>
-    <div class="flex bg-white rounded-md shadow-md">
-        <div class="flex-none w-64 relative">
+    <div class="flex flex-col sm:flex-row bg-white rounded-md shadow-md">
+        <div class=" sm:flex-none flex-auto h-64 sm:w-64 w-full relative">
             <img src="/tasche.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-l-md"/>
         </div>
         <form class="flex-auto p-6">
