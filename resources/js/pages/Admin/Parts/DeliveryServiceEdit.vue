@@ -31,7 +31,8 @@
                             @change="updateDeliveryService"></text-input>
             </div>
             <div>
-                <text-input name="delivery_cost" label="Kosten / Lieferung in CHF" v-model="delivery_cost" :value="delivery_cost"
+                <text-input name="delivery_cost" label="Kosten / Lieferung in CHF" v-model="delivery_cost"
+                            :value="delivery_cost"
                             :error="errors['delivery_cost']" @change="updateDeliveryService"></text-input>
 
             </div>
@@ -41,7 +42,7 @@
         </div>
     </div>
     <div class="box bg-white">
-        <p>Kommende, unbestätigte Lieferungen</p>
+        <p>Kommende Lieferungen</p>
         <div class="border-t border-gray-200 py-5 sm:p-0">
             <dl class="sm:divide-y sm:divide-gray-200">
                 <div class="py-4 sm:py-2 sm:grid sm:grid-cols-3 sm:gap-3">
@@ -50,7 +51,14 @@
                 </div>
                 <div class="py-4 sm:py-2 sm:grid sm:grid-cols-3 sm:gap-3"
                      v-for="(delivery, index) in unapproved_deliveries">
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0">{{ delivery.date['d.m.Y'] }}</dd>
+                    <dd v-if="delivery.approved" class="mt-1 text-sm text-gray-900 sm:mt-0">{{
+                            delivery.date['d.m.Y']
+                        }}
+                    </dd>
+                    <dd v-if="!delivery.approved" class="mt-1 text-sm text-gray-900 sm:mt-0">
+                        <text-input @change="updateDelivery(delivery.id, $event)"
+                                    :value="delivery.date['d.m.Y']"></text-input>
+                    </dd>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0">{{ delivery.deadline['d.m.Y'] }}</dd>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0">
                         <toggle v-model="delivery.approved" @change="approveDelivery(delivery.id)"></toggle>
@@ -125,14 +133,23 @@ export default {
             this.key++;
         },
         async approveDelivery(id) {
-            this.$axios.patch(`/api/delivery/${id}/toggle-approved`, {
-
-            }).then(response => {
+            this.$axios.patch(`/api/delivery/${id}/toggle-approved`, {}).then(response => {
                 this.delivery = response.data.delivery;
+                this.$notify({type: "success", text: 'Bearbeiten erfolgreich'});
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        async updateDelivery(id, event) {
+            this.$axios.patch(`/api/delivery/${id}`, {
+                date: event.target.value
+            }).then(response => {
+                this.$notify({type: "success", text: 'Bearbeiten erfolgreich'});
+                // this.delivery = response.data.delivery;
+            }).catch(errors => {
+                this.$notify({type: "danger", text: 'Es ist ein Fehler aufgetreten'});
+                console.log(errors);
             })
-                .catch(function (error) {
-                    console.log(error);
-                });
         },
         toggleDays(id) {
             this.delivery_days = helpers.toggleValueInArray(this.delivery_days, id);

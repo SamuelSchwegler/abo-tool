@@ -50,6 +50,14 @@
                             </ul>
                         </dd>
                     </div>
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-3">
+                        <dt class="text-sm font-medium text-gray-500">Produkte</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            <div v-for="product in delivery.summary">
+                                {{product.name}}: {{product.count}}
+                            </div>
+                        </dd>
+                    </div>
                 </dl>
             </div>
         </div>

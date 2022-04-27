@@ -8,7 +8,7 @@
         <div class="box bg-white">
             <ul>
                 <li v-for="(s, index) in services" v-bind:class="{'bg-violet': (service !== null && s.id === service.id), 'bg-green': (service === null || s.id !== service.id)}" class="btn mb-2 cursor-pointer" >
-                    <a class="block w-full" @click="switchService(s.id)">{{ s.name }}</a>
+                    <router-link :to="'/delivery-service/' + s.id" class="block w-full" @click="switchService(s.id)">{{ s.name }}</router-link>
                 </li>
                 <li class="btn cursor-pointer" v-bind:class="{'bg-violet': inCreate, 'bg-green': !inCreate}">
                     <a class="block w-full" @click="createService">Hinzufügen</a>

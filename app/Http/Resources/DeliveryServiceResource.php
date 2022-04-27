@@ -15,7 +15,11 @@ class DeliveryServiceResource extends JsonResource
     public function toArray($request): array|\JsonSerializable|\Illuminate\Contracts\Support\Arrayable
     {
         $unapproved_deliveries = $this->deliveries()->where(function ($query) {
-            return $query->where('approved', 0)->orWhere('updated_at', '>=', now()->subDay());
+            $query->where(function ($query) {
+                return $query->where('approved', 0)->orWhere('updated_at', '>=', now()->subDay());
+            })->orWhere(function ($query) {
+                return $query->where('approved', 1)->where('date', '>=', now()->subDay());
+            });
         })->get();
         $unapproved_array = [];
         foreach($unapproved_deliveries as $delivery) {

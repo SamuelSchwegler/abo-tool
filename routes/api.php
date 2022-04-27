@@ -64,6 +64,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/delivery/{delivery}', [DeliveryController::class, 'delivery']);
     Route::patch('/delivery/{delivery}/toggle-approved', [DeliveryController::class, 'toggleApproved']);
 
+    Route::patch('/delivery/{delivery}', [DeliveryController::class, 'update']);
+
     // delivery items
     Route::post('/delivery/{delivery}/item/{item}', [DeliveryController::class, 'addItem']);
 

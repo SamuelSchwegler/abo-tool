@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DeliveryResource extends JsonResource
@@ -9,14 +10,18 @@ class DeliveryResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
         $orders = $this->orders;
         $orders_array = [];
-        foreach($orders as $order) {
+        $count = [];
+
+        foreach ($orders as $order) {
+            $product_id = $order->product->id;
+
             $orders_array[] = [
                 'id' => $order->id,
                 'customer' => [
@@ -24,18 +29,31 @@ class DeliveryResource extends JsonResource
                     'name' => $order->customer->name,
                 ],
                 'product' => [
-                    'id' => $order->product->id,
+                    'id' => $product_id,
                     'name' => $order->product->name,
                 ],
                 'depository' => $this->depository ?? '',
             ];
+
+            $count[$product_id] = (1 + (array_key_exists($product_id, $count) ? $count[$product_id] : 0));
         }
 
         $items_array = [];
-        foreach($this->items as $item) {
+        foreach ($this->items as $item) {
             $items_array[] = [
                 'id' => $item->id,
                 'name' => $item->name,
+            ];
+        }
+
+        $summary = [];
+        foreach ($count as $product_id => $c) {
+            $product = Product::find($product_id);
+
+            $summary[] = [
+                'product_id' => $product_id,
+                'name' => $product->name,
+                'count' => $c
             ];
         }
 
@@ -58,6 +76,7 @@ class DeliveryResource extends JsonResource
             'approved' => ($this->approved === 1),
             'orders' => $orders_array,
             'items' => $items_array,
+            'summary' => $summary
         ];
     }
 }
