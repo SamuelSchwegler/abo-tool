@@ -21,7 +21,7 @@ class CustomerResource extends JsonResource
             'last_name' => $this->last_name,
             'company_name' => $this->company_name,
             'phone' => $this->phone,
-            'email' => $this->user->email,
+            'email' => $this?->user?->email,
             'delivery_address' => AddressResource::make($this->delivery_address),
             'billing_address' => AddressResource::make($this->billing_address),
             'delivery_option' => $this->delivery_option,
