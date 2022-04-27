@@ -9,6 +9,7 @@ use App\Http\Resources\DeliveryServiceResource;
 use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Item;
+use App\Models\ItemOrigin;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -88,9 +89,31 @@ class DeliveryController extends Controller
         return $this->delivery($delivery);
     }
 
-    public function addItem(Delivery $delivery, Item $item): Response|Application|ResponseFactory
+    /**
+     * @param Delivery $delivery
+     * @param Request $request
+     * @return Response|Application|ResponseFactory
+     */
+    public function addItem(Delivery $delivery, Request $request): Response|Application|ResponseFactory
     {
+        $item = Item::firstOrCreate(['name' => $request->item], ['item_origin_id' => ItemOrigin::first()->id]);
         $delivery->items()->attach($item->id);
+
+        return \response([
+            'msg' => 'ok',
+            'delivery' => DeliveryResource::make($delivery),
+        ]);
+    }
+
+    /**
+     * @param Delivery $delivery
+     * @param Item $item
+     * @return Response|Application|ResponseFactory
+     */
+    public function removeItem(Delivery $delivery, Item $item): Response|Application|ResponseFactory
+    {
+        $delivery->items()->detach($item->id);
+        $delivery->refresh();
 
         return \response([
             'msg' => 'ok',
