@@ -74,7 +74,7 @@ class Buy extends Model
         // Add payment reference
         // This is what you will need to identify incoming payments.
         $referenceNumber = QrBill\Reference\QrPaymentReferenceGenerator::generate(
-            '210000',  // You receive this number from your bank (BESR-ID). Unless your bank is PostFinance, in that case use NULL.
+            $setting->besr_id,  // You receive this number from your bank (BESR-ID). Unless your bank is PostFinance, in that case use NULL.
             $this->bill_number // A number to match the payment with your internal data, e.g. an invoice number
         );
 
