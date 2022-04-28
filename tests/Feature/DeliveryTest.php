@@ -6,6 +6,7 @@ use App\Jobs\CreateDeliveries;
 use App\Jobs\DeliveryCreateOrders;
 use App\Jobs\DeliveryRemoveOrders;
 use App\Models\Address;
+use App\Models\Bundle;
 use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\Delivery;
@@ -104,6 +105,7 @@ class DeliveryTest extends TestCase
         self::assertEquals(0, $customer->orders->count());
         $buy = Buy::factory()->create([
             'customer_id' => $customer->id,
+            'paid' => false
         ]);
         $delivery = Delivery::factory()->create([
             'delivery_service_id' => $service->id,
@@ -112,6 +114,14 @@ class DeliveryTest extends TestCase
             'date' => now()->addDays(5),
         ]);
 
+        DeliveryCreateOrders::dispatch($delivery);
+        $delivery->refresh();
+        $customer->refresh();
+
+        self::assertEquals(0, $customer->orders->count());
+        self::assertEquals(0, $delivery->orders->count());
+
+        $buy->update(['paid' => true]);
         DeliveryCreateOrders::dispatch($delivery);
         $delivery->refresh();
         $customer->refresh();

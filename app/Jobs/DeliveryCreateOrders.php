@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class DeliveryCreateOrders implements ShouldQueue
 {
@@ -38,13 +39,22 @@ class DeliveryCreateOrders implements ShouldQueue
     {
         $customers = $this->service->customers();
         foreach ($customers as $customer) {
+            foreach ($customer->productBalances() ?? [] as $balance) {
+                if($balance->balance > 0) {
+                    $order = Order::where('customer_id',$customer->id)->where('delivery_id',$this->delivery->id)
+                        ->where('product_id', $balance->product_id)->first();
 
-            foreach ($customer->buys as $buy) {
-                $order = Order::firstOrCreate([
-                    'customer_id' => $customer->id,
-                    'delivery_id' => $this->delivery->id,
-                    'product_id' => $buy->bundle->product->id,
-                ]);
+                    if(is_null($order)) {
+                        $order = Order::create([
+                            'customer_id' => $customer->id,
+                            'delivery_id' => $this->delivery->id,
+                            'product_id' => $balance->product_id,
+                        ]);
+
+                        Log::info($order);
+                    }
+                }
+
             }
 
         }

@@ -44,15 +44,20 @@ class CreateOrdersForBuy implements ShouldQueue
         $count = 0;
         $max_orders = $this->buy->bundle->deliveries;
         foreach ($deliveries as $delivery) {
-            Order::create([
-                'customer_id' => $this->customer->id,
-                'delivery_id' => $delivery->id,
-                'product_id' => $this->buy->bundle->product->id,
-            ]);
+            $order = Order::where('customer_id',$this->customer->id)->where('delivery_id',$delivery->id)
+                ->where('product_id', $this->buy->bundle->product->id)->first();
 
-            $count++;
-            if($count >= $max_orders) {
-                break; // nicht mehr Orders erstellen, als im Abo sind...
+            if(is_null($order)) {
+                Order::create([
+                    'customer_id' => $this->customer->id,
+                    'delivery_id' => $delivery->id,
+                    'product_id' => $this->buy->bundle->product->id,
+                ]);
+
+                $count++;
+                if($count >= $max_orders) {
+                    break; // nicht mehr Orders erstellen, als im Abo sind...
+                }
             }
         }
     }
