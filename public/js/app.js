@@ -20665,6 +20665,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    issue: function issue(customer_id, product_id) {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.post('/api/buy', {
+                  product_id: product_id,
+                  customer_id: customer_id
+                }).then(function (response) {
+                  var customer = response.data.customer;
+                  _this2.customers = _this2.customers.map(function (c) {
+                    return c.id === customer.id ? customer : c;
+                  });
+                })["catch"](function (error) {
+                  console.log(error);
+                });
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
   },
   created: function created() {
@@ -20875,6 +20904,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   methods: {
     changeItem: function changeItem(event) {
       this.item = event.originalTarget.value;
+    },
+    selectedItem: function selectedItem(item) {
+      this.item = item.name;
     },
     addItem: function addItem() {
       var _this = this;
@@ -22680,6 +22712,17 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       "default": ""
     }
+  },
+  emits: ['selected'],
+  methods: {
+    changed: function changed(event) {
+      this.query = event.target.value;
+    }
+  },
+  watch: {
+    selectedPerson: function selectedPerson(newValue, old) {
+      this.$emit('selected', newValue);
+    }
   }
 });
 
@@ -23149,6 +23192,12 @@ var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
 }, "Email"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col",
+  "class": "px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+}, "Kontostand"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
+  "class": "px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
   "class": "relative py-3.5 pl-3 pr-4 sm:pr-6"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
   "class": "sr-only"
@@ -23167,12 +23216,28 @@ var _hoisted_14 = {
 };
 var _hoisted_15 = ["href"];
 var _hoisted_16 = {
+  "class": "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+};
+var _hoisted_17 = {
+  "class": "whitespace-nowrap"
+};
+var _hoisted_18 = {
+  "class": "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+};
+var _hoisted_19 = {
+  key: 0
+};
+var _hoisted_20 = {
+  key: 1
+};
+var _hoisted_21 = ["onClick"];
+var _hoisted_22 = {
   "class": "relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
 };
 
-var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Bestellübersicht ");
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Bestellübersicht ");
 
-var _hoisted_18 = {
+var _hoisted_24 = {
   "class": "sr-only"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -23201,12 +23266,35 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "text-indigo-600 hover:text-indigo-900"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(person.email), 9
     /* TEXT, PROPS */
-    , _hoisted_15)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    , _hoisted_15)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_16, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(person.balances.filter(function (b) {
+      return b.balance > 0;
+    }), function (balance) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.name) + ": " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.balance) + "; ", 1
+      /* TEXT */
+      );
+    }), 256
+    /* UNKEYED_FRAGMENT */
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_18, [person.buys.filter(function (buy) {
+      return !buy.paid;
+    }).length > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_19, " Offene Rechnung ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_20, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(person.balances.filter(function (b) {
+      return b.balance < 5;
+    }), function (balance) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+        onClick: function onClick($event) {
+          return $options.issue(person.id, balance.product_id);
+        },
+        "class": "text-indigo-600 hover:text-indigo-900 whitespace-nowrap"
+      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.name) + " verlängern ", 9
+      /* TEXT, PROPS */
+      , _hoisted_21);
+    }), 256
+    /* UNKEYED_FRAGMENT */
+    ))]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
       to: '/customer/' + person.id + '/orders',
       "class": "text-indigo-600 hover:text-indigo-900"
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-        return [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_18, ", " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(person.name), 1
+        return [_hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_24, ", " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(person.name), 1
         /* TEXT */
         )];
       }),
@@ -23718,12 +23806,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onChange: _cache[0] || (_cache[0] = function ($event) {
       return $options.changeItem($event);
     }),
+    onSelected: $options.selectedItem,
     items: _ctx.allItems,
     value: _ctx.item,
     key: 'item-search_' + _ctx.itemSearchKey
   }, null, 8
   /* PROPS */
-  , ["items", "value"]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  , ["onSelected", "items", "value"]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     onClick: _cache[1] || (_cache[1] = function ($event) {
       return $options.addItem();
     }),
@@ -26460,7 +26549,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_ComboboxInput, {
         "class": "w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm",
         onChange: _cache[0] || (_cache[0] = function ($event) {
-          return $setup.query = $event.target.value;
+          return $options.changed($event);
         }),
         "display-value": function displayValue(person) {
           return person.name;

@@ -7,6 +7,7 @@ use App\Models\Buy;
 use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Item;
+use App\Models\ItemOrigin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -19,6 +20,9 @@ class DeliverySeeder extends Seeder
      */
     public function run()
     {
+        ItemOrigin::factory()->count(3)->create();
+        Item::factory()->count(10)->create();
+
         Buy::factory(5)->create([
             'paid' => 0,
         ]);

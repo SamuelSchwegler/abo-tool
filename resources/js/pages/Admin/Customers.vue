@@ -23,6 +23,8 @@
                                 class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name
                             </th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Kontostand</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
                             <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                 <span class="sr-only">Edit</span>
                             </th>
@@ -41,6 +43,22 @@
                                 <a :href="'mailto:' + person.mail" class="text-indigo-600 hover:text-indigo-900">
                                     {{ person.email }}
                                 </a>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <span v-for="balance in person.balances.filter(b => b.balance > 0)" class="whitespace-nowrap">
+                                    {{balance.name}}: {{balance.balance}};
+                                </span>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <span v-if="person.buys.filter(buy => !buy.paid).length > 0">
+                                    Offene Rechnung
+                                </span>
+                                <span v-else>
+                                    <button v-for="balance in person.balances.filter(b => b.balance < 5)" @click="issue(person.id, balance.product_id)"
+                                            class="text-indigo-600 hover:text-indigo-900 whitespace-nowrap">
+                                    {{balance.name}} verlängern
+                                </button>
+                                </span>
                             </td>
                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                 <router-link :to="'/customer/' + person.id + '/orders'"
@@ -71,6 +89,19 @@ export default {
         async load() {
             await axios.get('/api/customers').then(response => {
                 this.customers = response.data.customers;
+            }).catch(error => {
+                console.log(error);
+            })
+        },
+        async issue(customer_id, product_id) {
+            await axios.post('/api/buy', {
+                product_id: product_id,
+                customer_id: customer_id
+            }).then(response => {
+                let customer = response.data.customer;
+                this.customers = this.customers.map(c => {
+                   return (c.id === customer.id ? customer : c);
+                });
             }).catch(error => {
                 console.log(error);
             })

@@ -14,6 +14,13 @@ class CustomerResource extends JsonResource
      */
     public function toArray($request)
     {
+        $balances = $this->productBalances();
+        $buys = [];
+
+        foreach($this->buys as $buy) {
+            $buys[] = BuyResource::make($buy);
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -25,6 +32,8 @@ class CustomerResource extends JsonResource
             'delivery_address' => AddressResource::make($this->delivery_address),
             'billing_address' => AddressResource::make($this->billing_address),
             'delivery_option' => $this->delivery_option,
+            'balances' => $balances,
+            'buys' => $buys
         ];
     }
 }

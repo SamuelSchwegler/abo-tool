@@ -69,8 +69,5 @@ class HuenibachSeeder extends Seeder
             'besr_id' => '',
             'iban' => 'CH5330790016597781328',
         ]);
-
-        ItemOrigin::factory()->count(3)->create();
-        Item::factory()->count(10)->create();
     }
 }

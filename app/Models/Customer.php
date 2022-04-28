@@ -2,18 +2,24 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Customer extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'used_orders' => 'array'
+    ];
 
     public function user(): BelongsTo
     {
@@ -36,7 +42,7 @@ class Customer extends Model
             ->leftJoin('bundles', 'buys.bundle_id', 'bundles.id')
             ->leftJoin('products', 'products.id', 'bundles.product_id')
             ->groupBy('products.id')
-            ->selectRaw('products.id as product_id, products.name, SUM(bundles.deliveries) as total_deliveries')->get();
+            ->selectRaw('products.id as product_id, products.name, SUM(bundles.deliveries) as total_deliveries, max(issued) as last_issue')->get();
     }
 
     public function productOrders(): Collection
@@ -64,9 +70,25 @@ class Customer extends Model
             $balance->ordered = (int) $order?->ordered ?? 0;
             $balance->planned = (int) $order?->planned ?? 0;
             $balance->balance = $balance->total_deliveries - $balance->ordered;
-
-            // todo calculate Expected end
+            $balance->last_issue = Carbon::parse($buy->last_issue);
             $balances[$buy->product_id] = $balance;
+        }
+
+        foreach($this->used_orders ?? [] as $key => $used) {
+            if(array_key_exists((int) $key, $balances)) {
+                $balance = $balances[(int)$key];
+                $balance->ordered = $used;
+                $balance->balance -= $used;
+                $balances[(int)$key] = $balance;
+            } else {
+                Log::error('balance key '.$key.' not existing for customer: '.$this->id);
+            }
+        }
+
+        foreach($balances as $key => $balance) {
+            if($balance->last_issue->lt(now()->subMonths(3)) && $balance->balance === 0) {
+                unset($balances[$key]);
+            }
         }
 
         return $balances;

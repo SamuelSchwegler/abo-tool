@@ -65,6 +65,7 @@ return new class extends Migration {
             $table->string('last_name');
             $table->string('company_name')->nullable();
             $table->string('phone')->nullable();
+            $table->json('used_orders')->nullable()->comment('verbrauchte orders vor Systemstart');
             $table->timestamps();
 
             $table->foreign('delivery_address_id')->references('id')->on('addresses')->onDelete('set null');

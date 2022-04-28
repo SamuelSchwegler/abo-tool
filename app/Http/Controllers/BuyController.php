@@ -60,8 +60,8 @@ class BuyController extends Controller
             'items' => [
                 [
                     'name' => $buy->bundle->name,
-                    'single_price' => 'CHF '.number_format($buy->price / 100 / $buy->bundle->deliveries, 2, '.', '\''),
-                    'total_price' => 'CHF '.number_format($buy->price / 100, 2, '.', '\''),
+                    'single_price' => 'CHF '.number_format($buy->price / $buy->bundle->deliveries, 2, '.', '\''),
+                    'total_price' => 'CHF '.number_format($buy->price, 2, '.', '\''),
                     'count' => $buy->bundle->deliveries,
                 ],
                 [

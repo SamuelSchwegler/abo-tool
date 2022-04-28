@@ -25,7 +25,7 @@
             <div class="mt-6 sm:flex sm:items-center">
                 <label for="items" class="sr-only">Produkt</label>
                 <div class="relative rounded-md shadow-sm sm:min-w-0 sm:flex-1">
-                    <search-select @change="changeItem($event)" :items="allItems" :value="item"
+                    <search-select @change="changeItem($event)" @selected="selectedItem" :items="allItems" :value="item"
                                    :key="'item-search_' + itemSearchKey"></search-select>
                 </div>
                 <div class="mt-3 sm:mt-0 sm:ml-4 sm:flex-shrink-0">
@@ -83,6 +83,9 @@ export default {
     methods: {
         changeItem(event) {
             this.item = event.originalTarget.value;
+        },
+        selectedItem(item) {
+          this.item = item.name;
         },
         async addItem() {
             await axios.post('/api/delivery/' + this.$route.params.id + '/item/', {

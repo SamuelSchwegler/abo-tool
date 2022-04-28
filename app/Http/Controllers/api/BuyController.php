@@ -4,9 +4,14 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BuyResource;
+use App\Http\Resources\CustomerResource;
 use App\Jobs\CreateOrdersForBuy;
+use App\Models\Bundle;
 use App\Models\Buy;
+use App\Models\Customer;
+use App\Models\Product;
 use App\Notifications\ConfirmPayment;
+use App\Notifications\SendInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use function response;
@@ -14,19 +19,21 @@ use Symfony\Component\Mailer\Exception\TransportException;
 
 class BuyController extends Controller
 {
-    public function buy(Buy $buy) {
+    public function buy(Buy $buy)
+    {
         return response(['buy' => BuyResource::make($buy)]);
     }
 
-    public function update(Buy $buy, Request $request) {
+    public function update(Buy $buy, Request $request)
+    {
         $validated = $request->validate([
             'paid' => ['nullable', 'boolean'],
         ]);
         $buy->update($validated);
 
-        if($request->has('paid') && $buy->paid) {
+        if ($request->has('paid') && $buy->paid) {
             CreateOrdersForBuy::dispatch($buy);
-            if(! is_null($buy->customer->user)) {
+            if (!is_null($buy->customer->user)) {
                 try {
                     $buy->customer->user->notify(new ConfirmPayment($buy));
                 } catch (TransportException $exception) {
@@ -38,13 +45,49 @@ class BuyController extends Controller
         return response(['buy' => BuyResource::make($buy)]);
     }
 
-    public function payments() {
+    public function payments()
+    {
         $buys = Buy::orderBy('issued')->where(function ($query) {
             $query->where('paid', 0)->orWhere('issued', '>=', now()->subWeeks(2));
         })->get();
 
         return response([
             'buys' => BuyResource::collection($buys),
+        ]);
+    }
+
+    public function issue(Request $request)
+    {
+        $validated = $request->validate([
+            'customer_id' => ['required', 'exists:customers,id'],
+            'product_id' => ['required', 'exists:products,id'],
+        ]);
+        $customer = Customer::find($validated['customer_id']);
+        $product = Product::find($validated['product_id']);
+
+        $bundle = $customer->buys()->whereHas('bundle', function ($query) use ($product) {
+            $query->where('product_id', $product->id)->where('trial',0);
+        })->first()?->bundle ?? Bundle::where('trial', 0)->where('product_id', $product->id)->first();
+        $delivery_service = $customer->delivery_service();
+
+        $buy = Buy::create([
+            'customer_id' => $customer->id,
+            'bundle_id' => $bundle->id,
+            'price' => $bundle->price,
+            'delivery_cost' => ($delivery_service?->delivery_cost ?? 0) * $bundle->deliveries,
+            'issued' => now()
+        ]);
+
+        $user = $customer->user;
+        if (!is_null($user)) {
+            $user->notify(new SendInvoice($buy));
+        }
+
+        $customer->refresh();
+
+        return response([
+            'msg' => 'ok',
+            'customer' => CustomerResource::make($customer)
         ]);
     }
 }
