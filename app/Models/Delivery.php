@@ -47,7 +47,6 @@ class Delivery extends Model
 
         $zip = new ZipArchive();
         if ($zip->open($path, ZipArchive::CREATE) === true) {
-            Log::info('open');
             foreach ($this->orders as $order) {
                 $zip->addFile($order->exportDeliveryNote(), $order->deliveryNoteName());
             }

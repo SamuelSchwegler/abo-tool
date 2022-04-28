@@ -55,7 +55,7 @@ class BundleController extends Controller
             $user = User::create([
                 'email' => $userValidated['email'],
                 'password' => Hash::make($userValidated['password']),
-            ]);
+            ])->syncRoles(['customer']);
 
             Auth::login($user);
         }

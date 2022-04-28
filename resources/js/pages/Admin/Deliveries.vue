@@ -30,7 +30,9 @@
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Bestätigt
                 </th>
-                <th>Details</th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    Details
+                </th>
             </tr>
             </thead>
             <tbody class="bg-white dark:bg-slate-800">

@@ -40,7 +40,7 @@ class DeliveryCreateOrders implements ShouldQueue
         foreach ($customers as $customer) {
 
             foreach ($customer->buys as $buy) {
-                $order = Order::create([
+                $order = Order::firstOrCreate([
                     'customer_id' => $customer->id,
                     'delivery_id' => $this->delivery->id,
                     'product_id' => $buy->bundle->product->id,

@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class DeliveryServiceController extends Controller
 {
@@ -49,7 +50,7 @@ class DeliveryServiceController extends Controller
             'postcode' => ['required'],
         ]);
 
-        Postcode::updateOrCreate([
+        $postcode = Postcode::updateOrCreate([
             'postcode' => $validated['postcode'],
         ], [
             'delivery_service_id' => $service->id,
