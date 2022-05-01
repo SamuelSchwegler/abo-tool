@@ -18,6 +18,7 @@ $brown: #B8A877;
 $light-green: #9F993A;
 $orange: #E4935D;
 $blue: #6E9DAC;
+$footer: #f2e5d6;
 
 $default_colors: (green: $green, violet: $violet, dark: $dark, brown: $brown);
 @each $key,$color in $default_colors {
@@ -40,6 +41,10 @@ $default_colors: (green: $green, violet: $violet, dark: $dark, brown: $brown);
 
 .bg-default {
     background-color: $background;
+}
+
+.bg-footer {
+    background-color: $footer;
 }
 
 .btn {

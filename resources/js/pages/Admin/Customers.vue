@@ -5,11 +5,11 @@
             <h1 class="page-title">Kunden</h1>
             <p class="mt-2 text-sm text-gray-700">Zusammenfassung aller Kunden.</p>
         </div>
-        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none" v-if="false">
-            <button type="button"
+        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <router-link type="button" to="/customer"
                     class="inline-flex items-center justify-center rounded-md border border-transparent bg-green px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                 Neuer Kunde erstellen
-            </button>
+            </router-link>
         </div>
     </div>
     <div class="mt-8 flex flex-col">

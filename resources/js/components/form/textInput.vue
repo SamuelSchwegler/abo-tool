@@ -4,8 +4,9 @@
                class="block text-sm font-medium text-gray-700">{{ label }}</label>
         <div class="mt-1 relative rounded-md shadow-sm">
             <input :type="type" :name="name" v-model="input" @input="onChanged"
-                   v-bind:class="{'border-red-500': hasError}"
-                   class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"/>
+                   v-bind:class="{'border-red-500': hasError}" v-bind:readonly="readonly"
+                   class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300
+                   rounded-md read-only:bg-gray-100"/>
         </div>
         <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1" v-if="hasError">
 			<span v-for="e in error">{{ e }}</span>
@@ -28,6 +29,9 @@ export default {
             default: function () {
                 return {}
             }
+        }, readonly: {
+            type: Boolean,
+            default: false
         },
         type: {
             type: String,

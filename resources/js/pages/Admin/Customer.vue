@@ -17,6 +17,7 @@
     <div class="grid grid-cols-2 gap-4" v-if="key > 0">
         <div class="box bg-white">
             <customer-data v-on:updated="updated" :customer="customer" :errors="[]" :editable="true"></customer-data>
+            <user-data v-if="customer.email !== null" :user="user"></user-data>
         </div>
         <div class="box bg-white">
             <fieldset>
@@ -62,30 +63,28 @@
 
 import CustomerData from "../parts/CustomerData";
 import AddressVue from "../parts/Address";
+import UserData from "../parts/UserData";
+import customerHelpers from "./Helpers/customerHelpers";
 
 export default {
     name: "Customer",
-    components: {CustomerData, AddressVue},
+    components: {CustomerData, AddressVue, UserData},
     data() {
-        const delivery_options = [
-            {id: 'match', name: 'Liefer und Rechnungsadresse stimmen überein', description: ''},
-            {id: 'split', name: 'Unterschiedliche Rechnungs und Lieferadresse', description: ''},
-            {id: 'pickup', name: 'Lieferung wird direkt vor Ort in Hünibach abgeholt', description: ''},
-        ]
-
         return {
             customer: {},
             key: 0,
-            delivery_options: delivery_options,
+            delivery_options: customerHelpers.getDeliveryOptions(),
             errors: [],
             delivery_address_errors: {},
             billing_address_errors: {},
+            user: {}
         }
     },
     methods: {
         async load() {
             await axios.get('/api/customer/' + this.$route.params.id).then(response => {
                 this.customer = response.data.customer;
+                this.user = response.data.user;
             });
             this.key++;
         },

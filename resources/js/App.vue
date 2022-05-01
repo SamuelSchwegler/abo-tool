@@ -1,8 +1,8 @@
 <template>
-    <div class="min-h-screen bg-default">
+    <div class="min-h-screen bg-default flex flex-col justify-between">
         <navigation :key="'nav_key_' + navKey"></navigation>
         <!-- Page Content -->
-        <main class="container mx-auto">
+        <main class="container mx-auto mb-auto">
             <div class="py-12">
                 <div class="max-w-7xl mx-auto px-6 lg:px-8">
                     <router-view @authentication="authentication($event)"/>
@@ -10,15 +10,17 @@
             </div>
             <notifications position="bottom right"></notifications>
         </main>
+        <footer-component></footer-component>
     </div>
 </template>
 
 <script>
 import Navigation from "./pages/parts/Navigation";
+import FooterComponent from "./pages/parts/FooterComponent";
 
 export default {
     name: "App",
-    components: {Navigation},
+    components: {Navigation, FooterComponent},
     data() {
         return {
             isLoggedIn: false,

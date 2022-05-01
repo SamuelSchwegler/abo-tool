@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
+use App\Http\Resources\UserResource;
 use App\Models\Address;
 use App\Models\Customer;
 use App\Rules\DeliveryPossibleToPostcode;
@@ -25,6 +26,17 @@ class CustomerController extends Controller
     {
         return response([
             'customer' => CustomerResource::make($customer),
+        ]);
+    }
+
+    public function store(Request $request): Response|Application|ResponseFactory
+    {
+        $customerValidated = $request->validate(Customer::rules());
+        $customer = Customer::create($customerValidated);
+
+        return \response([
+            'msg' => 'ok',
+            'customer' => CustomerResource::make($customer)
         ]);
     }
 
@@ -79,6 +91,7 @@ class CustomerController extends Controller
         return response([
             'msg' => 'ok',
             'customer' => CustomerResource::make($customer),
+            'user' => UserResource::make($customer->user)
         ]);
     }
 }

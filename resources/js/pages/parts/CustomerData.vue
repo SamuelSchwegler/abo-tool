@@ -50,6 +50,11 @@ export default {
         update() {
             this.$emit('updated', this.c);
         },
+    },
+    watch: {
+        errors: function (newValue) {
+            this.key++;
+        }
     }
 }
 </script>
