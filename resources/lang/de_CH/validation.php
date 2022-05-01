@@ -24,7 +24,9 @@ return [
     'attributes' => [
         'password' => 'Passwort',
         'email' => 'Email',
-        'phone' => 'Telefon'
+        'phone' => 'Telefon',
+        'first_name' => 'Vorname',
+        'last_name' => 'Nachname',
     ],
     'before'               => ':attribute muss ein Datum vor dem :date sein.',
     'before_or_equal'      => ':attribute muss ein Datum vor dem :date oder gleich dem :date sein.',

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BundleResource;
 use App\Http\Resources\BuyResource;
+use App\Http\Resources\UserResource;
 use App\Models\Address;
 use App\Models\Bundle;
 use App\Models\Buy;
@@ -19,7 +20,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Mailer\Exception\TransportException;
+use const http\Client\Curl\AUTH_ANY;
 
 class BundleController extends Controller
 {
@@ -36,8 +39,8 @@ class BundleController extends Controller
     /**
      * Zahlung mit allen Daten absenden.
      *
-     * @param  Bundle  $bundle
-     * @param  Request  $request
+     * @param Bundle $bundle
+     * @param Request $request
      * @return Application|ResponseFactory|Response
      */
     public function submitBuy(Bundle $bundle, Request $request)
@@ -48,7 +51,7 @@ class BundleController extends Controller
             $customer = $user->customer;
         } else {
             $userValidated = $request->validate([
-                'email' => ['required', 'string', 'unique:users,email'],
+                'email' => ['required', 'email', 'unique:users,email'],
                 'password' => ['required', 'string'],
             ]);
 
@@ -60,7 +63,17 @@ class BundleController extends Controller
             Auth::login($user);
         }
 
-        $customerValidated = $request->validate(Customer::rules());
+        //$customerValidated = $request->validate(Customer::rules());
+        $validator = Validator::make($request->all(), Customer::rules());
+        if ($validator->fails()) {
+            return \response([
+                'errors' => $validator->errors()->toArray(),
+                'authenticated' => !Auth::guest(),
+                'user' => UserResource::make(Auth::user())
+            ], 422);
+        }
+        $customerValidated = $validator->validated();
+
         $deliveryAddressRules = Address::rules('delivery_address');
         $billingAddressRules = Address::rules('billing_address');
         $address_data = [];

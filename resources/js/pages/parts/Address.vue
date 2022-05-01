@@ -1,15 +1,15 @@
 <template>
     <div class="grid gap-4 grid-cols-4 pb-4" :key="key">
         <div class="col-span-4">
-            <text-input name="street" v-model="address.street" :value="address.street" label="Strasse"
+            <text-input :name="prefix + 'street'" v-model="address.street" :value="address.street" label="Strasse"
                         :error="errors['street']" @change="updated"></text-input>
         </div>
         <div class="col-span-1">
-            <text-input name="postcode" v-model="address.postcode" :value="address.postcode" label="PLZ"
+            <text-input :name="prefix + 'postcode'" v-model="address.postcode" :value="address.postcode" label="PLZ"
                         @change="postcodeChanged" :error="errors['postcode']"></text-input>
         </div>
         <div class="col-span-3">
-            <text-input name="city" v-model="address.city" :value="address.city" label="Ort"
+            <text-input :name="prefix + 'city'" v-model="address.city" :value="address.city" label="Ort"
                         :error="errors['city']" @change="updated"></text-input>
         </div>
     </div>
@@ -33,6 +33,10 @@ export default {
             default: function () {
                 return {};
             }
+        },
+        prefix: {
+            type: String,
+            default: ''
         }
     },
     data() {

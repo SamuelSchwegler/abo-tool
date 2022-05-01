@@ -50,8 +50,6 @@ class DeliveryCreateOrders implements ShouldQueue
                             'delivery_id' => $this->delivery->id,
                             'product_id' => $balance->product_id,
                         ]);
-
-                        Log::info($order);
                     }
                 }
 

@@ -30,7 +30,8 @@
                             <input :id="option.id" :aria-describedby="`${option.id}-description`" name="plan"
                                    type="radio"
                                    :checked="option.id === delivery_option" @change="changeDeliveryOption(option.id)"
-                                   class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"/>
+                                   class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"
+                                   v-bind:class="'delivery-option-' + option.id"/>
                         </div>
                         <div class="ml-3 text-sm">
                             <label :for="option.id" class="font-medium text-gray-700">{{ option.name }}</label>
@@ -39,24 +40,27 @@
                     </div>
                 </div>
             </fieldset>
-            <div v-if="delivery_option !== 'pickup'" class="mt-5">
+            <div v-if="delivery_option !== 'pickup'" class="mt-5 delivery-address">
                 <h4>Lieferadresse</h4>
                 <address-vue v-on:postcodeChanged="getDeliveryService" :address="user.customer.delivery_address ?? {}"
                              @updated="updateAddress('delivery_address', $event)"
+                             prefix="delivery_address_"
                              class="mt-5" :errors="delivery_address_errors"></address-vue>
                 <alert v-if="!delivery_service.pickup && delivery_service.delivery_cost > 0"
                        :text="'Die Lieferkosten betragen pro Lieferung ' + delivery_service.delivery_cost+ ' CHF'"></alert>
                 <alert v-if="delivery_service.pickup" :text="'Für diese PLZ wird keine Lieferung angeboten'"></alert>
             </div>
-            <div v-if="delivery_option !== 'match'" class="mt-5">
+            <div v-if="delivery_option !== 'match'" class="mt-5 billing-address">
                 <h4>Rechnungsadresse</h4>
-                <address-vue :address="user.customer.billing_address ?? {}" @updated="updateAddress('billing_address', $event)"
+                <address-vue :address="user.customer.billing_address ?? {}"
+                             @updated="updateAddress('billing_address', $event)"
+                             prefix="billing_address_"
                              :errors="billing_address_errors"></address-vue>
             </div>
         </div>
     </div>
     <div class="text-center">
-        <button type="button" @click="proceed"
+        <button type="button" @click="proceed" id="proceed"
                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green hover:bg-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Daten Speichern und Fortfahren
         </button>
@@ -79,7 +83,7 @@ export default {
         ProgressSteps, Alert, LoginModal, LoginCredentials,
         Bundle, CustomerData, AddressVue, TextInput
     },
-
+    emits: ['authentication'],
     data: function () {
         const delivery_options = [
             {id: 'match', name: 'Liefer- und Rechnungsadresse stimmen überein', description: ''},
@@ -154,6 +158,14 @@ export default {
                 let buy = response.data.buy;
                 this.$router.push({name: 'buy.bill', params: {id: buy.id}})
             }).catch(error => {
+                if (error.response.data.authenticated && !this.isLoggedIn) {
+                    let user = error.response.data.user;
+                    this.user.email = user.email;
+
+                    this.isLoggedIn = true;
+                    this.$emit('authentication', user);
+                    this.$notify({type: "success", text: 'Es fehlen noch Angaben, aber ein Konto wurde erstellt.'});
+                }
                 this.errors = error.response.data.errors;
 
                 this.delivery_address_errors = {
@@ -197,6 +209,7 @@ export default {
             this.user = user;
             this.isLoggedIn = true;
             this.delivery_option = user.customer.delivery_option;
+            this.$emit('authentication', user);
 
             this.bundleBuyKey++;
         },

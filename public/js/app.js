@@ -20243,8 +20243,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      isLoggedIn: false
+      isLoggedIn: false,
+      navKey: 0
     };
+  },
+  methods: {
+    authentication: function authentication(user) {
+      if (user.hasOwnProperty('email')) {
+        this.isLoggedIn = true;
+        window.Laravel.isLoggedIn = true;
+        this.navKey++;
+      }
+    }
   },
   created: function created() {
     if (window.Laravel.isLoggedIn) {
@@ -21750,6 +21760,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     AddressVue: _parts_Address__WEBPACK_IMPORTED_MODULE_5__["default"],
     TextInput: _components_form_textInput__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
+  emits: ['authentication'],
   data: function data() {
     var delivery_options = [{
       id: 'match',
@@ -21838,6 +21849,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         });
       })["catch"](function (error) {
+        if (error.response.data.authenticated && !_this.isLoggedIn) {
+          var user = error.response.data.user;
+          _this.user.email = user.email;
+          _this.isLoggedIn = true;
+
+          _this.$emit('authentication', user);
+
+          _this.$notify({
+            type: "success",
+            text: 'Es fehlen noch Angaben, aber ein Konto wurde erstellt.'
+          });
+        }
+
         _this.errors = error.response.data.errors;
         _this.delivery_address_errors = {
           street: _this.errors['delivery_address.street'],
@@ -21880,6 +21904,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.user = user;
       this.isLoggedIn = true;
       this.delivery_option = user.customer.delivery_option;
+      this.$emit('authentication', user);
       this.bundleBuyKey++;
     },
     getDeliveryService: function getDeliveryService() {
@@ -22404,6 +22429,10 @@ __webpack_require__.r(__webpack_exports__);
       "default": function _default() {
         return {};
       }
+    },
+    prefix: {
+      type: String,
+      "default": ''
     }
   },
   data: function data() {
@@ -22769,7 +22798,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_notifications = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("notifications");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_navigation), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Page Content "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_view)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_notifications, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_navigation, {
+    key: 'nav_key_' + $data.navKey
+  })), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Page Content "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_view, {
+    onAuthentication: _cache[0] || (_cache[0] = function ($event) {
+      return $options.authentication($event);
+    })
+  })])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_notifications, {
     position: "bottom right"
   })])]);
 }
@@ -24814,7 +24849,7 @@ var _hoisted_11 = ["for"];
 var _hoisted_12 = ["id"];
 var _hoisted_13 = {
   key: 0,
-  "class": "mt-5"
+  "class": "mt-5 delivery-address"
 };
 
 var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", null, "Lieferadresse", -1
@@ -24823,7 +24858,7 @@ var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 
 var _hoisted_15 = {
   key: 1,
-  "class": "mt-5"
+  "class": "mt-5 billing-address"
 };
 
 var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", null, "Rechnungsadresse", -1
@@ -24901,9 +24936,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onChange: function onChange($event) {
         return $options.changeDeliveryOption(option.id);
       },
-      "class": "focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"
-    }, null, 40
-    /* PROPS, HYDRATE_EVENTS */
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300", 'delivery-option-' + option.id])
+    }, null, 42
+    /* CLASS, PROPS, HYDRATE_EVENTS */
     , _hoisted_9)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
       "for": option.id,
       "class": "font-medium text-gray-700"
@@ -24923,6 +24958,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onUpdated: _cache[1] || (_cache[1] = function ($event) {
       return $options.updateAddress('delivery_address', $event);
     }),
+    prefix: "delivery_address_",
     "class": "mt-5",
     errors: _ctx.delivery_address_errors
   }, null, 8
@@ -24940,6 +24976,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onUpdated: _cache[2] || (_cache[2] = function ($event) {
       return $options.updateAddress('billing_address', $event);
     }),
+    prefix: "billing_address_",
     errors: _ctx.billing_address_errors
   }, null, 8
   /* PROPS */
@@ -24948,6 +24985,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[3] || (_cache[3] = function () {
       return $options.proceed && $options.proceed.apply($options, arguments);
     }),
+    id: "proceed",
     "class": "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green hover:bg-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
   }, " Daten Speichern und Fortfahren ")])], 64
   /* STABLE_FRAGMENT */
@@ -25829,7 +25867,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "grid gap-4 grid-cols-4 pb-4",
     key: $data.key
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
-    name: "street",
+    name: $props.prefix + 'street',
     modelValue: $props.address.street,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $props.address.street = $event;
@@ -25840,8 +25878,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onChange: $options.updated
   }, null, 8
   /* PROPS */
-  , ["modelValue", "value", "error", "onChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
-    name: "postcode",
+  , ["name", "modelValue", "value", "error", "onChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+    name: $props.prefix + 'postcode',
     modelValue: $props.address.postcode,
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return $props.address.postcode = $event;
@@ -25852,8 +25890,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     error: $props.errors['postcode']
   }, null, 8
   /* PROPS */
-  , ["modelValue", "value", "onChange", "error"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
-    name: "city",
+  , ["name", "modelValue", "value", "onChange", "error"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+    name: $props.prefix + 'city',
     modelValue: $props.address.city,
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
       return $props.address.city = $event;
@@ -25864,7 +25902,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onChange: $options.updated
   }, null, 8
   /* PROPS */
-  , ["modelValue", "value", "error", "onChange"])])]);
+  , ["name", "modelValue", "value", "error", "onChange"])])]);
 }
 
 /***/ }),
@@ -25952,7 +25990,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         id: $props.bundle.id
       }
     },
-    "class": "inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+    "class": "order-button inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_13];
