@@ -42,6 +42,7 @@
             <div v-if="delivery_option !== 'pickup'" class="mt-5">
                 <h4>Lieferadresse</h4>
                 <address-vue v-on:postcodeChanged="getDeliveryService" :address="user.customer.delivery_address ?? {}"
+                             @updated="updateAddress('delivery_address', $event)"
                              class="mt-5" :errors="delivery_address_errors"></address-vue>
                 <alert v-if="!delivery_service.pickup && delivery_service.delivery_cost > 0"
                        :text="'Die Lieferkosten betragen pro Lieferung ' + delivery_service.delivery_cost+ ' CHF'"></alert>
@@ -49,7 +50,7 @@
             </div>
             <div v-if="delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
-                <address-vue :address="user.customer.billing_address ?? {}"
+                <address-vue :address="user.customer.billing_address ?? {}" @updated="updateAddress('billing_address', $event)"
                              :errors="billing_address_errors"></address-vue>
             </div>
         </div>
@@ -195,19 +196,26 @@ export default {
             this.show_loginModal = false;
             this.user = user;
             this.isLoggedIn = true;
+            this.delivery_option = user.customer.delivery_option;
+
             this.bundleBuyKey++;
         },
         async getDeliveryService() {
-            let postcode = this.user.customer.delivery_address.postcode;
-            if (postcode.length > 0) {
-                await axios.get('/api/postcode-delivery-service', {
-                    params: {
-                        postcode: this.user.customer.delivery_address.postcode
-                    }
-                }).then(response => {
-                    this.delivery_service = response.data.service;
-                });
+            if (this.user.customer.delivery_address !== null && this.user.customer.delivery_address.hasOwnProperty('postcode')) {
+                let postcode = this.user.customer.delivery_address.postcode;
+                if (postcode.length > 0) {
+                    await axios.get('/api/postcode-delivery-service', {
+                        params: {
+                            postcode: this.user.customer.delivery_address.postcode
+                        }
+                    }).then(response => {
+                        this.delivery_service = response.data.service;
+                    });
+                }
             }
+        },
+        updateAddress(kind, address) {
+            this.user.customer[kind] = address;
         }
     },
     created() {

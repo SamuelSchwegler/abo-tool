@@ -21,6 +21,11 @@ return [
     'alpha_dash'           => ':attribute darf nur aus Buchstaben, Zahlen, Binde- und Unterstrichen bestehen.',
     'alpha_num'            => ':attribute darf nur aus Buchstaben und Zahlen bestehen.',
     'array'                => ':attribute muss ein Array sein.',
+    'attributes' => [
+        'password' => 'Passwort',
+        'email' => 'Email',
+        'phone' => 'Telefon'
+    ],
     'before'               => ':attribute muss ein Datum vor dem :date sein.',
     'before_or_equal'      => ':attribute muss ein Datum vor dem :date oder gleich dem :date sein.',
     'between'              => [
