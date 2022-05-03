@@ -1,14 +1,14 @@
 <template>
     <tr  v-bind:class="{'bg-gray-200': order.deadline_passed}" :key="'order_key_' + order.id + '_' + key">
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
-            <Toggle class="h-5 w-5" v-model="running" @change="toggleCancel" :disabled="order.deadline_passed"
+            <Toggle class="h-5 w-5" v-model="running" @change="toggleCancel" :disabled="toggleDisabled"
                     :classes="{ toggleOnDisabled: 'bg-green-300'}"></Toggle>
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
             {{ order.delivery.date['d.m.Y'] }}
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
-            <text-input v-model="this.order.depository"  :value="this.order.depository" :disabled="order.deadline_passed" @change="updateOrder"></text-input>
+            <text-input v-model="this.order.depository"  :value="this.order.depository" :disabled="toggleDisabled" @change="updateOrder"></text-input>
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
             {{ order.delivery.deadline['d.m.Y'] }}
@@ -31,7 +31,8 @@ export default {
         return {
             order: this.input_order,
             running: !this.input_order.canceled,
-            key: 0
+            key: 0,
+            toggleDisabled: this.input_order.deadline_passed && !this.can('manage customers')
         }
     },
     methods: {

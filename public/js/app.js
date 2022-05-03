@@ -20391,7 +20391,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       order: this.input_order,
       running: !this.input_order.canceled,
-      key: 0
+      key: 0,
+      toggleDisabled: this.input_order.deadline_passed && !this.can('manage customers')
     };
   },
   methods: {
@@ -23164,7 +23165,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return _ctx.running = $event;
     }),
     onChange: $options.toggleCancel,
-    disabled: _ctx.order.deadline_passed,
+    disabled: _ctx.toggleDisabled,
     classes: {
       toggleOnDisabled: 'bg-green-300'
     }
@@ -23178,7 +23179,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return _this.order.depository = $event;
     }),
     value: this.order.depository,
-    disabled: _ctx.order.deadline_passed,
+    disabled: _ctx.toggleDisabled,
     onChange: $options.updateOrder
   }, null, 8
   /* PROPS */

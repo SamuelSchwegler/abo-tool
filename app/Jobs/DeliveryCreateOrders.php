@@ -51,6 +51,11 @@ class DeliveryCreateOrders implements ShouldQueue
                             'product_id' => $balance->product_id,
                         ]);
                     }
+
+
+                    if($customer->id === 33) {
+                        Log::info($order);
+                    }
                 }
 
             }
