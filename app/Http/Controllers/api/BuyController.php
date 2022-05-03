@@ -48,7 +48,7 @@ class BuyController extends Controller
     public function payments()
     {
         $buys = Buy::orderBy('issued')->where(function ($query) {
-            $query->where('paid', 0)->orWhere('issued', '>=', now()->subWeeks(2));
+            $query->where('paid', 0)->orWhere('updated_at', '>=', now()->subWeeks(2));
         })->get();
 
         return response([

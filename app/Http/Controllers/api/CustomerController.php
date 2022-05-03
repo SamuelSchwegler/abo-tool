@@ -7,6 +7,7 @@ use App\Http\Resources\CustomerResource;
 use App\Http\Resources\UserResource;
 use App\Models\Address;
 use App\Models\Customer;
+use App\Models\User;
 use App\Rules\DeliveryPossibleToPostcode;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -26,13 +27,26 @@ class CustomerController extends Controller
     {
         return response([
             'customer' => CustomerResource::make($customer),
+            'user' => UserResource::make($customer->user)
         ]);
     }
 
     public function store(Request $request): Response|Application|ResponseFactory
     {
-        $customerValidated = $request->validate(Customer::rules());
+        $customerValidated = $request->validate(Customer::rules() + [
+                'email' => ['nullable', 'email', 'unique:users,email']
+            ]);
         $customer = Customer::create($customerValidated);
+
+        if (!is_null($customerValidated['email'])) {
+            $user = User::create([
+                'email' => $customerValidated['email'],
+                'password' => 'keinPasswort'
+            ])->syncRoles(['customer']);
+            $customer->update([
+                'user_id' => $user->id,
+            ]);
+        }
 
         return \response([
             'msg' => 'ok',

@@ -31,6 +31,7 @@ class BuyResource extends JsonResource
             ],
             'price' => $this->formated_price,
             'delivery_cost' => $this->delivery_cost,
+            'total_cost' => $this->total_cost,
             'paid' => $this->paid === 1,
             'created' => [
                 'd.m.Y' => $this->issued->format('d.m.Y'),

@@ -13,7 +13,7 @@
     <div class="grid grid-cols-2 gap-4">
         <div class="box bg-white">
             <customer-data v-on:updated="updated" :customer="customer" :errors="errors" :editable="true"></customer-data>
-            <!--<user-data :user="user"></user-data>-->
+            <user-data :user="user" :editable="true" v-on:updated="updatedUser"></user-data>
         </div>
     </div>
     <div class="text-center">
@@ -44,7 +44,9 @@ export default {
             },
             key: 0,
             errors: [],
-            user: {}
+            user: {
+                email: ''
+            }
         }
     },
     methods: {
@@ -52,9 +54,14 @@ export default {
             this.customer = customer;
             this.key++;
         },
+        updatedUser(user) {
+            this.user = user;
+            this.key++;
+        },
         async create() {
             await axios.post('/api/customer/', {
                 ...this.customer,
+                email: this.user.email
             }).then(response => {
                 this.customer = response.data.customer;
                 this.errors = [];

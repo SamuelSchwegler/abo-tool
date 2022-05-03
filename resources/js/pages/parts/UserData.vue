@@ -1,7 +1,7 @@
 <template>
     <div class="grid gap-4 md:grid-cols-2 grid-cols-1 pb-4" :key="key">
         <div>
-            <text-input name="email" :value="u.email" v-model="u.email" label="Email" :error="errors['email']" :readonly="true" @change="update"></text-input>
+            <text-input name="email" :value="u.email" v-model="u.email" label="Email" :error="errors['email']" :readonly="!editable" @change="update"></text-input>
         </div>
     </div>
 </template>
@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         update() {
-            this.$emit('updated', this.c);
+            this.$emit('updated', this.u);
         },
     }
 }
