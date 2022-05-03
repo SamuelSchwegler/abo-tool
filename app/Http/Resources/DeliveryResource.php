@@ -15,7 +15,7 @@ class DeliveryResource extends JsonResource
      */
     public function toArray($request)
     {
-        $orders = $this->orders()->with(['customer'])->get();
+        $orders = $this->orders()->where('canceled', 0)->with(['customer'])->get();
         $orders_array = [];
         $count = [];
 

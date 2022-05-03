@@ -27,7 +27,7 @@ class CustomerController extends Controller
     {
         return response([
             'customer' => CustomerResource::make($customer),
-            'user' => UserResource::make($customer->user)
+            'user' => !is_null($customer->user) ? UserResource::make($customer->user) : null
         ]);
     }
 

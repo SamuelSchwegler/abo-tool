@@ -27,7 +27,7 @@ class OrderController extends Controller
 
         return \response([
             'customer' => CustomerResource::make($customer),
-            'orders' => OrderResource::collection(OrderResource::collection($customer?->next_orders ?? collect([]))),
+            'orders' => OrderResource::collection($customer?->next_orders ?? collect([])),
             'product_balances' => $customer->productBalances(),
         ]);
     }

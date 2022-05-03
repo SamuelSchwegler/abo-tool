@@ -40,6 +40,9 @@ class DeliveryCreateOrders implements ShouldQueue
         $customers = $this->service->customers();
         foreach ($customers as $customer) {
             foreach ($customer->productBalances() ?? [] as $balance) {
+                if($customer->id === 10) {
+                    Log::info($balance->balance);
+                }
                 if($balance->balance > 0) {
                     $order = Order::where('customer_id',$customer->id)->where('delivery_id',$this->delivery->id)
                         ->where('product_id', $balance->product_id)->first();
@@ -50,11 +53,6 @@ class DeliveryCreateOrders implements ShouldQueue
                             'delivery_id' => $this->delivery->id,
                             'product_id' => $balance->product_id,
                         ]);
-                    }
-
-
-                    if($customer->id === 33) {
-                        Log::info($order);
                     }
                 }
 
