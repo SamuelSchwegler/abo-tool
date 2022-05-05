@@ -1,4 +1,4 @@
-name: Deploy Develop Application
+name: Deploy Prod Application
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.1
+        image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: ubuntu
           MYSQL_DATABASE: circle_test
@@ -38,6 +38,7 @@ jobs:
 
       - name: Copy Enviroment and prepare enviroment
         run: |
+          cp .env.testing_online .env.testing
           cp .env.testing_online .env
           php artisan key:generate
 
@@ -45,22 +46,11 @@ jobs:
         run: |
           php artisan migrate:fresh
           php artisan db:seed
-          php artisan passport:keys
 
       - name: Run Tests
         run: |
           php artisan config:clear
           vendor/bin/phpunit --testdox
-
-      - name: Slack Failure Notification
-        if: ${{ failure() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: (some) tests have failed! :this-is-fine-fire:"}'  ${{ secrets.SLACK_WEBHOOK }}
-
-      - name: Slack Success Notification
-        if: ${{ success() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: all tests passed! :catjam:"}'  ${{ secrets.SLACK_WEBHOOK }}
 
   create-deployment-artifacts:
     name: Create deployment artifacts
@@ -101,7 +91,7 @@ jobs:
       - name: Export deployment matrix
         id: export-deployment-matrix
         run: |
-          JSON="$(cat ./deployment-config-develop.json)"
+          JSON="$(cat ./deployment-config-prod.json)"
           JSON="${JSON//'%'/'%25'}"
           JSON="${JSON//$'\n'/'%0A'}"
           JSON="${JSON//$'\r'/'%0D'}"
@@ -226,11 +216,6 @@ jobs:
             ln -s -f $STORAGE_PATH $RELEASE_PATH
             ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
             sudo service php8.1-fpm reload
-      - name: Slack Failure Notification
-        if: ${{ failure() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment failed! :strahlenwarnzeichen:"}'  ${{ secrets.SLACK_WEBHOOK }}
-
   run-after-hooks:
     name: "${{ matrix.server.name }}: After hook"
     runs-on: ubuntu-latest
@@ -255,11 +240,6 @@ jobs:
           envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH
           script: |
             ${{ matrix.server.afterHooks }}
-
-      - name: Slack Failure Notification
-        if: ${{ failure() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment failed! :strahlenwarnzeichen:"}'  ${{ secrets.SLACK_WEBHOOK }}
 
   clean-up:
     name: "${{ matrix.server.name }}: Clean up"
@@ -287,12 +267,3 @@ jobs:
 
             php ${ACTIVE_RELEASE_PATH}/artisan storage:link
             php ${ACTIVE_RELEASE_PATH}/artisan up
-      - name: Slack Failure Notification
-        if: ${{ failure() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment failed on ${{ matrix.server.name }}! :strahlenwarnzeichen:"}'  ${{ secrets.SLACK_WEBHOOK }}
-
-      - name: Slack Success Notification
-        if: ${{ success() }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"username": "Github Actions", "text":"${{ github.event.repository.name }}: deployment successfull finished on ${{ matrix.server.name }}! :elmofire:"}'  ${{ secrets.SLACK_WEBHOOK }}
