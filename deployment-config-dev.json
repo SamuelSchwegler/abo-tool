@@ -1,0 +1,12 @@
+[
+    {
+        "name": "vServerHosttech - dev",
+        "ip": "213.167.227.127",
+        "username": "nespresso",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "php /var/www/dev-abo-tool/current/artisan migrate:fresh --seed --force",
+        "path": "/var/www/dev-abo-tool",
+        "env": "DEV_ENV"
+    }
+]
