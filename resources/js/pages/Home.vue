@@ -1,7 +1,7 @@
 <template>
     <div class="sm:flex sm:items-center mb-4">
         <div class="sm:flex-auto">
-            <h1 class="page-title">Frisches Biogemüse nach Hause liefern lassen</h1>
+            <h1 class="page-title">Gemüse-Abo: Frisches Bio-Gemüse abonnieren</h1>
         </div>
     </div>
     <div class="box bg-white">
@@ -14,7 +14,7 @@
     <div v-if="trials.length > 0">
         <div class="sm:flex sm:items-center mt-8">
             <div class="sm:flex-auto">
-                <h3 class="sub-title">Testen Sie unser Angebot</h3>
+                <h3 class="sub-title">Abo ausprobieren</h3>
             </div>
         </div>
         <div class="mt-4 grid lg:grid-cols-2 gap-4 grid-cols-1">

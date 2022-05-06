@@ -6,6 +6,7 @@ use App\Models\Buy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
 class ConfirmPayment extends Notification
 {
@@ -45,10 +46,12 @@ class ConfirmPayment extends Notification
         return (new MailMessage)
             ->subject('Bestätigung Zahlungseingang')
             ->greeting('Guten Tag '.$notifiable->customer->name)
-            ->line('Besten dank für Ihre Bezahlung. Sie erhalten nun ihre Gemüsepakete geliefert.')
-            ->line('Sollten Sie einen Liefertermin nicht wahrnehmen können (bsp durch Ferienabwesenheiten), können Sie die Liefertermine online verwalten.')
+            ->line('Ihre Zahlung wurde registriert und wir freuen uns, in den kommenden Tagen die erste Bio-Gemüse-
+Lieferung für Sie vorzubereiten. Die genauen Daten finden Sie in Ihrem persönlichen Konto unter
+‘Meine Lieferungen’. Hier können Sie auch allfällige Abwesenheiten verwalten, z.B. Ferien.')
             ->action('Lieferungen verwalten', url(env('APP_URL').'/my-orders'))
-            ->salutation('Wir wünschen Ihnen einen schönen Tag');
+            ->line('Wir wünschen guten Appetit!')
+            ->salutation(new HtmlString('Freundliche Grüsse<br>Gartenbauschule Hünibach'));
     }
 
     /**

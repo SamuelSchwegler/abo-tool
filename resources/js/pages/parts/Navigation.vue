@@ -22,7 +22,7 @@
                         Startseite
                     </router-link>
                     <router-link to="/my-orders" class="text-base font-medium text-gray-500 hover:text-gray-900">
-                        Meine Lieferungen
+                       Verwaltung Lieferungen
                     </router-link>
                     <Popover class="relative" v-slot="{ open }" v-if="settings.canAny">
                         <PopoverButton
@@ -162,7 +162,7 @@ export default {
                 can: true
             },
             {
-                name: 'Meine Lieferungen',
+                name: 'Verwaltung Lieferungen',
                 description: '',
                 href: '/my-orders',
                 icon: BookOpenIcon,

@@ -9,7 +9,11 @@
                 </a>
             </div>
             <div class="mt-8 md:mt-0 md:order-1">
-                <p class="text-center text-base text-gray-600">&copy; 2022 Gartenbauschule Hünibach
+                <p class="text-left text-base text-gray-600">Informationen zum Gemüse-Abo auf
+                    <a class="text-gray-800 hover:text-gray-500" target="_blank" href="https://gartenbauschule-
+huenibach.ch/Angebote/Gemueseabo">unserer Website</a>
+                </p>
+                <p class="text-left text-base text-gray-600">&copy; 2022 Gartenbauschule Hünibach
                     <a class="text-gray-800 hover:text-gray-500" href="mailto:gemueseabo@gsh.ch">gemueseabo@gsh.ch</a>
                 </p>
             </div>

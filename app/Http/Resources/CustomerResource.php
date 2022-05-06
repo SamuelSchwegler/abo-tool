@@ -32,6 +32,7 @@ class CustomerResource extends JsonResource
             'delivery_address' => AddressResource::make($this->delivery_address),
             'billing_address' => AddressResource::make($this->billing_address),
             'delivery_option' => $this->delivery_option,
+            'delivery_service' => DeliveryServiceResource::make($this->delivery_service()),
             'balances' => $balances,
             'buys' => $buys
         ];

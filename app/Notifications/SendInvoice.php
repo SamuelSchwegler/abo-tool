@@ -6,6 +6,7 @@ use App\Models\Buy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
 class SendInvoice extends Notification
 {
@@ -45,10 +46,14 @@ class SendInvoice extends Notification
         return (new MailMessage)
             ->subject('Ihre Rechnung')
             ->greeting('Guten Tag '.$notifiable->customer->name)
-            ->line('Danke für Ihre Bestellung bei der Gartenbauschule Hünibach. Hier finden Sie die Rechnung.')
+            ->line('Herzlichen Dank für die Bestellung des Gemüse-Abos! Sie erhalten hier die dazugehörende
+Rechnung.')
             ->action('Rechnung herunterladen', url(route('buy.export.bill', $this->buy)))
-            ->line('Sobald Sie die Rechnung bezahlt haben, werden wir das Abo für Sie freischalten.')
-            ->salutation('Wir wünschen Ihnen einen schönen Tag');
+            ->line('Sobald die Rechnung bezahlt und die Zahlungsbestätigung erfolgt ist, wird Ihr Gemüse-Abo
+freigeschaltet. Vor der ersten Bio-Gemüse-Lieferung erhalten Sie von uns eine Benachrichtigung.')
+            ->line('Danke, dass Sie sich für ein Gemüse-Abo der Gartenbauschule Hünibach entschieden haben. Damit
+unterstützen Sie auch die Ausbildung von Bio-Gärtner:innen an unserer Schule!')
+            ->salutation(new HtmlString('Freundliche Grüsse<br>Gartenbauschule Hünibach'));
     }
 
     /**

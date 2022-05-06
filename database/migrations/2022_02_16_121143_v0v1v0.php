@@ -106,6 +106,7 @@ return new class extends Migration {
             $table->integer('price')->comment(' / 100');
             $table->integer('deliveries')->default(0);
             $table->boolean('trial')->default(false);
+            $table->string('short_description')->nullable();
             $table->timestamps();
         });
 

@@ -6,7 +6,9 @@
             <bundle :bundle="bundle" v-if="bundle.hasOwnProperty('id')"></bundle>
             <div v-if="!isLoggedIn" class="mt-5">
                 <alert
-                    :text="'Um die Liefertermine zu verwalten brauchen Sie ein Kundenkonto. In diesem Schritt können Sie gleich ein Konto erstellen.'"></alert>
+                    :text="'Damit Sie Liefertermine verwalten können (beispielsweise um Ferienabwesenheiten zu\n'+
+'melden), benötigen Sie ein persönliches Konto. In diesem Schritt können Sie dies\n'+
+'eröffnen.'"></alert>
                 <div class="grid gap-4 grid-cols-2 mt-5">
                     <login-credentials :credentials="credentials" :errors="errors"></login-credentials>
                     <div>

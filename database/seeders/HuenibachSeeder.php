@@ -29,6 +29,7 @@ class HuenibachSeeder extends Seeder
 
         Bundle::create([
             'name' => 'Gemüseabo gross',
+            'short_description' => 'Ideal für 3 - 4 Personen',
             'deliveries' => 12,
             'price' => 528,
             'product_id' => $gross->id,
@@ -36,6 +37,7 @@ class HuenibachSeeder extends Seeder
 
         Bundle::create([
             'name' => 'Gemüseabo klein',
+            'short_description' => 'Ideal für 1 - 2 Personen',
             'deliveries' => 12,
             'price' => 348,
             'product_id' => $klein->id,

@@ -64,7 +64,24 @@
                 <alert v-else :text="'Momentan ist noch kein Guthaben für Bestellungen freigeschaltet.'"></alert>
             </div>
             <div class="box bg-white" v-if="orders.length > 0">
-                <p>Sie haben die Möglichkeit ihre Lieferungen auszusetzen. Dazu können Sie den Schalter neben der Lieferung klicken.</p>
+                <h3 class="title">Ferienabwesenheiten</h3>
+                <p class="mb-1">
+                    Sie haben die Möglichkeit, den Regler neben den entsprechenden Daten auf inaktiv stellen (grün =
+                    aktiv, grau = keine Lieferung).
+                </p>
+                <p>
+                    Die nachkommenden Liefertermine werden automatisch nach hinten verschoben.
+                </p>
+            </div>
+            <div class="box bg-white" v-if="customer.hasOwnProperty('delivery_service') && customer.delivery_service.pickup">
+                <h3 class="title">Abholung im Bioladen der Gartenbauschule Hünibach</h3>
+                <p class="mb-1">
+                    Sie haben bei den Lieferoptionen die Abholung gewählt. Ihre Tasche mit Bio-Gemüse wartet zu den
+                    hier aufgeführten Daten jeweils ab 8.30 Uhr im Bioladen auf Sie.
+                </p>
+                <p>
+                    Bitte beachten Sie die Öffnungszeiten (MO-FR 8.30-12 Uhr, 13.30-18.30, SA 8.30-16 Uhr).
+                </p>
             </div>
         </div>
     </div>
