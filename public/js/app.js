@@ -26450,7 +26450,7 @@ var _hoisted_5 = {
   "class": "sr-only"
 };
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"mt-8 md:mt-0 md:order-1\"><p class=\"text-left text-base text-gray-600\">Informationen zum Gemüse-Abo auf <a class=\"text-gray-800 hover:text-gray-500\" target=\"_blank\" href=\"https://gartenbauschule-\nhuenibach.ch/Angebote/Gemueseabo\">unserer Website</a></p><p class=\"text-left text-base text-gray-600\">© 2022 Gartenbauschule Hünibach <a class=\"text-gray-800 hover:text-gray-500\" href=\"mailto:gemueseabo@gsh.ch\">gemueseabo@gsh.ch</a></p></div>", 1);
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"mt-8 md:mt-0 md:order-1\"><p class=\"text-left text-base text-gray-600\">Informationen zum Gemüse-Abo auf <a class=\"text-gray-800 hover:text-gray-500\" target=\"_blank\" href=\"https://gartenbauschule-\r\nhuenibach.ch/Angebote/Gemueseabo\">unserer Website</a></p><p class=\"text-left text-base text-gray-600\">© 2022 Gartenbauschule Hünibach <a class=\"text-gray-800 hover:text-gray-500\" href=\"mailto:gemueseabo@gsh.ch\">gemueseabo@gsh.ch</a></p></div>", 1);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("footer", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.navigation, function (item) {
@@ -26501,7 +26501,7 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   "class": "sr-only"
 }, "Logo"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
   "class": "h-8 w-auto sm:h-10",
-  src: "/img/logo-gsh.png",
+  src: "/img/logo-gsh_header.png",
   alt: ""
 })])], -1
 /* HOISTED */
