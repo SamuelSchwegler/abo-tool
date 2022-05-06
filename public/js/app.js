@@ -25057,11 +25057,17 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Bitte beachten Sie, dass das Abonnement erst nach der Zahlungsbestätigung freigeschaltet wird. ");
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Herzlichen Dank für die Bestellung ihres Gemüse-Abos! ", -1
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mb-1"
+}, "Herzlichen Dank für die Bestellung ihres Gemüse-Abos! ", -1
 /* HOISTED */
 );
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Bitte beachten Sie, dass das Abonnement erst nach der Zahlungsbestätigung freigeschaltet wird.", -1
+var _hoisted_7 = {
+  "class": "mb-1"
+};
+
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Bitte beachten Sie, dass das Abonnement erst nach der Zahlungsbestätigung freigeschaltet wird.", -1
 /* HOISTED */
 );
 
@@ -25082,9 +25088,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     delivery_cost: $data.buy.delivery_cost
   }, null, 8
   /* PROPS */
-  , ["bundle", "delivery_cost"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, _hoisted_5, _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Sie erhalten die Rechnung per E-Mail an " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.buy.customer.user.email) + " geschickt.", 1
+  , ["bundle", "delivery_cost"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, _hoisted_5, _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, "Sie erhalten die Rechnung per E-Mail an " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.buy.customer.user.email) + " geschickt.", 1
   /* TEXT */
-  ), _hoisted_7])]))], 64
+  ), _hoisted_8])]))], 64
   /* STABLE_FRAGMENT */
   );
 }

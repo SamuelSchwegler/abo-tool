@@ -7,60 +7,56 @@
 <div class="head">
     <table>
         <tr>
-            <td>
-                <span>{{$issuer['name']}}</span><br>
-                <span>{{$issuer['street']}}</span><br>
-                <span>{{$issuer['postcode']}} {{$issuer['city']}}</span>
+            <td style="text-align: left">
+                <img src="/img/logo-gsh.png" alt="" style="width: 6cm">
             </td>
             <td style="height: 100px"></td>
-            <td style="text-align: right">
-                <img src="/img/logo-gsh.png" alt="" style="width: 200px">
-            </td>
+            <td></td>
         </tr>
         <tr>
-            <td></td>
-            <td style="height: 100px"></td>
             <td>
-                <span>{{$receiver['name']}}</span><br>
-                <span>{{$receiver['street']}}</span><br>
-                <span>{{$receiver['postcode']}} {{$receiver['city']}}</span>
+                <span style="font-size: 10pt">{{$receiver['name']}}</span><br>
+                <span style="font-size: 10pt">{{$receiver['street']}}</span><br>
+                <span style="font-size: 10pt">{{$receiver['postcode']}} {{$receiver['city']}}</span>
             </td>
+            <td style="height: 100px"></td>
+            <td></td>
         </tr>
     </table>
-    <p>Ihre Bestellung vom {{$meta['issue_date']}}:</p>
+    <p style="font-size: 10pt">Ihre Bestellung vom {{$meta['issue_date']}}:</p>
     <table border="1" cellpadding="6">
         <tr>
-            <td width="40%">Bezeichnung</td>
-            <td width="20%" style="text-align: right">Preis</td>
-            <td width="10%">Anzahl</td>
-            <td width="10%">MwSt</td>
-            <td width="20%" style="text-align: right">Gesamt</td>
+            <td style="font-size: 10pt" width="40%">Bezeichnung</td>
+            <td style="font-size: 10pt; text-align: right" width="20%">Preis</td>
+            <td style="font-size: 10pt" width="10%">Anzahl</td>
+            <td style="font-size: 10pt" width="10%">MwSt</td>
+            <td style="font-size: 10pt; text-align: right" width="20%">Gesamt</td>
         </tr>
         @foreach($items as $item)
             <tr>
-                <td>{{$item['name']}}</td>
-                <td  style="text-align: right">{{$item['single_price']}}</td>
-                <td>{{$item['count']}}</td>
-                <td>{{$item['vat'] ?? '0.00'}}</td>
-                <td style="text-align: right">{{$item['total_price']}}</td>
+                <td style="font-size: 10pt">{{$item['name']}}</td>
+                <td style="font-size: 10pt; text-align: right">{{$item['single_price']}}</td>
+                <td style="font-size: 10pt">{{$item['count']}}</td>
+                <td style="font-size: 10pt">@if(isset($item['vat'])){{$item['vat']}} % @else 0.00 @endif</td>
+                <td style="font-size: 10pt; text-align: right">{{$item['total_price']}}</td>
             </tr>
         @endforeach
         <tr>
-            <td>inkl MWST</td>
+            <td style="font-size: 10pt">inkl MWST</td>
             <td></td>
             <td></td>
             <td></td>
-            <td style="text-align: right"><b>{{$meta['total_vat']}}</b></td>
+            <td style="font-size: 10pt; text-align: right"><b>{{$meta['total_vat']}}</b></td>
         </tr>
         <tr>
-            <td><b>Total</b></td>
+            <td><b style="font-size: 10pt">Total</b></td>
             <td></td>
             <td></td>
             <td></td>
-            <td style="text-align: right"><b>{{$meta['total_price']}}</b></td>
+            <td style="font-size: 10pt; text-align: right"><b>{{$meta['total_price']}}</b></td>
         </tr>
     </table>
-    <p>{{$meta['summary_text']}}</p>
+    <p style="font-size: 10pt">{{$meta['summary_text']}}</p>
 </div>
 </body>
 </html>
