@@ -4,7 +4,7 @@
         "ip": "213.167.227.127",
         "username": "nespresso",
         "port": "22",
-        "beforeHooks": "",
+        "beforeHooks": "php /var/www/abo-tool/current/artisan db:backup --force",
         "afterHooks": "php /var/www/dev-abo-tool/current/artisan migrate:fresh --seed --force && php /var/www/dev-abo-tool/current/artisan copy:prod-settings",
         "path": "/var/www/dev-abo-tool",
         "env": "DEV_ENV"

@@ -17,6 +17,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new CreateDeliveries)->dailyAt('02:00');
+
+        // db backups
+        $schedule->command('db:backup')->daily()->everyFourHours()->between('6:00', '22:00');
+        $schedule->command('db:backup:clean')->dailyAt('04:10');
     }
 
     /**
