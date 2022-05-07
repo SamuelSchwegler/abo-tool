@@ -5,7 +5,7 @@
         "username": "nespresso",
         "port": "22",
         "beforeHooks": "",
-        "afterHooks": "php /var/www/dev-abo-tool/current/artisan migrate:fresh --seed --force",
+        "afterHooks": "php /var/www/dev-abo-tool/current/artisan migrate:fresh --seed --force && php /var/www/dev-abo-tool/current/artisan copy:prod-settings",
         "path": "/var/www/dev-abo-tool",
         "env": "DEV_ENV"
     }
