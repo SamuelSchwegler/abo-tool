@@ -30,10 +30,10 @@ class OrderTest extends DuskTestCase
             $customer_count = Customer::count();
             $addresses_count = Address::count();
 
-            $browser->visit('/')->waitForText('Gemüseabo gross', 2);
+            $browser->visit('/')->waitForText('Gemüse-Abo:', 4);
             $browser->click('.order-button')
                 ->assertPathBeginsWith('/bundle/buy')
-                ->assertSee('Um die Liefertermine zu verwalten brauchen Sie ein Kundenkonto. In diesem Schritt können Sie gleich ein Konto erstellen.');
+                ->assertSee('Damit Sie Liefertermine verwalten können (beispielsweise um Ferienabwesenheiten zu melden), benötigen Sie ein persönliches Konto. In diesem Schritt können Sie dies eröffnen.');
             $browser->click('button#proceed')
                 ->assertPathBeginsWith('/bundle/buy')
                 ->pause(50)
@@ -59,8 +59,6 @@ class OrderTest extends DuskTestCase
 
             $browser->type('first_name', $this->faker->firstName())
                 ->type('phone', $this->faker->phoneNumber());
-
-            $browser->screenshot('mamiea');
 
             // Lieferoptionen Testen
             $browser->click('input.delivery-option-match')->pause(80)
@@ -92,7 +90,7 @@ class OrderTest extends DuskTestCase
             $browser->click('button#proceed')
                 ->pause(300)
                 ->assertPathBeginsWith('/buy')
-                ->assertSee('Besten Dank für Ihre Bestellung');
+                ->assertSee('Herzlichen Dank für die Bestellung ihres Gemüse-Abos!');
 
             self::assertEquals($user_count + 1, User::count());
             self::assertEquals($customer_count + 1, Customer::count());

@@ -7,8 +7,6 @@
         </div>
         <div class="box bg-white">
             <h3 class="title">Bezahlung</h3>
-             Bitte beachten Sie, dass das Abonnement erst nach der
-            Zahlungsbestätigung freigeschaltet wird.
             <p class="mb-1">Herzlichen Dank für die Bestellung ihres Gemüse-Abos! </p>
             <p class="mb-1">Sie erhalten die Rechnung per E-Mail an {{ buy.customer.user.email }} geschickt.</p>
             <p>Bitte beachten Sie, dass das Abonnement erst nach der Zahlungsbestätigung freigeschaltet wird.</p>
