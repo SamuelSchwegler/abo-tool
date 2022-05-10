@@ -1,12 +1,11 @@
 <template>
     <div class="sm:flex sm:items-center mb-4">
         <div class="sm:flex-auto">
-            <h1 class="page-title">Gemüse-Abo: Frisches Bio-Gemüse abonnieren</h1>
+            <h1 class="page-title">Gemüse-Abo: Frisches Bio-Gemüse im Abonnement</h1>
         </div>
     </div>
     <div class="box bg-white">
-        <p>Abonnieren Sie unser Bio-Gemüse, und wir liefern es Ihnen frisch vom Feld bis vor die Haustür. Jede Woche
-            neu.</p>
+        <p>Saisonales Bio-Gemüse, jede Woche frisch angeliefert – hier wählen Sie das für Sie passende Abonnement.</p>
     </div>
     <div class="mt-4 grid lg:grid-cols-2 gap-4 grid-cols-1">
         <bundle v-for="bundle in bundles" :bundle="bundle" :allowOrder="true"></bundle>

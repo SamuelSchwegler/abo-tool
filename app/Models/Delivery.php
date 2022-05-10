@@ -26,6 +26,11 @@ class Delivery extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function active_orders(): HasMany
+    {
+        return $this->hasMany(Order::class)->where('canceled', 0);
+    }
+
     public function deadlinePassed(): bool
     {
         return $this->deadline->lt(now());
@@ -47,7 +52,7 @@ class Delivery extends Model
 
         $zip = new ZipArchive();
         if ($zip->open($path, ZipArchive::CREATE) === true) {
-            foreach ($this->orders as $order) {
+            foreach ($this->active_orders as $order) {
                 $zip->addFile($order->exportDeliveryNote(), $order->deliveryNoteName());
             }
             $zip->close();

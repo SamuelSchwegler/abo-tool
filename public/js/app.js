@@ -25055,19 +25055,17 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 /* HOISTED */
 );
 
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Bitte beachten Sie, dass das Abonnement erst nach der Zahlungsbestätigung freigeschaltet wird. ");
-
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "mb-1"
 }, "Herzlichen Dank für die Bestellung ihres Gemüse-Abos! ", -1
 /* HOISTED */
 );
 
-var _hoisted_7 = {
+var _hoisted_6 = {
   "class": "mb-1"
 };
 
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Bitte beachten Sie, dass das Abonnement erst nach der Zahlungsbestätigung freigeschaltet wird.", -1
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Bitte beachten Sie, dass das Abonnement erst nach der Zahlungsbestätigung freigeschaltet wird.", -1
 /* HOISTED */
 );
 
@@ -25088,9 +25086,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     delivery_cost: $data.buy.delivery_cost
   }, null, 8
   /* PROPS */
-  , ["bundle", "delivery_cost"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, _hoisted_5, _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, "Sie erhalten die Rechnung per E-Mail an " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.buy.customer.user.email) + " geschickt.", 1
+  , ["bundle", "delivery_cost"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, "Sie erhalten die Rechnung per E-Mail an " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.buy.customer.user.email) + " geschickt.", 1
   /* TEXT */
-  ), _hoisted_8])]))], 64
+  ), _hoisted_7])]))], 64
   /* STABLE_FRAGMENT */
   );
 }
@@ -25714,7 +25712,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.name), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.balance), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.balance + balance.planned), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.planned), 1
     /* TEXT */
@@ -25774,13 +25772,13 @@ var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   "class": "sm:flex-auto"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
   "class": "page-title"
-}, "Gemüse-Abo: Frisches Bio-Gemüse abonnieren")])], -1
+}, "Gemüse-Abo: Frisches Bio-Gemüse im Abonnement")])], -1
 /* HOISTED */
 );
 
 var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "box bg-white"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Abonnieren Sie unser Bio-Gemüse, und wir liefern es Ihnen frisch vom Feld bis vor die Haustür. Jede Woche neu.")], -1
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Saisonales Bio-Gemüse, jede Woche frisch angeliefert – hier wählen Sie das für Sie passende Abonnement.")], -1
 /* HOISTED */
 );
 
