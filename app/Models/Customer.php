@@ -66,6 +66,7 @@ class Customer extends Model
         foreach ($this->productBuys() as $buy) {
             $order = $this->productOrders()->where('product_id', $buy->product_id)->first();
             $balance = $buy;
+            $balance->ordered_before = 0;
             $balance->total_deliveries = (int) $buy->total_deliveries;
             $balance->ordered = (int) $order?->ordered ?? 0;
             $balance->planned = (int) $order?->planned ?? 0;
@@ -77,7 +78,8 @@ class Customer extends Model
         foreach($this->used_orders ?? [] as $key => $used) {
             if(array_key_exists((int) $key, $balances)) {
                 $balance = $balances[(int)$key];
-                $balance->ordered = $used;
+                $balance->ordered_before = $used;
+                $balance->ordered += $used;
                 $balance->balance -= $used;
                 $balances[(int)$key] = $balance;
             } else {

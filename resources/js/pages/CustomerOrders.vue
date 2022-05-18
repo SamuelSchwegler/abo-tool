@@ -30,7 +30,7 @@
             </table>
         </div>
         <div>
-            <div class="box bg-white">
+            <div class="box bg-white" >
                 <h3 class="title">Meine Abos</h3>
                 <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key"
                        v-if="Object.entries(product_balances).length > 0">
@@ -63,7 +63,7 @@
                 </table>
                 <alert v-else :text="'Momentan ist noch kein Guthaben für Bestellungen freigeschaltet.'"></alert>
             </div>
-            <div class="box bg-white" v-if="orders.length > 0">
+            <div class="box bg-white" v-if="!can('manage customers') && orders.length > 0">
                 <h3 class="title">Ferienabwesenheiten</h3>
                 <p class="mb-1">
                     Sie haben die Möglichkeit, den Regler neben den entsprechenden Daten auf inaktiv stellen (grün =
@@ -73,7 +73,7 @@
                     Die nachkommenden Liefertermine werden automatisch nach hinten verschoben.
                 </p>
             </div>
-            <div class="box bg-white" v-if="customer.hasOwnProperty('delivery_service') && customer.delivery_service.pickup">
+            <div class="box bg-white" v-if="!can('manage customers') && customer.hasOwnProperty('delivery_service') && customer.delivery_service.pickup">
                 <h3 class="title">Abholung im Bioladen der Gartenbauschule Hünibach</h3>
                 <p class="mb-1">
                     Sie haben bei den Lieferoptionen die Abholung gewählt. Ihre Tasche mit Bio-Gemüse wartet zu den
@@ -84,6 +84,57 @@
                 </p>
             </div>
         </div>
+    </div>
+    <div class="box bg-white" v-if="can('manage customers')">
+        <h3 class="title">Bestellhistorie</h3>
+        <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key"
+               v-if="Object.entries(product_balances).length > 0">
+            <thead>
+            <tr>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    Abo
+                </th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    gekauft
+                </th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    geordert
+                </th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    davon geplant
+                </th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    davon vor Systemstart
+                </th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    Guthaben
+                </th>
+
+            </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-slate-800">
+            <tr v-for="[index, balance] in Object.entries(product_balances)">
+                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                    {{ balance.name }}
+                </td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                    {{ balance.total_deliveries }}
+                </td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                    {{ balance.ordered }}
+                </td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                    {{ balance.planned }}
+                </td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                    {{ balance.ordered_before }}
+                </td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                    {{ balance.balance }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -110,6 +161,7 @@ export default {
             if (index > -1) { // nur falls index gefunden worden ist
                 this.product_balances[action.product_id].balance += action.running ? -1 : 1;
                 this.product_balances[action.product_id].planned += action.running ? 1 : -1;
+                this.product_balances[action.product_id].ordered += action.running ? 1 : -1;
             }
 
             this.balances_key++;

@@ -20,8 +20,6 @@ class FileController extends Controller
             $file = public_path('img/product_default.jpg');
         }
 
-        Log::info($file);
-
         return response()->file($file);
     }
 }
