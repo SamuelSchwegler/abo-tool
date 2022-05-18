@@ -40,7 +40,8 @@ class CreateOrdersForBuy implements ShouldQueue
         // richtiger Delivery Service finden
         $delivery_service = $this->customer->delivery_service();
 
-        $deliveries = $delivery_service->deliveries()->where('deadline', '>=', now()->addDay())->where('approved', 1)->get();
+        // Erstelle Orders auch über Deadline hinaus.
+        $deliveries = $delivery_service->deliveries()->where('date', '>=', now()->addDay())->where('approved', 1)->get();
         $count = 0;
         $max_orders = $this->buy->bundle->deliveries;
         foreach ($deliveries as $delivery) {

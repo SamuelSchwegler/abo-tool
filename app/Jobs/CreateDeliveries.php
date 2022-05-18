@@ -14,7 +14,7 @@ class CreateDeliveries implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    const DISTANCE = 90;
+    const DISTANCE = 120;
 
     protected ?DeliveryService $service;
 
