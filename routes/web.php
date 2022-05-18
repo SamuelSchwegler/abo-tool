@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BuyController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('export/delivery-addresses/{delivery}', [DeliveryController::class, 'exportDeliveryAddresses'])->name('delivery-notes.export');
 });
+
+Route::get('media/img/bundle/{bundle}', [FileController::class, 'bundleImg']);
 
 Route::get('/{any}', function () {
     return view('app');

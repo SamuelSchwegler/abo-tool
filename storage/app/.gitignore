@@ -7,3 +7,6 @@
 !bills/qr_codes
 !bills/qr_codes/.gitkeep
 !.gitignore
+!media
+!media/img
+!media/img/.gitkeep
