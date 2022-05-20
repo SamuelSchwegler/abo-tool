@@ -13,7 +13,7 @@
             <h3 class="title">Kommende Lieferungen</h3>
             <table class="border-collapse table-auto w-full text-sm">
                 <thead>
-                <th></th>
+                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"></th>
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Lieferdatum
                 </th>
@@ -22,6 +22,9 @@
                 </th>
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Schluss
+                </th>
+                <th v-if="can('manage customers')" class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    Interner Kommentar
                 </th>
                 </thead>
                 <tbody class="bg-white dark:bg-slate-800">
@@ -90,54 +93,56 @@
     </div>
     <div class="box bg-white" v-if="can('manage customers')">
         <h3 class="title">Bestellhistorie</h3>
-        <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key"
-               v-if="Object.entries(product_balances).length > 0">
-            <thead>
-            <tr>
-                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                    Abo
-                </th>
-                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                    gekauft
-                </th>
-                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                    geordert
-                </th>
-                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                    davon geplant
-                </th>
-                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                    davon vor Systemstart
-                </th>
-                <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                    Guthaben*
-                </th>
-            </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-slate-800">
-            <tr v-for="[index, balance] in Object.entries(product_balances)">
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                    {{ balance.name }}
-                </td>
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                    {{ balance.total_deliveries }}
-                </td>
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                    {{ balance.ordered }}
-                </td>
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                    {{ balance.planned }}
-                </td>
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                    {{ balance.ordered_before }}
-                </td>
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                    {{ balance.balance + balance.planned }}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <p class="p-4 text-slate-500 text-sm">* beinhaltet nur definitiv bezogene Lieferungen.</p>
+        <template v-if="Object.entries(product_balances).length > 0">
+            <table class="border-collapse table-auto w-full text-sm" :key="'balances_key_' + balances_key">
+                <thead>
+                <tr>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                        Abo
+                    </th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                        gekauft
+                    </th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                        geordert
+                    </th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                        davon geplant
+                    </th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                        davon vor Systemstart
+                    </th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                        Guthaben*
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-slate-800">
+                <tr v-for="[index, balance] in Object.entries(product_balances)">
+                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                        {{ balance.name }}
+                    </td>
+                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                        {{ balance.total_deliveries }}
+                    </td>
+                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                        {{ balance.ordered }}
+                    </td>
+                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                        {{ balance.planned }}
+                    </td>
+                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                        {{ balance.ordered_before }}
+                    </td>
+                    <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+                        {{ balance.balance + balance.planned }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="p-4 text-slate-500 text-sm">* beinhaltet nur definitiv bezogene Lieferungen.</p>
+        </template>
+        <p v-else class="text-slate-500 text-sm">Es gibt keine Bestellungen durch {{ customer.name }}</p>
     </div>
 </template>
 

@@ -43,6 +43,8 @@
                 <address-vue :address="customer.delivery_address ?? {}" class="mt-5"
                              v-on:updated="deliveryAddressUpdated"
                              :errors="delivery_address_errors"></address-vue>
+                <text-input v-model="customer.depository"  :value="customer.depository"
+                    label="Standard Abstellort"></text-input>
             </div>
             <div v-if="customer.delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
@@ -65,10 +67,11 @@ import CustomerData from "../parts/CustomerData";
 import AddressVue from "../parts/Address";
 import UserData from "../parts/UserData";
 import customerHelpers from "./Helpers/customerHelpers";
+import TextInput from "../../components/form/textInput";
 
 export default {
     name: "Customer",
-    components: {CustomerData, AddressVue, UserData},
+    components: {CustomerData, AddressVue, UserData, TextInput},
     data() {
         return {
             customer: {},

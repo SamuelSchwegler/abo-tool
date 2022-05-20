@@ -48,6 +48,7 @@ class OrderController extends Controller
 
         $validated = $request->validate([
             'depository' => ['nullable', 'string'],
+            'internal_comment' => ['nullable', 'string']
         ]);
         $order->update($validated);
 

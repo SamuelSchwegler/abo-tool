@@ -13,6 +13,9 @@
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
             {{ order.delivery.deadline['d.m.Y'] }}
         </td>
+        <td v-if="can('manage customers')" class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
+            <text-input v-model="this.order.internal_comment"  :value="this.order.internal_comment" @change="updateOrder"></text-input>
+        </td>
     </tr>
 </template>
 
@@ -50,7 +53,8 @@ export default {
         },
         async updateOrder() {
             await axios.patch(`/api/order/` + this.order.id, {
-                depository: this.order.depository
+                depository: this.order.depository,
+                internal_comment: this.order.internal_comment
             }).then(response => {
                 this.order = response.data.order;
                 this.key++;

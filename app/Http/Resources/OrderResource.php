@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class OrderResource extends JsonResource
 {
@@ -33,6 +34,7 @@ class OrderResource extends JsonResource
                 'name' => $product->name,
             ],
             'depository' => $this->depository ?? '',
+            'internal_comment' => $this->internal_comment ?? '', // müsste allenfalls geschützt sein?
             'canceled' => $this->canceled === 1,
             'deadline_passed' => $this->deadlinePassed(),
         ];

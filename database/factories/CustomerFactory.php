@@ -27,6 +27,7 @@ class CustomerFactory extends Factory
             'last_name' => $this->faker->lastName(),
             'phone' => $this->faker->phoneNumber(),
             'company_name' => $this->faker->randomElement([$this->faker->company(), null, null]),
+            'depository' => $this->faker->randomElement([$this->faker->sentence, null, null]),
             'delivery_address_id' => $delivery,
             'billing_address_id' => $billing,
         ];

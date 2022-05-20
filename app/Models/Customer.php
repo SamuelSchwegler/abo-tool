@@ -28,6 +28,7 @@ class Customer extends Model
 
     public function orders(): HasMany
     {
+        // todo sortieren
         return $this->hasMany(Order::class);
     }
 
@@ -155,6 +156,7 @@ class Customer extends Model
             'company_name' => ['nullable', 'string'],
             'phone' => ['required', 'string'],
             'pickup' => ['nullable', 'boolean'],
+            'depository' => ['nullable', 'string'],
             'delivery_address_id' => ['nullable', 'exists:addresses,id'],
             'billing_address_id' => ['nullable', 'exists:addresses,id'],
         ];

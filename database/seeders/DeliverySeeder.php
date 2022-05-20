@@ -23,7 +23,7 @@ class DeliverySeeder extends Seeder
         ItemOrigin::factory()->count(3)->create();
         Item::factory()->count(10)->create();
 
-        Buy::factory(5)->create([
+        Buy::factory(8)->create([
             'paid' => 0,
         ]);
         $paidBuys = Buy::factory(5)->create([
@@ -40,7 +40,7 @@ class DeliverySeeder extends Seeder
                         'date' => $date,
                         'deadline' => $date->copy()->subDays($service->deadline_distance),
                         'delivery_service_id' => $service->id,
-                        'approved' => $date->lt(now()->addWeeks(2)),
+                        'approved' => $date->lt(now()->addWeeks(5)),
                         'updated_at' => $date->copy()->subDays(15),
                     ]);
 
