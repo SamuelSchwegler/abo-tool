@@ -546,6 +546,9 @@ select{
   white-space: nowrap;
   border-width: 0;
 }
+.pointer-events-none{
+  pointer-events: none;
+}
 .fixed{
   position: fixed;
 }

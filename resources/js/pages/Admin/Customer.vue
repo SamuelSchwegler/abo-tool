@@ -18,6 +18,20 @@
         <div class="box bg-white">
             <customer-data v-on:updated="updated" :customer="customer" :errors="[]" :editable="true"></customer-data>
             <user-data v-if="customer.email !== null" :user="user"></user-data>
+            <div class="pb-4">
+                <label for="comment" class="block text-sm font-medium text-gray-700">Interner Kommentar</label>
+                <div class="mt-1">
+                    <textarea rows="4" name="comment" id="comment"
+                              v-model="customer.internal_comment"
+                              class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" />
+                </div>
+            </div>
+            <div class="grid gap-4 md:grid-cols-2 grid-cols-1 pb-4" :key="key">
+                <div>
+                    <text-input name="first_name" :value="customer.discount" v-model="customer.discount" label="Rabatt"
+                                suffix="%" :error="errors['discount']"></text-input>
+                </div>
+            </div>
         </div>
         <div class="box bg-white">
             <fieldset>

@@ -22,6 +22,14 @@ return new class extends Migration
         if(!Schema::hasColumns('customers', ['depository'])) {
             Schema::table('customers', function (Blueprint $table) {
                 $table->string('depository')->nullable()->after('phone');
+                $table->text('internal_comment')->nullable()->after('depository');
+                $table->smallInteger('discount')->default(0)->after('phone');
+            });
+        }
+
+        if(!Schema::hasColumns('buys', ['discount'])) {
+            Schema::table('buys', function (Blueprint $table) {
+               $table->smallInteger('discount')->default(0)->after('paid');
             });
         }
     }
@@ -37,8 +45,12 @@ return new class extends Migration
             Schema::dropColumns('orders', ['internal_comment']);
         }
 
-        if(Schema::hasColumns('customers', ['depository'])) {
-            Schema::dropColumns('customers', ['depository']);
+        if(Schema::hasColumns('customers', ['depository', 'internal_comment', 'discount'])) {
+            Schema::dropColumns('customers', ['depository', 'internal_comment', 'discount']);
+        }
+
+        if(Schema::hasColumns('buys', ['discount'])) {
+            Schema::dropColumns('buys', ['discount']);
         }
     }
 };

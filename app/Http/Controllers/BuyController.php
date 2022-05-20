@@ -31,7 +31,7 @@ class BuyController extends Controller
             ->getPaymentPart();
 
         // 4. For demo purposes, let's save the generated example in a file
-        $path = storage_path('app/bills/bill_'.$buy->id.'.pdf');
+        $path = storage_path('app/bills/bill_' . $buy->id . '.pdf');
 
         $tcPdf->Output($path, 'F');
 
@@ -43,6 +43,9 @@ class BuyController extends Controller
         $setting = Setting::first();
         $customer = $buy->customer;
         $billing_address = $customer->billing_address;
+
+        $summary_text = "Sämtliche Produkte sind Bio-zertifiziert: Bio-Zertifizierung: CH-BIO 006 | Betrieb-Nr: 1396
+Steuernummer: 109.681.257";
 
         return view('export.bill_head')->with([
             'issuer' => [
@@ -60,24 +63,25 @@ class BuyController extends Controller
             'items' => [
                 [
                     'name' => $buy->bundle->name,
-                    'single_price' => 'CHF '.number_format($buy->price / $buy->bundle->deliveries, 2, '.', '\''),
-                    'total_price' => 'CHF '.number_format($buy->price, 2, '.', '\''),
+                    'single_price' => 'CHF ' . number_format($buy->price / $buy->bundle->deliveries, 2, '.', '\''),
+                    'total_price' => 'CHF ' . number_format($buy->price, 2, '.', '\''),
                     'count' => $buy->bundle->deliveries,
                 ],
                 [
                     'name' => 'Lieferkosten',
-                    'single_price' => 'CHF '.number_format($buy->delivery_cost / $buy->bundle->deliveries, 2, '.', '\''),
-                    'total_price' => 'CHF '.$buy->delivery_cost,
+                    'single_price' => 'CHF ' . number_format($buy->delivery_cost / $buy->bundle->deliveries, 2, '.', '\''),
+                    'total_price' => 'CHF ' . $buy->delivery_cost,
                     'vat' => '7.70',
                     'count' => $buy->bundle->deliveries,
                 ],
             ],
             'meta' => [
                 'issue_date' => $buy->issued->format('d.m.Y'),
-                'total_price' => 'CHF '.$buy->total_cost,
-                'total_vat' => 'CHF '.$buy->total_vat,
-                'summary_text' => 'Sämtliche Produkte sind Bio-zertifiziert: Bio-Zertifizierung: CH-BIO 006 | Betrieb-Nr: 1396
-Steuernummer: 109.681.257',
+                'total_price' => 'CHF ' . $buy->total_cost,
+                'total_vat' => 'CHF ' . $buy->total_vat,
+                'discount_percent' => $buy->discount_percent,
+                'discount_amount' => 'CHF ' . $buy->discount_amount,
+                'summary_text' => $summary_text,
             ],
         ])->render();
     }

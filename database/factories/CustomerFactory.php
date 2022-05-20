@@ -30,6 +30,7 @@ class CustomerFactory extends Factory
             'depository' => $this->faker->randomElement([$this->faker->sentence, null, null]),
             'delivery_address_id' => $delivery,
             'billing_address_id' => $billing,
+            'discount' => $this->faker->randomElement([0,0,0,0,0,0,0,0,20,40])
         ];
     }
 }

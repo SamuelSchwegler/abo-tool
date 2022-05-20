@@ -35,7 +35,9 @@ class CustomerResource extends JsonResource
             'delivery_option' => $this->delivery_option,
             'delivery_service' => DeliveryServiceResource::make($this->delivery_service()),
             'balances' => $balances,
-            'buys' => $buys
+            'buys' => $buys,
+            'internal_comment' => $this->internal_comment,
+            'discount' => $this->discount
         ];
     }
 }

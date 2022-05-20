@@ -68,28 +68,28 @@ class Customer extends Model
             $order = $this->productOrders()->where('product_id', $buy->product_id)->first();
             $balance = $buy;
             $balance->ordered_before = 0;
-            $balance->total_deliveries = (int) $buy->total_deliveries;
-            $balance->ordered = (int) $order?->ordered ?? 0;
-            $balance->planned = (int) $order?->planned ?? 0;
+            $balance->total_deliveries = (int)$buy->total_deliveries;
+            $balance->ordered = (int)$order?->ordered ?? 0;
+            $balance->planned = (int)$order?->planned ?? 0;
             $balance->balance = $balance->total_deliveries - $balance->ordered;
             $balance->last_issue = Carbon::parse($buy->last_issue);
             $balances[$buy->product_id] = $balance;
         }
 
-        foreach($this->used_orders ?? [] as $key => $used) {
-            if(array_key_exists((int) $key, $balances)) {
+        foreach ($this->used_orders ?? [] as $key => $used) {
+            if (array_key_exists((int)$key, $balances)) {
                 $balance = $balances[(int)$key];
                 $balance->ordered_before = $used;
                 $balance->ordered += $used;
                 $balance->balance -= $used;
                 $balances[(int)$key] = $balance;
             } else {
-                Log::error('balance key '.$key.' not existing for customer: '.$this->id);
+                Log::error('balance key ' . $key . ' not existing for customer: ' . $this->id);
             }
         }
 
-        foreach($balances as $key => $balance) {
-            if($balance->last_issue->lt(now()->subMonths(3)) && $balance->balance === 0) {
+        foreach ($balances as $key => $balance) {
+            if ($balance->last_issue->lt(now()->subMonths(3)) && $balance->balance === 0) {
                 unset($balances[$key]);
             }
         }
@@ -97,16 +97,23 @@ class Customer extends Model
         return $balances;
     }
 
+    /**
+     * v0.1.0
+     * Gibt die nächsten Bestellungen Zurück
+     * @return HasMany
+     */
     public function next_orders(): HasMany
     {
         return $this->orders()->whereHas('delivery', function ($query) {
             $query->where('date', '>=', now()->subDay());
-        })->limit(Order::PREVIEW_OFFSET);
+        })->join('deliveries', 'deliveries.id', '=', 'orders.delivery_id')
+            ->orderBy('deliveries.date')
+            ->limit(Order::PREVIEW_OFFSET);
     }
 
     public function getNameAttribute(): string
     {
-        return $this->first_name.' '.$this->last_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     public function getDeliveryOptionAttribute(): string
@@ -141,7 +148,7 @@ class Customer extends Model
     {
         $postcode = $this->delivery_address?->postcode;
         $pickup = DeliveryService::where('pickup', 1)->first();
-        if(is_null($postcode)) {
+        if (is_null($postcode)) {
             return $pickup;
         }
 
@@ -159,6 +166,8 @@ class Customer extends Model
             'depository' => ['nullable', 'string'],
             'delivery_address_id' => ['nullable', 'exists:addresses,id'],
             'billing_address_id' => ['nullable', 'exists:addresses,id'],
+            'internal_comment' => ['nullable', 'string'],
+            'discount' => ['nullable', 'numeric', 'min:0','max:100']
         ];
     }
 }

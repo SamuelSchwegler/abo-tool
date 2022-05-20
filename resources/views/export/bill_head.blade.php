@@ -41,8 +41,17 @@
                 <td style="font-size: 10pt; text-align: right">{{$item['total_price']}}</td>
             </tr>
         @endforeach
+        @if(isset($meta['discount_percent']) && $meta['discount_percent'] > 0)
+            <tr>
+                <td style="font-size: 10pt">{{$meta['discount_percent']}}% Rabatt</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="font-size: 10pt; text-align: right">{{$meta['discount_amount']}}</td>
+            </tr>
+        @endif
         <tr>
-            <td style="font-size: 10pt">inkl MWST</td>
+            <td style="font-size: 10pt">inkl. MWST</td>
             <td></td>
             <td></td>
             <td></td>
