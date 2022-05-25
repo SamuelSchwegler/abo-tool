@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\DeliveryAddresses;
 use App\Models\Delivery;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 

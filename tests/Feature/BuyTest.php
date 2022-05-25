@@ -3,8 +3,11 @@
 namespace Tests\Feature;
 
 use App\Jobs\CreateOrdersForBuy;
+use App\Models\Bundle;
 use App\Models\Buy;
 use App\Models\Customer;
+use App\Notifications\SendInvoice;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -79,5 +82,33 @@ class BuyTest extends TestCase
         Sanctum::actingAs($this->admin);
         $response = $this->json('get', '/api/buy/'.$buy->id);
         $response->assertOk();
+    }
+
+    public function test_issue() {
+        $customer = Customer::factory()->create();
+        $bundle = Bundle::where('trial', 0)->first();
+        $previous_buy = Buy::factory()->create([
+            'customer_id' => $customer->id,
+            'bundle_id' => $bundle->id
+        ]);
+        $customer->refresh();
+
+        self::assertNotNull($customer->user);
+        self::assertEquals(1, $customer->buys->count());
+
+        Notification::fake();
+
+        Sanctum::actingAs($this->admin);
+        $response = $this->json('post', '/api/buy', [
+            'customer_id' => $customer->id,
+            'product_id' => $bundle->product->id
+        ]);
+        $customer->refresh();
+
+        self::assertEquals(2, $customer->buys->count());
+
+        $response->assertOk();
+
+        Notification::assertSentTo($customer->user, SendInvoice::class);
     }
 }

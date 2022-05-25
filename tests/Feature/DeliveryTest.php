@@ -143,11 +143,27 @@ class DeliveryTest extends TestCase
             $this->markTestSkipped('word probleme');
         }
         $this->actingAs($this->admin);
-        $delivery = Delivery::has('orders')->inRandomOrder()->first();
+        $delivery = Delivery::has('active_orders')->whereHas('delivery_service', function ($query) {
+            $query->where('pickup', 0);
+        })->inRandomOrder()->first();
         self::assertNotNull($delivery);
 
         $response = $this->get(route('delivery-notes.export', $delivery));
         $response->assertOk();
         //$response->assertDownload();
+    }
+
+    public function test_exportDeliveryAddresses() {
+        if(env('SKIP_POTENTIAL_ERROR_TESTS', false)) {
+            $this->markTestSkipped('word probleme');
+        }
+        $this->actingAs($this->admin);
+        $delivery = Delivery::has('active_orders')->whereHas('delivery_service', function ($query) {
+            $query->where('pickup', 0);
+        })->inRandomOrder()->first();
+        self::assertNotNull($delivery);
+
+        $response = $this->get(route('delivery-addresses.export', $delivery));
+        $response->assertOk();
     }
 }

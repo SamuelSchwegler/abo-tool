@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Notifications\ConfirmPayment;
 use App\Notifications\SendInvoice;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use function response;
 use Symfony\Component\Mailer\Exception\TransportException;
@@ -56,7 +57,12 @@ class BuyController extends Controller
         ]);
     }
 
-    public function issue(Request $request)
+    /**
+     * Manuelles Ausstellen einer neuen Rechnung. Bspw. weil Guthaben nicht mehr so hoch ist.
+     * @param Request $request
+     * @return Response
+     */
+    public function issue(Request $request): Response
     {
         $validated = $request->validate([
             'customer_id' => ['required', 'exists:customers,id'],
@@ -65,6 +71,8 @@ class BuyController extends Controller
         $customer = Customer::find($validated['customer_id']);
         $product = Product::find($validated['product_id']);
 
+        // Was ist das Standardbundle für den Customer mit diesem Produkt?
+        // Trial Bundles sollen nicht verlängert werden.
         $bundle = $customer->buys()->whereHas('bundle', function ($query) use ($product) {
             $query->where('product_id', $product->id)->where('trial',0);
         })->first()?->bundle ?? Bundle::where('trial', 0)->where('product_id', $product->id)->first();

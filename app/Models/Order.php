@@ -86,7 +86,6 @@ class Order extends Model
         }
         $template->cloneRowAndSetValues('item_name', $item_rows);
 
-        // todo: soll es PDF sein?
         $word_output = storage_path('app/delivery-notes/delivery-note_'.$this->id.'.docx');
         $template->saveAs($word_output);
 

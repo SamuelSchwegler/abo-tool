@@ -29,8 +29,7 @@ Route::get('export/buy/{buy}/bill', [BuyController::class, 'exportBill'])->name(
 Route::middleware('auth')->group(function () {
     Route::get('export/delivery-note/{order}', [OrderController::class, 'exportDeliveryNote'])->name('delivery-note.export');
     Route::get('export/delivery-notes/{delivery}', [DeliveryController::class, 'exportDeliveryNotes'])->name('delivery-notes.export');
-
-    Route::get('export/delivery-addresses/{delivery}', [DeliveryController::class, 'exportDeliveryAddresses'])->name('delivery-notes.export');
+    Route::get('export/delivery-addresses/{delivery}', [DeliveryController::class, 'exportDeliveryAddresses'])->name('delivery-addresses.export');
 });
 
 Route::get('media/img/bundle/{bundle}', [FileController::class, 'bundleImg']);
