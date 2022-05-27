@@ -152,7 +152,7 @@ class Buy extends Model
      */
     protected function getTotalCostAttribute(): string
     {
-        $amount = (($this->delivery_cost + $this->price) * (100 - $this->discount_percent) / 100);
+        $amount = (($this->delivery_cost + ($this->price * (100 - $this->discount_percent)) / 100));
         return number_format($amount, 2, '.', '\'');
     }
 
