@@ -32,7 +32,7 @@
                         </thead>
                         <tbody class="bg-white">
                         <tr v-for="(person, personIdx) in customers" :key="person.email"
-                            :class="personIdx % 2 === 0 ? undefined : 'bg-gray-50'">
+                            v-bind:class="{'bg-gray-50': (person.active && personIdx % 2 === 0), 'bg-gray-200': !person.active}">
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                 <router-link :to="'/customer/' + person.id"
                                              class="text-indigo-600 hover:text-indigo-900">
@@ -53,7 +53,7 @@
                                 <span v-if="person.buys.filter(buy => !buy.paid).length > 0">
                                     Offene Rechnung
                                 </span>
-                                <span v-else>
+                                <span v-else-if="person.active">
                                     <button v-for="balance in person.balances.filter(b => b.balance < 5)" @click="issue(person.id, balance.product_id)"
                                             class="text-indigo-600 hover:text-indigo-900 whitespace-nowrap">
                                     {{balance.name}} verlängern

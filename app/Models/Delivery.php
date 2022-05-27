@@ -31,9 +31,14 @@ class Delivery extends Model
         return $this->hasMany(Order::class)->where('canceled', 0);
     }
 
+    /**
+     * v0.1.0
+     * @return bool
+     * @changes - v0.1.1 - Ende des Tages soll inkludiert werden
+     */
     public function deadlinePassed(): bool
     {
-        return $this->deadline->lt(now());
+        return $this->deadline->endOfDay()->lte(now());
     }
 
     public function items() {

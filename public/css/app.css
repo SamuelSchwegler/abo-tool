@@ -564,22 +564,22 @@ select{
   bottom: 0px;
   left: 0px;
 }
+.inset-y-0{
+  top: 0px;
+  bottom: 0px;
+}
 .inset-x-0{
   left: 0px;
   right: 0px;
 }
-.inset-y-0{
-  top: 0px;
-  bottom: 0px;
+.right-0{
+  right: 0px;
 }
 .left-1\/2{
   left: 50%;
 }
 .top-0{
   top: 0px;
-}
-.right-0{
-  right: 0px;
 }
 .left-0{
   left: 0px;
@@ -1215,20 +1215,20 @@ select{
 .pb-3{
   padding-bottom: 0.75rem;
 }
-.pl-4{
-  padding-left: 1rem;
-}
 .pr-3{
   padding-right: 0.75rem;
+}
+.pb-4{
+  padding-bottom: 1rem;
+}
+.pl-4{
+  padding-left: 1rem;
 }
 .pl-3{
   padding-left: 0.75rem;
 }
 .pr-4{
   padding-right: 1rem;
-}
-.pb-4{
-  padding-bottom: 1rem;
 }
 .pt-5{
   padding-top: 1.25rem;

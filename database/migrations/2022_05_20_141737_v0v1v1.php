@@ -21,6 +21,7 @@ return new class extends Migration
 
         if(!Schema::hasColumns('customers', ['depository'])) {
             Schema::table('customers', function (Blueprint $table) {
+                $table->boolean('active')->default(true)->after('user_id');
                 $table->string('depository')->nullable()->after('phone');
                 $table->text('internal_comment')->nullable()->after('depository');
                 $table->smallInteger('discount')->default(0)->after('phone');

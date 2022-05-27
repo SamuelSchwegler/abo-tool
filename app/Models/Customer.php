@@ -18,7 +18,8 @@ class Customer extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'used_orders' => 'array'
+        'used_orders' => 'array',
+        'active' => 'boolean'
     ];
 
     public function user(): BelongsTo
@@ -158,6 +159,7 @@ class Customer extends Model
     public static function rules(): array
     {
         return [
+            'active' => ['required', 'boolean'],
             'first_name' => ['required', 'string'],
             'last_name' => ['required', 'string'],
             'company_name' => ['nullable', 'string'],

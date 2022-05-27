@@ -4,6 +4,13 @@
             <h1 class="page-title">{{ customer.name }}</h1>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <div class="inline-flex mr-3">
+                <span class="mr-3 text-sm font-medium text-gray-700">
+                    <template v-if="customer.active">Aktiv</template>
+                    <template v-if="!customer.active">Passiv</template>
+                </span>
+                <Toggle v-model="customer.active"></Toggle>
+            </div>
             <router-link :to="'/customer/' + customer.id + '/orders'" type="button"
                          class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet mr-3 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                 Zur Bestellübersicht
@@ -82,10 +89,11 @@ import AddressVue from "../parts/Address";
 import UserData from "../parts/UserData";
 import customerHelpers from "./Helpers/customerHelpers";
 import TextInput from "../../components/form/textInput";
+import Toggle from "@vueform/toggle";
 
 export default {
     name: "Customer",
-    components: {CustomerData, AddressVue, UserData, TextInput},
+    components: {CustomerData, AddressVue, UserData, TextInput, Toggle},
     data() {
         return {
             customer: {},
