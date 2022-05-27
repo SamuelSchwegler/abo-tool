@@ -165,7 +165,7 @@ class Buy extends Model
 
     public function getDiscountPercentAttribute(): string
     {
-        return number_format($this->customer->discount, 1, '.', '\'');
+        return number_format($this->discount, 1, '.', '\'');
     }
 
     public function getDiscountAmountAttribute(): string

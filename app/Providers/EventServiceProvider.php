@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\Delivery;
 use App\Models\Order;
+use App\Observers\BuyObserver;
 use App\Observers\CustomerObserver;
 use App\Observers\DeliveryObserver;
 use App\Observers\OrderObserver;
@@ -36,5 +38,6 @@ class EventServiceProvider extends ServiceProvider
         Delivery::observe(DeliveryObserver::class);
         Customer::observe(CustomerObserver::class);
         Order::observe(OrderObserver::class);
+        Buy::observe(BuyObserver::class);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\Exception\CopyFileException;
 use PhpOffice\PhpWord\Exception\CreateTemporaryFileException;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -63,7 +64,7 @@ class Order extends Model
         $template->setValue('product_name', $this->product->name);
 
         $balances = $customer->productBalances();
-        $balance = array_key_exists($this->product_id, $balances) ? $balances[$this->product_id]->balance : 0;
+        $balance = array_key_exists($this->product_id, $balances) ? $balances[$this->product_id]->balance + $balances[$this->product_id]->planned : 0;
         $template->setValue('open_deliveries', $balance);
 
         $settings = Setting::first();

@@ -11,6 +11,10 @@
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             {{ buy.bundle.name }}
         </td>
+        <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+            <text-input v-model="buy.discount" :value="buy.discount" suffix="%" input-class="w-16"
+                        @change="updateBuy"></text-input>
+        </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400 text-right">
             CHF {{ buy.total_cost }}
         </td>
@@ -18,7 +22,7 @@
             <Toggle v-model="paid" @change="updateBuy"></Toggle>
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-            {{ buy.created['d.m.Y']}}
+            {{ buy.created['d.m.Y'] }}
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400 text-right">
             {{ buy.age }}
@@ -38,12 +42,13 @@
 
 <script>
 import Toggle from "@vueform/toggle";
+import TextInput from "../../../components/form/textInput";
 
 export default {
     name: "BuyPayment",
     props: ['input_buy'],
     components: {
-        Toggle
+        Toggle, TextInput
     },
     data: function () {
         return {
@@ -55,7 +60,8 @@ export default {
     methods: {
         async updateBuy() {
             await axios.patch(`/api/buy/` + this.buy.id, {
-                paid: this.paid
+                paid: this.paid,
+                discount: this.buy.discount
             }).then(response => {
                 this.buy = response.data.buy;
                 this.$notify({type: "success", text: 'Bearbeiten erfolgreich'});

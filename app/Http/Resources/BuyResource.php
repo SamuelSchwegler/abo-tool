@@ -30,6 +30,7 @@ class BuyResource extends JsonResource
                 'user' => $user,
             ],
             'price' => $this->formated_price,
+            'discount' => $this->discount,
             'delivery_cost' => $this->delivery_cost,
             'total_cost' => $this->total_cost,
             'paid' => $this->paid === 1,

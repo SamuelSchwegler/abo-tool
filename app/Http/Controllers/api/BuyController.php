@@ -29,6 +29,7 @@ class BuyController extends Controller
     {
         $validated = $request->validate([
             'paid' => ['nullable', 'boolean'],
+            'discount' => ['nullable', 'numeric', 'between:0,100']
         ]);
         $buy->update($validated);
 
