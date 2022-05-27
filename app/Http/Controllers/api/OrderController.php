@@ -13,7 +13,6 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use function PHPUnit\Framework\assertNotNull;
 use function response;
 
 class OrderController extends Controller
@@ -41,7 +40,6 @@ class OrderController extends Controller
      */
     public function update(Order $order, Request $request): Response|Application|ResponseFactory
     {
-        assertNotNull($order);
         if ($order->deadlinePassed()) {
             throw DeliveryException::deadlineHasPassed($order->delivery);
         }
