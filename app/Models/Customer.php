@@ -159,7 +159,7 @@ class Customer extends Model
     public static function rules(): array
     {
         return [
-            'active' => ['required', 'boolean'],
+            'active' => ['nullable', 'boolean'],
             'first_name' => ['required', 'string'],
             'last_name' => ['required', 'string'],
             'company_name' => ['nullable', 'string'],

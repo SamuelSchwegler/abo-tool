@@ -22189,15 +22189,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _components_parts_Order__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/parts/Order */ "./resources/js/components/parts/Order.vue");
-/* harmony import */ var _components_parts_Alert__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/parts/Alert */ "./resources/js/components/parts/Alert.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_parts_Order__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/parts/Order */ "./resources/js/components/parts/Order.vue");
+/* harmony import */ var _components_parts_Alert__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/parts/Alert */ "./resources/js/components/parts/Alert.vue");
+/* harmony import */ var _components_form_textInput__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/form/textInput */ "./resources/js/components/form/textInput.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CustomerOrders",
   components: {
-    order: _components_parts_Order__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Alert: _components_parts_Alert__WEBPACK_IMPORTED_MODULE_1__["default"]
+    order: _components_parts_Order__WEBPACK_IMPORTED_MODULE_1__["default"],
+    Alert: _components_parts_Alert__WEBPACK_IMPORTED_MODULE_2__["default"],
+    TextInput: _components_form_textInput__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
@@ -22220,10 +22231,37 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.balances_key++;
+    },
+    updateUsedOrders: function updateUsedOrders(product_id, value) {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.patch('/api/customer/' + _this.customer.id + '/used-orders', {
+                  'product_id': product_id,
+                  'value': parseInt(value)
+                }).then(function (response) {
+                  _this.product_balances = response.data.product_balances;
+                  _this.balances_key++;
+                })["catch"](function (error) {
+                  console.log(error);
+                });
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     var route = '';
 
@@ -22234,9 +22272,9 @@ __webpack_require__.r(__webpack_exports__);
     }
 
     this.$axios.get(route).then(function (response) {
-      _this.customer = response.data.customer;
-      _this.orders = response.data.orders;
-      _this.product_balances = response.data.product_balances;
+      _this2.customer = response.data.customer;
+      _this2.orders = response.data.orders;
+      _this2.product_balances = response.data.product_balances;
     })["catch"](function (error) {
       console.log(error);
     });
@@ -25702,7 +25740,7 @@ var _hoisted_5 = {
   "class": "mt-4 sm:mt-0 sm:ml-16 sm:flex-none"
 };
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Zum Kundenkonto");
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Zum Kundenkonto ");
 
 var _hoisted_7 = {
   key: 0,
@@ -25900,6 +25938,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_alert = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("alert");
 
+  var _component_text_input = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("text-input");
+
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_ctx.can('manage customers') ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.customer.name), 1
   /* TEXT */
   ), _hoisted_4]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
@@ -25974,9 +26014,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_41, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.planned), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.ordered_before), 1
-    /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.balance + balance.planned), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_42, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
+      value: balance.ordered_before,
+      "class": "w-32",
+      onChange: function onChange($event) {
+        return $options.updateUsedOrders(balance.product_id, $event.target.value);
+      }
+    }, null, 8
+    /* PROPS */
+    , ["value", "onChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.balance + balance.planned), 1
     /* TEXT */
     )]);
   }), 256

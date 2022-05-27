@@ -6,6 +6,7 @@ use App\Models\Bundle;
 use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\Postcode;
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\Sanctum;
@@ -28,7 +29,7 @@ class CustomerTest extends TestCase
         Sanctum::actingAs($this->admin);
         $customer = Customer::inRandomOrder()->first();
 
-        $response = $this->json('get', '/api/customer/'.$customer->id);
+        $response = $this->json('get', '/api/customer/' . $customer->id);
         $response->assertOk();
     }
 
@@ -37,7 +38,7 @@ class CustomerTest extends TestCase
         Sanctum::actingAs($this->admin);
         $customer = Customer::factory()->create();
 
-        $response = $this->json('patch', '/api/customer/'.$customer->id, [
+        $data = [
             'first_name' => $customer->first_name,
             'last_name' => $customer->last_name,
             'phone' => $customer->phone,
@@ -46,27 +47,90 @@ class CustomerTest extends TestCase
                 'street' => $this->faker->streetAddress(),
                 'postcode' => Postcode::inRandomOrder()->first()->postcode,
                 'city' => $this->faker->city(),
-            ],
-        ]);
+            ]
+        ];
 
+        $response = $this->json('patch', '/api/customer/' . $customer->id, $data);
+
+        $response->assertOk();
+        $customer->refresh();
+        self::assertEquals($data['delivery_address']['city'], $customer->delivery_address->city);
+
+        $data['delivery_option'] = 'split';
+        $data['billing_address'] = [
+            'street' => $this->faker->streetAddress(),
+            'postcode' => $this->faker->postcode(),
+            'city' => $this->faker->city(),
+        ];
+
+        $response = $this->json('patch', '/api/customer/' . $customer->id, $data);
+
+        $response->assertOk();
+        $customer->refresh();
+        self::assertEquals($data['billing_address']['city'], $customer->billing_address->city);
+
+        $data['delivery_option'] = 'pickup';
+        $data['delivery_address'] = null;
+
+        $response = $this->json('patch', '/api/customer/' . $customer->id, $data);
         $response->assertOk();
     }
 
-    public function test_usedOrders() {
-        $this->markTestIncomplete('in entwicklung');
+    public function test_store()
+    {
+        $customer_count = Customer::count();
+        $user_count =  User::count();
+        Sanctum::actingAs($this->admin);
+
+        $data = [
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'phone' => $this->faker->phoneNumber(),
+            'email' => $this->faker->email()
+        ];
+
+        $response = $this->json('post', '/api/customer/', $data);
+
+        $response->assertOk();
+        self::assertEquals($customer_count + 1, Customer::count());
+        self::assertEquals($user_count + 1, User::count());
+    }
+
+    public function test_usedOrders()
+    {
         $bundle = Bundle::inRandomOrder()->first();
+
         $customer = Customer::factory()->create([
             'used_orders' => [
                 $bundle->product->id => 12
             ]
         ]);
+
         $buy = Buy::factory()->create([
             'customer_id' => $customer->id,
-            'bundle_id' => $bundle->id
+            'bundle_id' => $bundle->id,
+            'paid' => true
         ]);
-        $buy->refresh();
+        $customer->refresh();
+        self::assertEquals(1, $customer->buys->count());
+        self::assertEquals(1, $customer->productBuys()->count());
 
-        var_dump($customer->productBalances());
-        //self::assertEquals(12, $customer->productBalances()[$bundle->product->id]->balance);
+        $product_balances = $customer->productBalances();
+        self::assertIsArray($product_balances);
+        Log::info($product_balances);
+        self::assertEquals($bundle->deliveries - 12, $product_balances[$bundle->product->id]->balance);
+
+        // update
+        Sanctum::actingAs($this->admin);
+        $response = $this->patch('/api/customer/' . $customer->id . '/used-orders', [
+            'product_id' => $bundle->product_id,
+            'value' => 6
+        ]);
+        $response->assertOk();
+
+        $customer->refresh();
+        $product_balances = $customer->productBalances();
+        self::assertIsArray($product_balances);
+        self::assertEquals($bundle->deliveries - 6, $product_balances[$bundle->product->id]->balance);
     }
 }

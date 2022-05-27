@@ -13,6 +13,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -106,6 +107,23 @@ class CustomerController extends Controller
             'msg' => 'ok',
             'customer' => CustomerResource::make($customer),
             'user' => UserResource::make($customer->user)
+        ]);
+    }
+
+    public function updateUsedOrders(Customer $customer, Request $request): Response
+    {
+        $validated = $request->validate([
+            'product_id' => ['required', 'exists:products,id'],
+            'value' => ['required', 'numeric']
+        ]);
+
+        $customer->update([
+            'used_orders' => [$validated['product_id'] => $validated['value']]
+        ]);
+
+        return \response([
+            'msg' => 'ok',
+            'product_balances' => $customer->productBalances(),
         ]);
     }
 }

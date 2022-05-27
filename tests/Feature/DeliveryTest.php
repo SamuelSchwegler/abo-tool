@@ -21,29 +21,32 @@ class DeliveryTest extends TestCase
 {
     use WithFaker;
 
-    public function test_deliveries() {
+    public function test_deliveries()
+    {
         Sanctum::actingAs($this->admin);
 
         $response = $this->json('get', '/api/deliveries');
         $response->assertOk();
 
-        $response = $this->json('get', '/api/deliveries?start='.now()->format('Y-m-d').'&order_by=deadline');
+        $response = $this->json('get', '/api/deliveries?start=' . now()->format('Y-m-d') . '&order_by=deadline');
         $response->assertOk();
 
-        $response = $this->json('get', '/api/deliveries?start='.now()->format('Y-m-d').'&delivery_service_ids[]='.DeliveryService::inRandomOrder()->first()->id);
+        $response = $this->json('get', '/api/deliveries?start=' . now()->format('Y-m-d') . '&delivery_service_ids[]=' . DeliveryService::inRandomOrder()->first()->id);
         $response->assertOk();
     }
 
-    public function test_delivery() {
+    public function test_delivery()
+    {
         $delivery = Delivery::factory()->create();
 
         Sanctum::actingAs($this->admin);
 
-        $response = $this->json('get', '/api/delivery/'.$delivery->id);
+        $response = $this->json('get', '/api/delivery/' . $delivery->id);
         $response->assertOk();
     }
 
-    public function test_createDeliveriesJob() {
+    public function test_createDeliveriesJob()
+    {
         $service = DeliveryService::factory([
             'days' => ['sun'],
         ])->create();
@@ -59,7 +62,24 @@ class DeliveryTest extends TestCase
         self::assertEquals($after_count, $service->deliveries->count());
     }
 
-    public function test_toggleApproved() {
+    public function test_update()
+    {
+        $delivery = Delivery::factory()->create([
+            'deadline' => now()->addDays(2)
+        ]);
+        $new_date = $delivery->date->addDay();
+
+        Sanctum::actingAs($this->admin);
+        $response = $this->json('patch', 'api/delivery/' . $delivery->id, [
+            'date' => $new_date->format('d.m.Y')
+        ]);
+        $response->assertOk();
+        $delivery->refresh();
+        self::assertEquals($new_date->format('Y-m-d'), $delivery->date->format('Y-m-d'));
+    }
+
+    public function test_toggleApproved()
+    {
         $delivery = Delivery::factory()->create([
             'approved' => false,
             'deadline' => now()->addDays(3),
@@ -68,20 +88,21 @@ class DeliveryTest extends TestCase
         Queue::fake();
         Sanctum::actingAs($this->admin);
 
-        $response = $this->json('patch', '/api/delivery/'.$delivery->id.'/toggle-approved');
+        $response = $this->json('patch', '/api/delivery/' . $delivery->id . '/toggle-approved');
         $response->assertOk();
         $delivery->refresh();
         self::assertEquals(1, $delivery->approved);
         Queue::assertPushed(DeliveryCreateOrders::class);
 
-        $response = $this->json('patch', '/api/delivery/'.$delivery->id.'/toggle-approved');
+        $response = $this->json('patch', '/api/delivery/' . $delivery->id . '/toggle-approved');
         $response->assertOk();
         $delivery->refresh();
         self::assertEquals(0, $delivery->approved);
         Queue::assertPushed(DeliveryRemoveOrders::class);
     }
 
-    public function test_createOrdersForDeliveryJob() {
+    public function test_createOrdersForDeliveryJob()
+    {
         // Test Needed Relations
         $service = DeliveryService::factory()->create();
         $postcode = $this->faker->postcode();
@@ -139,7 +160,7 @@ class DeliveryTest extends TestCase
 
     public function test_exportDeliveryNotes()
     {
-        if(env('SKIP_POTENTIAL_ERROR_TESTS', false)) {
+        if (env('SKIP_POTENTIAL_ERROR_TESTS', false)) {
             $this->markTestSkipped('word probleme');
         }
         $this->actingAs($this->admin);
@@ -153,8 +174,9 @@ class DeliveryTest extends TestCase
         //$response->assertDownload();
     }
 
-    public function test_exportDeliveryAddresses() {
-        if(env('SKIP_POTENTIAL_ERROR_TESTS', false)) {
+    public function test_exportDeliveryAddresses()
+    {
+        if (env('SKIP_POTENTIAL_ERROR_TESTS', false)) {
             $this->markTestSkipped('word probleme');
         }
         $this->actingAs($this->admin);

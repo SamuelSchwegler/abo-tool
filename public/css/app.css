@@ -787,6 +787,9 @@ select{
 .w-40{
   width: 10rem;
 }
+.w-32{
+  width: 8rem;
+}
 .min-w-full{
   min-width: 100%;
 }

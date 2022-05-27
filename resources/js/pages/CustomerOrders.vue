@@ -1,11 +1,14 @@
 <template>
     <div class="sm:flex sm:items-center" v-if="can('manage customers')">
-        <div class="sm:flex-auto" >
+        <div class="sm:flex-auto">
             <h1 class="page-title">{{ customer.name }}</h1>
             <p class="mt-2 text-sm text-gray-700">Überblick über Bestellungen.</p>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <router-link :to="'/customer/' + customer.id" type="button" class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Zum Kundenkonto</router-link>
+            <router-link :to="'/customer/' + customer.id" type="button"
+                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+                Zum Kundenkonto
+            </router-link>
         </div>
     </div>
     <div class="mt-4 grid grid-cols-1 gap-4" v-bind:class="{'lg:grid-cols-2': !can('manage customers')}">
@@ -23,7 +26,8 @@
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Schluss
                 </th>
-                <th v-if="can('manage customers')" class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                <th v-if="can('manage customers')"
+                    class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Interner Kommentar
                 </th>
                 </thead>
@@ -79,7 +83,8 @@
                     Die nachkommenden Liefertermine werden automatisch nach hinten verschoben.
                 </p>
             </div>
-            <div class="box bg-white" v-if="!can('manage customers') && customer.hasOwnProperty('delivery_service') && customer.delivery_service.pickup">
+            <div class="box bg-white"
+                 v-if="!can('manage customers') && customer.hasOwnProperty('delivery_service') && customer.delivery_service.pickup">
                 <h3 class="title">Abholung im Bioladen der Gartenbauschule Hünibach</h3>
                 <p class="mb-1">
                     Sie haben bei den Lieferoptionen die Abholung gewählt. Ihre Tasche mit Bio-Gemüse wartet zu den
@@ -132,7 +137,9 @@
                         {{ balance.planned }}
                     </td>
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                        {{ balance.ordered_before }}
+                        <text-input :value="balance.ordered_before" class="w-32"
+                                    @change="updateUsedOrders(balance.product_id, $event.target.value)">
+                        </text-input>
                     </td>
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
                         {{ balance.balance + balance.planned }}
@@ -150,10 +157,11 @@
 
 import order from "../components/parts/Order";
 import Alert from "../components/parts/Alert";
+import TextInput from "../components/form/textInput";
 
 export default {
     name: "CustomerOrders",
-    components: {order, Alert},
+    components: {order, Alert, TextInput},
     data: function () {
         return {
             product_balances: {},
@@ -173,11 +181,22 @@ export default {
             }
 
             this.balances_key++;
+        },
+        async updateUsedOrders(product_id, value) {
+            await axios.patch('/api/customer/' + this.customer.id + '/used-orders', {
+                'product_id': product_id,
+                'value': parseInt(value)
+            }).then(response => {
+                this.product_balances = response.data.product_balances;
+                this.balances_key++;
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
     },
     created() {
         let route = '';
-        if(this.can('manage customers') && this.$route.params.hasOwnProperty('id')) {
+        if (this.can('manage customers') && this.$route.params.hasOwnProperty('id')) {
             route = `/api/orders/${this.$route.params.id}`;
         } else {
             route = `/api/orders/`;
