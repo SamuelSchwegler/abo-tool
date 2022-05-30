@@ -54,7 +54,7 @@
                                     Offene Rechnung
                                 </span>
                                 <span v-else-if="person.active">
-                                    <button v-for="balance in person.balances.filter(b => b.balance < 5)" @click="issue(person.id, balance.product_id)"
+                                    <button v-for="balance in person.balances.filter(b => b.balance + b.planned < 4)" @click="issue(person.id, balance.product_id)"
                                             class="text-indigo-600 hover:text-indigo-900 whitespace-nowrap">
                                     {{balance.name}} verlängern
                                 </button>
@@ -80,6 +80,8 @@
 
 export default {
     name: "Customers",
+    components: {},
+
     data() {
         return {
             customers: []
