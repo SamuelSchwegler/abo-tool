@@ -85,18 +85,21 @@ export default {
             this.item = event.originalTarget.value;
         },
         selectedItem(item) {
-          this.item = item.name;
+          this.item = item;
         },
         async addItem() {
-            await axios.post('/api/delivery/' + this.$route.params.id + '/item/', {
-                item: this.item
-            }).then(response => {
-                this.item = "";
-                this.itemSearchKey++;
-                this.items = response.data.delivery.items;
-            }).catch(errors => {
-                console.log(errors);
-            })
+            if(this.item.length > 0) {
+                await axios.post('/api/delivery/' + this.$route.params.id + '/item/', {
+                    item: this.item
+                }).then(response => {
+                    this.item = "";
+                    this.itemSearchKey++;
+                    this.items = response.data.delivery.items;
+                }).catch(errors => {
+                    console.log(errors);
+                })
+            }
+
         },
         async removeItem(item_id) {
             await axios.delete('/api/delivery/' + this.$route.params.id + '/item/' + item_id).then(response => {
