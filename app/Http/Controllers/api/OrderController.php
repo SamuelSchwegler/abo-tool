@@ -13,6 +13,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use function response;
 
 class OrderController extends Controller
@@ -63,9 +64,12 @@ class OrderController extends Controller
         if (!\auth()->user()->can('manage customers') && $order->deadlinePassed()) {
             throw DeliveryException::deadlineHasPassed($order->delivery);
         }
+
+        Log::info($order->canceled);
         $order->update([
-            'canceled' => ! $order->canceled,
+            'canceled' => $order->canceled ? false : true
         ]);
+        Log::info($order->canceled);
 
         return response(['order' => OrderResource::make($order)]);
     }

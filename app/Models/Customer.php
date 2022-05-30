@@ -109,6 +109,7 @@ class Customer extends Model
             $query->where('date', '>=', now()->subDay());
         })->join('deliveries', 'deliveries.id', '=', 'orders.delivery_id')
             ->orderBy('deliveries.date')
+            ->select('orders.*')
             ->limit(Order::PREVIEW_OFFSET);
     }
 
