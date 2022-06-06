@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        if(!Schema::hasColumns('orders', ['internal_comment'])) {
+        if(!Schema::hasColumns('orders', ['internal_comment','reminded'])) {
             Schema::table('orders', function (Blueprint $table) {
                 $table->string('internal_comment')->nullable()->after('depository');
+                $table->boolean('reminded')->default(false)->after('canceled');
             });
         }
 
@@ -42,8 +43,8 @@ return new class extends Migration
      */
     public function down()
     {
-        if(Schema::hasColumns('orders', ['internal_comment'])) {
-            Schema::dropColumns('orders', ['internal_comment']);
+        if(Schema::hasColumns('orders', ['internal_comment', 'reminded'])) {
+            Schema::dropColumns('orders', ['internal_comment', 'reminded']);
         }
 
         if(Schema::hasColumns('customers', ['depository', 'internal_comment', 'discount'])) {

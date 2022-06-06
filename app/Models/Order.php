@@ -15,6 +15,10 @@ class Order extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+    protected $casts = [
+        'canceled' => 'boolean',
+        'reminded' => 'boolean'
+    ];
 
     const PREVIEW_OFFSET = 10; // wie viele Lieferungen voraus werden Orders angezeigt.
 
@@ -40,7 +44,7 @@ class Order extends Model
 
     public function deliveryNoteName(): string
     {
-        return str_replace(' ', '_', $this->customer->name).'_'.$this->id.'.docx';
+        return str_replace(' ', '_', $this->customer->name) . '_' . $this->id . '.docx';
     }
 
     /**
@@ -87,7 +91,7 @@ class Order extends Model
         }
         $template->cloneRowAndSetValues('item_name', $item_rows);
 
-        $word_output = storage_path('app/delivery-notes/delivery-note_'.$this->id.'.docx');
+        $word_output = storage_path('app/delivery-notes/delivery-note_' . $this->id . '.docx');
         $template->saveAs($word_output);
 
         return $word_output;

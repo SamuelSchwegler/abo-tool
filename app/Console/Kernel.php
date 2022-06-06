@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\CreateDeliveries;
+use App\Jobs\DeliveryOrderReminder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new CreateDeliveries)->dailyAt('02:00');
+        $schedule->job(new DeliveryOrderReminder)->dailyAt('04:30');
 
         // db backups
         $schedule->command('db:backup')->daily()->everyFourHours()->between('6:00', '22:00');

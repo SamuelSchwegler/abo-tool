@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Jobs\CreateDeliveries;
 use App\Jobs\DeliveryCreateOrders;
+use App\Jobs\DeliveryOrderReminder;
 use App\Jobs\DeliveryRemoveOrders;
 use App\Models\Address;
 use App\Models\Bundle;
@@ -11,8 +12,11 @@ use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\Delivery;
 use App\Models\DeliveryService;
+use App\Models\Order;
 use App\Models\Postcode;
+use App\Notifications\OrderReminder;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -187,5 +191,35 @@ class DeliveryTest extends TestCase
 
         $response = $this->get(route('delivery-addresses.export', $delivery));
         $response->assertOk();
+    }
+
+    public function test_sendOrderReminder() {
+        $tomorrow = Delivery::factory([
+            'deadline' => now()->addDay()
+        ])->create();
+
+        $today = Delivery::factory([
+            'deadline' => now()
+        ])->create();
+
+        $yesterday = Delivery::factory([
+            'deadline' => now()->subDay()
+        ]);
+
+        $deliveries = Delivery::deadlineOnNextDay();
+        self::assertEquals(2, $deliveries->count());
+
+        $order = Order::factory([
+            'customer_id' => $this->customer->customer->id,
+            'delivery_id' => $tomorrow->id
+        ])->create();
+        self::assertEquals(0, $order->reminded);
+
+        Notification::fake();
+        DeliveryOrderReminder::dispatchSync();
+        Notification::assertSentTo($this->customer, OrderReminder::class);
+
+        $order->refresh();
+        self::assertEquals(1, $order->reminded);
     }
 }

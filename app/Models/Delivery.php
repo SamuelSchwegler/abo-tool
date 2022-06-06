@@ -41,6 +41,20 @@ class Delivery extends Model
         return $this->deadline->endOfDay()->lte(now());
     }
 
+    /**
+     * v0.1.1
+     * @param $query
+     * @return mixed
+     */
+    public function scopeDeadlineNotPassed($query): mixed
+    {
+        return $query->where('deadline', '>=', now()->startOfDay()->format('Y-m-d'));
+    }
+
+    public static function deadlineOnNextDay() {
+        return self::deadlineNotPassed()->where('deadline', '<=', now()->addDay()->endOfDay()->format('Y-m-d H:i:s'))->get();
+    }
+
     public function items() {
         return $this->belongsToMany(Item::class);
     }
