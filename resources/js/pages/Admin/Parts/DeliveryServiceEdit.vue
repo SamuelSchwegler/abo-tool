@@ -147,7 +147,7 @@ export default {
                 this.$notify({type: "success", text: 'Bearbeiten erfolgreich'});
                 // this.delivery = response.data.delivery;
             }).catch(errors => {
-                this.$notify({type: "danger", text: 'Es ist ein Fehler aufgetreten'});
+                this.$notify({type: "error", text: 'Es ist ein Fehler aufgetreten'});
                 console.log(errors);
             })
         },

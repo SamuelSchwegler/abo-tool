@@ -25,7 +25,7 @@ class BuyController extends Controller
         return response(['buy' => BuyResource::make($buy)]);
     }
 
-    public function update(Buy $buy, Request $request)
+    public function update(Buy $buy, Request $request): Response
     {
         $validated = $request->validate([
             'paid' => ['nullable', 'boolean'],
@@ -47,7 +47,15 @@ class BuyController extends Controller
         return response(['buy' => BuyResource::make($buy)]);
     }
 
-    public function payments()
+    public function delete(Buy $buy): Response
+    {
+        $buy->delete();
+        return response([
+            'msg' => 'ok'
+        ]);
+    }
+
+    public function payments(): Response
     {
         $buys = Buy::orderBy('issued')->where(function ($query) {
             $query->where('paid', 0)->orWhere('updated_at', '>=', now()->subWeeks(2));
@@ -75,8 +83,8 @@ class BuyController extends Controller
         // Was ist das Standardbundle für den Customer mit diesem Produkt?
         // Trial Bundles sollen nicht verlängert werden.
         $bundle = $customer->buys()->whereHas('bundle', function ($query) use ($product) {
-            $query->where('product_id', $product->id)->where('trial',0);
-        })->first()?->bundle ?? Bundle::where('trial', 0)->where('product_id', $product->id)->first();
+                $query->where('product_id', $product->id)->where('trial', 0);
+            })->first()?->bundle ?? Bundle::where('trial', 0)->where('product_id', $product->id)->first();
         $delivery_service = $customer->delivery_service();
 
         $buy = Buy::create([
@@ -97,6 +105,17 @@ class BuyController extends Controller
         return response([
             'msg' => 'ok',
             'customer' => CustomerResource::make($customer)
+        ]);
+    }
+
+    public function customer(Customer $customer): Response
+    {
+        $buys = $customer->buys;
+
+        return response([
+            'msg' => 'ok',
+            'customer' => CustomerResource::make($customer),
+            'buys' => BuyResource::collection($buys)
         ]);
     }
 }

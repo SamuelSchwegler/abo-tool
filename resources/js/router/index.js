@@ -15,6 +15,7 @@ import Customers from "../pages/Admin/Customers";
 import Delivery from "../pages/Admin/Delivery";
 import Customer from "../pages/Admin/Customer";
 import CustomerCreate from "../pages/Admin/CustomerCreate";
+import CustomerBuys from "../pages/Admin/CustomerBuys";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -172,6 +173,18 @@ export const routes = [
         path: '/customer/:id/orders',
         component: CustomerOrders
     },
+    {
+        name:'customer-buys',
+        path: '/customer/:id/buys',
+        component: CustomerBuys,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage customers')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    }
 ];
 
 const router = createRouter({

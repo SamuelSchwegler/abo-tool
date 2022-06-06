@@ -35,7 +35,7 @@ class Customer extends Model
 
     public function buys(): HasMany
     {
-        return $this->hasMany(Buy::class);
+        return $this->hasMany(Buy::class)->orderByDesc('created_at');
     }
 
     public function productBuys(): Collection

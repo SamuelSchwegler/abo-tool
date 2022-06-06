@@ -1,11 +1,18 @@
 <template>
-    <tr :key="key">
+    <tr :key="key" v-if="show">
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             {{ buy.bill_number }}
         </td>
-        <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+        <td v-if="show_customer"
+            class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             <router-link :to="'/customer/' + buy.customer.id" class="text-indigo-600 hover:text-indigo-900">
                 {{ buy.customer.name }}
+            </router-link>
+        </td>
+        <td v-if="show_customer"
+            class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+            <router-link :to="'/customer/' + buy.customer.id + '/buys'" class="text-indigo-600 hover:text-indigo-900">
+                <ArchiveIcon class="h-6 w-6"></ArchiveIcon>
             </router-link>
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
@@ -27,7 +34,7 @@
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400 text-right">
             {{ buy.age }}
         </td>
-        <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+        <td class="border-b border-slate-100 dark:border-slate-700 p-2 text-slate-500 dark:text-slate-400">
             <a target="_blank" :href="'export/buy/' + buy.id + '/bill'" title="PDF Download"
                class="btn inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -37,24 +44,50 @@
                 </svg>
             </a>
         </td>
+        <td v-if="allow_delete"
+            class="border-b border-slate-100 dark:border-slate-700 p-2 text-slate-500 dark:text-slate-400">
+            <button @click="deleteBuy" v-bind:disabled="paid"
+                    v-bind:title="paid ? 'Löschen ist nur bei unbezahlten Rechnungen möglich': ''"
+                    class="btn inline-flex items-center px-4 py-2 bg-red-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                <TrashIcon class="h-6 w-6"></TrashIcon>
+            </button>
+            <delete-modal :key="'delete_modal_' + deleteModalKey" :show="open_delete" :route="`/api/buy/` + this.buy.id" v-on:deleted="deleted"></delete-modal>
+        </td>
     </tr>
 </template>
 
 <script>
 import Toggle from "@vueform/toggle";
 import TextInput from "../../../components/form/textInput";
+import {ArchiveIcon, TrashIcon} from "@heroicons/vue/solid";
+import DeleteModal from "../../parts/DeleteModal";
 
 export default {
     name: "BuyPayment",
-    props: ['input_buy'],
+    props: {
+        input_buy: {
+            type: Object
+        },
+        show_customer: {
+            type: Boolean,
+            default: true
+        },
+        allow_delete: {
+            type: Boolean,
+            default: false
+        }
+    },
     components: {
-        Toggle, TextInput
+        Toggle, TextInput, ArchiveIcon, TrashIcon, DeleteModal
     },
     data: function () {
         return {
             buy: this.input_buy,
             paid: this.input_buy.paid,
-            key: 0
+            key: 0,
+            show: true,
+            open_delete: false,
+            deleteModalKey: 0
         }
     },
     methods: {
@@ -66,10 +99,17 @@ export default {
                 this.buy = response.data.buy;
                 this.$notify({type: "success", text: 'Bearbeiten erfolgreich'});
             }).catch(error => {
-                this.$notify({type: "danger", text: 'Es ist ein Fehler aufgetreten'});
+                this.$notify({type: "error", text: 'Es ist ein Fehler aufgetreten'});
             });
 
             this.key++;
+        },
+        deleteBuy() {
+            this.open_delete = true;
+            this.deleteModalKey++;
+        },
+        deleted() {
+            this.show = false;
         }
     }
 }

@@ -48,7 +48,7 @@ export default {
                 this.key++;
             }).catch(error => {
                 console.log(error);
-                this.$notify({ type: "danger", text: 'Es ist ein Fehler aufgetreten' });
+                this.$notify({ type: "error", text: 'Es ist ein Fehler aufgetreten' });
             });
         },
         async updateOrder() {
@@ -60,7 +60,7 @@ export default {
                 this.key++;
                 this.$notify({ type: "success", text: 'Bearbeiten erfolgreich' });
             }).catch(error => {
-                this.$notify({ type: "danger", text: 'Es ist ein Fehler aufgetreten' });
+                this.$notify({ type: "error", text: 'Es ist ein Fehler aufgetreten' });
             });
         }
     }

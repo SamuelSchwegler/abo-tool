@@ -111,4 +111,28 @@ class BuyTest extends TestCase
 
         Notification::assertSentTo($customer->user, SendInvoice::class);
     }
+
+    public function test_delete() {
+        $buy = Buy::factory()->create();
+
+        Sanctum::actingAs($this->customer);
+        $response = $this->json('delete', '/api/buy/'.$buy->id);
+        $response->assertStatus(403);
+
+        Sanctum::actingAs($this->admin);
+        $response = $this->json('delete', '/api/buy/'.$buy->id);
+        $response->assertOk();
+    }
+
+    public function test_customer() {
+        $customer = Customer::factory()->create();
+        $buy = Buy::factory([
+            'customer_id' => $customer->id
+        ])->count(3)->create();
+
+        Sanctum::actingAs($this->admin);
+        $response = $this->json('get', '/api/buys/'.$customer->id);
+        $response->assertOk();
+        $response->assertJson(['customer' => [], 'buys' => []]);
+    }
 }

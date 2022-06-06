@@ -49,11 +49,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/order/{order}', [OrderController::class, 'update']);
     Route::patch('/order/{order}/toggle-cancel', [OrderController::class, 'toggleCancel']);
 
-    Route::get('payments', [BuyController::class, 'payments']);
     Route::get('buy/{buy}', [BuyController::class, 'buy']);
     Route::patch('/buy/{buy}', [BuyController::class, 'update']);
 
     Route::post('buy', [BuyController::class, 'issue']);
+
+    Route::group(['middleware' => ['permission:manage customers']], function () {
+        Route::get('payments', [BuyController::class, 'payments']);
+        Route::get('buys/{customer}', [BuyController::class, 'customer']);
+        Route::delete('buy/{buy}', [BuyController::class, 'delete']);
+    });
 
     Route::get('delivery-services', [DeliveryServiceController::class, 'services']);
     Route::patch('/delivery-service/{service}/', [DeliveryServiceController::class, 'update']);

@@ -193,7 +193,8 @@ class DeliveryTest extends TestCase
         $response->assertOk();
     }
 
-    public function test_sendOrderReminder() {
+    public function test_sendOrderReminder()
+    {
         $tomorrow = Delivery::factory([
             'deadline' => now()->addDay()
         ])->create();
@@ -204,14 +205,24 @@ class DeliveryTest extends TestCase
 
         $yesterday = Delivery::factory([
             'deadline' => now()->subDay()
-        ]);
+        ])->create();
 
         $deliveries = Delivery::deadlineOnNextDay();
-        self::assertEquals(2, $deliveries->count());
+        self::assertGreaterThanOrEqual(2, $deliveries->count());
+        self::assertFalse($deliveries->contains(function ($d) use ($yesterday) {
+            return $d->id === $yesterday->id;
+        }));
+        self::assertTrue($deliveries->contains(function ($d) use ($today) {
+            return $d->id === $today->id;
+        }));
+        self::assertTrue($deliveries->contains(function ($d) use ($tomorrow) {
+            return $d->id === $tomorrow->id;
+        }));
 
         $order = Order::factory([
             'customer_id' => $this->customer->customer->id,
-            'delivery_id' => $tomorrow->id
+            'delivery_id' => $tomorrow->id,
+            'canceled' => 0
         ])->create();
         self::assertEquals(0, $order->reminded);
 

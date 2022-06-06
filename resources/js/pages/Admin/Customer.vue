@@ -15,6 +15,10 @@
                          class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet mr-3 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                 Zur Bestellübersicht
             </router-link>
+            <router-link :to="'/customer/' + customer.id + '/buys'" type="button"
+                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet mr-3 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+                Zur Rechnungsübersicht
+            </router-link>
             <router-link to="/customers" type="button"
                          class="inline-flex items-center justify-center rounded-md border border-transparent bg-green px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                 Zu allen Kunden
@@ -23,7 +27,7 @@
     </div>
     <div class="grid grid-cols-2 gap-4" v-if="key > 0">
         <div class="box bg-white">
-            <customer-data v-on:updated="updated" :customer="customer" :errors="[]" :editable="true"></customer-data>
+            <customer-data v-on:updated="updated" :customer="customer" :errors="errors" :editable="true"></customer-data>
             <user-data v-if="customer.email !== null" :user="user"></user-data>
             <div class="pb-4">
                 <label for="comment" class="block text-sm font-medium text-gray-700">Interner Kommentar</label>
@@ -154,7 +158,12 @@ export default {
                     postcode: this.errors['billing_address.postcode'],
                     city: this.errors['billing_address.city']
                 }
-                this.$notify({type: "danger", text: 'Es ist ein Fehler aufgetreten'});
+
+                let text = 'Es ist ein Fehler aufgetreten';
+                if(errors.response.status === 422) {
+                    text = "Die gesendeten Angaben sind ungültig. Bitte prüfen Sie die Felder."
+                }
+                this.$notify({type: "error", text: text});
             });
             this.key++;
         }

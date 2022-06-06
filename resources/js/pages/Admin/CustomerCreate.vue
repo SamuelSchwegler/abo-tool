@@ -71,7 +71,7 @@ export default {
             }).catch(errors => {
                 console.log(errors);
                 this.errors = errors.response.data.errors;
-                this.$notify({type: "danger", text: 'Es ist ein Fehler aufgetreten'});
+                this.$notify({type: "error", text: 'Es ist ein Fehler aufgetreten'});
             });
             this.key++;
         }
