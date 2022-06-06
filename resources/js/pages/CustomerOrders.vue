@@ -214,12 +214,6 @@ export default {
             .catch(function (error) {
                 console.log(error);
             });
-    },
-    beforeRouteEnter(to, from, next) {
-        if (!window.Laravel.isLoggedIn) {
-            window.location.href = "/";
-        }
-        next();
     }
 }
 </script>

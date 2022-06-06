@@ -88,7 +88,7 @@ class OrderTest extends DuskTestCase
             self::assertTrue(Auth::guest());
 
             $browser->click('button#proceed')
-                ->pause(300)
+                ->pause(500)
                 ->assertPathBeginsWith('/buy')
                 ->assertSee('Herzlichen Dank für die Bestellung ihres Gemüse-Abos!');
 

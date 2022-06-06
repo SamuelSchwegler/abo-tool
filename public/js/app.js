@@ -22484,13 +22484,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     })["catch"](function (error) {
       console.log(error);
     });
-  },
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    if (!window.Laravel.isLoggedIn) {
-      window.location.href = "/";
-    }
-
-    next();
   }
 });
 
@@ -28347,7 +28340,14 @@ var routes = [{
 }, {
   name: 'orders',
   path: '/my-orders',
-  component: _pages_CustomerOrders__WEBPACK_IMPORTED_MODULE_5__["default"]
+  component: _pages_CustomerOrders__WEBPACK_IMPORTED_MODULE_5__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (window.Laravel.isLoggedIn) {
+      next();
+    } else {
+      window.location.href = "/";
+    }
+  }
 }, {
   name: 'manage-payments',
   path: '/manage-payments',

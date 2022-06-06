@@ -70,7 +70,14 @@ export const routes = [
     {
         name: 'orders',
         path: '/my-orders',
-        component: CustomerOrders
+        component: CustomerOrders,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
     },
     {
         name: 'manage-payments',
