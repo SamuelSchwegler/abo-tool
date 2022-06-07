@@ -72,14 +72,14 @@ class Order extends Model
         $template->setValue('open_deliveries', $balance);
 
         $settings = Setting::first();
-        $template->setValue('company_street', $settings->address->street);
-        $template->setValue('company_postcode', $settings->address->postcode);
-        $template->setValue('company_city', $settings->address->city);
+        $template->setValue('company_street', $settings->address?->street);
+        $template->setValue('company_postcode', $settings->address?->postcode);
+        $template->setValue('company_city', $settings->address?->city);
 
         $template->setValue('customer_name', $customer->name);
-        $template->setValue('customer_street', $delivery_address?->street ?? $billing_address->street);
-        $template->setValue('customer_postcode', $delivery_address?->postcode ?? $billing_address->postcode);
-        $template->setValue('customer_city', $delivery_address?->city ?? $billing_address->city);
+        $template->setValue('customer_street', $delivery_address?->street ?? $billing_address?->street);
+        $template->setValue('customer_postcode', $delivery_address?->postcode ?? $billing_address?->postcode);
+        $template->setValue('customer_city', $delivery_address?->city ?? $billing_address?->city);
 
         // Items
         $item_rows = [];
