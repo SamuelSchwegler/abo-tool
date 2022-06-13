@@ -65,11 +65,9 @@ class OrderController extends Controller
             throw DeliveryException::deadlineHasPassed($order->delivery);
         }
 
-        Log::info($order->canceled);
         $order->update([
-            'canceled' => $order->canceled ? false : true
+            'canceled' => !$order->canceled
         ]);
-        Log::info($order->canceled);
 
         return response(['order' => OrderResource::make($order)]);
     }

@@ -35,7 +35,7 @@ class OrderResource extends JsonResource
             ],
             'depository' => $this->depository ?? '',
             'internal_comment' => $this->internal_comment ?? '', // müsste allenfalls geschützt sein?
-            'canceled' => $this->canceled === 1,
+            'canceled' => $this->canceled,
             'deadline_passed' => $this->deadlinePassed(),
         ];
     }
