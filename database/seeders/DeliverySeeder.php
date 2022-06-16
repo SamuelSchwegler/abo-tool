@@ -8,6 +8,7 @@ use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Item;
 use App\Models\ItemOrigin;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -23,16 +24,17 @@ class DeliverySeeder extends Seeder
         ItemOrigin::factory()->count(3)->create();
         Item::factory()->count(10)->create();
 
-        Buy::factory(8)->create([
+        Buy::factory(3)->create([
             'paid' => 0,
         ]);
-        $paidBuys = Buy::factory(5)->create([
+        $paidBuys = Buy::factory(10)->create([
             'paid' => 1,
         ]);
 
-        $date = now()->subWeeks(3);
-        $end = $date->copy()->addMonths(3);
+        $start = now()->subMonths(2);
+        $end = $start->copy()->addMonths(3);
 
+        $date = $start->copy();
         while ($date->lte($end)) {
             foreach (DeliveryService::all() as $service) {
                 if (in_array(strtolower($date->locale('en')->isoFormat('ddd')), $service->days)) {
@@ -57,7 +59,8 @@ class DeliverySeeder extends Seeder
         }
 
         foreach ($paidBuys as $buy) {
-            CreateOrdersForBuy::dispatch($buy);
+            $date = $start->copy()->addDays(rand(0,14));
+            CreateOrdersForBuy::dispatch($buy, $date);
         }
     }
 }

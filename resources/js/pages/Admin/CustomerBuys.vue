@@ -1,7 +1,17 @@
 <template>
     <div class="sm:flex sm:items-center mb-4">
         <div class="sm:flex-auto">
-            <h1 class="page-title">{{customer.name}}</h1>
+            <h1 class="page-title">{{ customer.name }}
+                <div
+                    :class="[customer.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800', 'inline-flex items-baseline px-2.5 py-0.5 rounded-full text-sm font-medium md:mt-2 lg:mt-0']">
+                    <span v-if="customer.active">
+                        Aktiv
+                    </span>
+                    <span v-else="customer.active">
+                        Passiv
+                    </span>
+                </div>
+            </h1>
             <p class="mt-2 text-sm text-gray-700">Überblick über die Rechnungen.</p>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -48,7 +58,8 @@
             </tr>
             </thead>
             <tbody class="bg-white dark:bg-slate-800">
-            <buy-payment :show_customer="false" :allow_delete="true" v-for="(buy, index) in buys" :input_buy="buy" :key="buy.id"></buy-payment>
+            <buy-payment :show_customer="false" :allow_delete="true" v-for="(buy, index) in buys" :input_buy="buy"
+                         :key="buy.id"></buy-payment>
             </tbody>
         </table>
         <p v-else class="text-slate-500 text-sm">Es gibt keine Rechnungen für {{ customer.name }}</p>

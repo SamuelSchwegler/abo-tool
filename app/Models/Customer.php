@@ -38,22 +38,32 @@ class Customer extends Model
         return $this->hasMany(Buy::class)->orderByDesc('created_at');
     }
 
-    public function productBuys(): Collection
+    public function productBuys(?Product $product = null): Collection
     {
-        return DB::table('buys')->where('buys.customer_id', '=', $this->id)->where('buys.paid', 1)
+        $query = DB::table('buys')->where('buys.customer_id', '=', $this->id)->where('buys.paid', 1)
             ->leftJoin('bundles', 'buys.bundle_id', 'bundles.id')
-            ->leftJoin('products', 'products.id', 'bundles.product_id')
-            ->groupBy('products.id')
+            ->leftJoin('products', 'products.id', 'bundles.product_id');
+
+        if (!is_null($product)) {
+            $query = $query->where('products.id', $product->id);
+        }
+
+        return $query->groupBy('products.id')
             ->selectRaw('products.id as product_id, products.name, SUM(bundles.deliveries) as total_deliveries, max(issued) as last_issue')->get();
     }
 
-    public function productOrders(): Collection
+    public function productOrders(?Product $product = null): Collection
     {
-        return DB::table('orders')->where('orders.customer_id', $this->id)
+        $query = DB::table('orders')->where('orders.customer_id', $this->id)
             ->leftJoin('products', 'products.id', 'orders.product_id')
             ->leftJoin('deliveries', 'deliveries.id', 'orders.delivery_id')
-            ->where('canceled', 0)
-            ->groupBy('orders.product_id')
+            ->where('canceled', 0);
+
+        if (!is_null($product)) {
+            $query = $query->where('products.id', $product->id);
+        }
+
+        return $query->groupBy('products.id')
             ->selectRaw('products.id as product_id, products.name, COUNT(orders.id) as ordered, SUM(IF(deliveries.deadline >= NOW(), 1, 0)) AS planned')->get();
     }
 
@@ -66,7 +76,7 @@ class Customer extends Model
     {
         $balances = [];
         foreach ($this->productBuys() as $buy) {
-            $order = $this->productOrders()->where('product_id', $buy->product_id)->first();
+            $order = $this->productOrders(Product::find($buy->product_id))->first();
             $balance = $buy;
             $balance->ordered_before = 0;
             $balance->total_deliveries = (int)$buy->total_deliveries;
@@ -96,6 +106,31 @@ class Customer extends Model
         }
 
         return $balances;
+    }
+
+    /**
+     * Wie viel Guthaben für ein Produkt besteht noch?
+     * @param Product $product
+     * @param bool $with_planned
+     * @return int
+     */
+    public function creditOfProduct(Product $product, bool $with_planned = false): int
+    {
+        $buys = $this->productBuys($product)->first();
+        $orders = $this->productOrders($product)->first();
+
+        $balance = $buys?->total_deliveries ?? 0;
+
+        if(!is_null($orders)) {
+            if ($with_planned) {
+                $balance -= $orders->ordered;
+            } else {
+                $balance -= $orders->ordered - $orders->planned;
+            }
+        }
+
+        return $balance;
+
     }
 
     /**
@@ -170,7 +205,7 @@ class Customer extends Model
             'delivery_address_id' => ['nullable', 'exists:addresses,id'],
             'billing_address_id' => ['nullable', 'exists:addresses,id'],
             'internal_comment' => ['nullable', 'string'],
-            'discount' => ['nullable', 'numeric', 'min:0','max:100']
+            'discount' => ['nullable', 'numeric', 'min:0', 'max:100']
         ];
     }
 }

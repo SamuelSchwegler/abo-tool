@@ -27,14 +27,15 @@
     </div>
     <div class="grid grid-cols-2 gap-4" v-if="key > 0">
         <div class="box bg-white">
-            <customer-data v-on:updated="updated" :customer="customer" :errors="errors" :editable="true"></customer-data>
+            <customer-data v-on:updated="updated" :customer="customer" :errors="errors"
+                           :editable="true"></customer-data>
             <user-data v-if="customer.email !== null" :user="user"></user-data>
             <div class="pb-4">
                 <label for="comment" class="block text-sm font-medium text-gray-700">Interner Kommentar</label>
                 <div class="mt-1">
                     <textarea rows="4" name="comment" id="comment"
                               v-model="customer.internal_comment"
-                              class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" />
+                              class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"/>
                 </div>
             </div>
             <div class="grid gap-4 md:grid-cols-2 grid-cols-1 pb-4" :key="key">
@@ -68,8 +69,20 @@
                 <address-vue :address="customer.delivery_address ?? {}" class="mt-5"
                              v-on:updated="deliveryAddressUpdated"
                              :errors="delivery_address_errors"></address-vue>
-                <text-input v-model="customer.depository"  :value="customer.depository"
-                    label="Standard Abstellort"></text-input>
+                <div class="grid gap-4 grid-cols-4 pb-4" :key="key">
+                    <div class="col-span-1">
+                        <label class="block text-sm font-medium text-gray-700">Lieferdienst</label>
+                        <router-link :to="'/delivery-service/' + customer.delivery_service.id " type="button"
+                                     class="mt-1 w-full inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            {{ customer.delivery_service.name }}
+                        </router-link>
+                    </div>
+                    <div class="col-span-3">
+                        <text-input v-model="customer.depository" :value="customer.depository"
+                                    label="Standard Abstellort"></text-input>
+                    </div>
+                </div>
+
             </div>
             <div v-if="customer.delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
@@ -160,7 +173,7 @@ export default {
                 }
 
                 let text = 'Es ist ein Fehler aufgetreten';
-                if(errors.response.status === 422) {
+                if (errors.response.status === 422) {
                     text = "Die gesendeten Angaben sind ungültig. Bitte prüfen Sie die Felder."
                 }
                 this.$notify({type: "error", text: text});

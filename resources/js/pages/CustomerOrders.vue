@@ -1,7 +1,18 @@
 <template>
     <div class="sm:flex sm:items-center" v-if="can('manage customers')">
         <div class="sm:flex-auto">
-            <h1 class="page-title">{{ customer.name }}</h1>
+            <h1 class="page-title">
+                {{ customer.name }}
+                <div
+                    :class="[customer.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800', 'inline-flex items-baseline px-2.5 py-0.5 rounded-full text-sm font-medium md:mt-2 lg:mt-0']">
+                    <span v-if="customer.active">
+                        Aktiv
+                    </span>
+                    <span v-else="customer.active">
+                        Passiv
+                    </span>
+                </div>
+            </h1>
             <p class="mt-2 text-sm text-gray-700">Überblick über Bestellungen.</p>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">

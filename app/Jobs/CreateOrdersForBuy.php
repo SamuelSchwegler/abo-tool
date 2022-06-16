@@ -6,6 +6,7 @@ use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\Delivery;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,16 +19,18 @@ class CreateOrdersForBuy implements ShouldQueue
 
     protected Buy $buy;
     protected Customer $customer;
+    protected Carbon $from;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Buy $buy)
+    public function __construct(Buy $buy, ?Carbon $from = null)
     {
         $this->buy = $buy;
         $this->customer = $buy->customer;
+        $this->from = is_null($from) ? now()->addDay() : $from;
     }
 
     /**
@@ -41,9 +44,9 @@ class CreateOrdersForBuy implements ShouldQueue
         $delivery_service = $this->customer->delivery_service();
 
         // Erstelle Orders auch über Deadline hinaus.
-        $deliveries = $delivery_service->deliveries()->where('date', '>=', now()->addDay())->where('approved', 1)->get();
+        $deliveries = $delivery_service->deliveries()->where('date', '>=', $this->from)->where('approved', 1)->get();
         $count = 0;
-        $max_orders = $this->buy->bundle->deliveries;
+        $max_orders = $this->customer->creditOfProduct($this->buy->bundle->product, true);
         foreach ($deliveries as $delivery) {
             $order = Order::where('customer_id',$this->customer->id)->where('delivery_id',$delivery->id)
                 ->where('product_id', $this->buy->bundle->product->id)->first();
@@ -56,10 +59,13 @@ class CreateOrdersForBuy implements ShouldQueue
                 ]);
 
                 $count++;
+
                 if($count >= $max_orders) {
                     break; // nicht mehr Orders erstellen, als im Abo sind...
                 }
             }
+
+
         }
     }
 }
