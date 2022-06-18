@@ -17,6 +17,7 @@ return new class extends Migration
             Schema::table('orders', function (Blueprint $table) {
                 $table->string('internal_comment')->nullable()->after('depository');
                 $table->boolean('reminded')->default(false)->after('canceled');
+                $table->boolean('affordable')->default(true)->after('canceled');
             });
         }
 

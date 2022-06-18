@@ -129,8 +129,12 @@ class Customer extends Model
             }
         }
 
-        return $balance;
+        // bereits bestellt
+        if(!is_null($this->used_orders) && array_key_exists($product->id, $this->used_orders)) {
+            $balance -= $this->used_orders[$product->id];
+        }
 
+        return $balance;
     }
 
     /**

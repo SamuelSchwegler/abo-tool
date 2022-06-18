@@ -46,7 +46,7 @@ class CreateDeliveries implements ShouldQueue
     }
 
     private function createDeliveriesForService(DeliveryService $service) {
-        $generate_until = now()->addDays(self::DISTANCE);
+        $generate_until = now()->addDays(self::DISTANCE)->endOfDay();
 
         $max = $service->deliveries->max('date');
         if(is_null($max) || $max->lt($generate_until)) {

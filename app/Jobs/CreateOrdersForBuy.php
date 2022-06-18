@@ -40,32 +40,6 @@ class CreateOrdersForBuy implements ShouldQueue
      */
     public function handle()
     {
-        // richtiger Delivery Service finden
-        $delivery_service = $this->customer->delivery_service();
-
-        // Erstelle Orders auch über Deadline hinaus.
-        $deliveries = $delivery_service->deliveries()->where('date', '>=', $this->from)->where('approved', 1)->get();
-        $count = 0;
-        $max_orders = $this->customer->creditOfProduct($this->buy->bundle->product, true);
-        foreach ($deliveries as $delivery) {
-            $order = Order::where('customer_id',$this->customer->id)->where('delivery_id',$delivery->id)
-                ->where('product_id', $this->buy->bundle->product->id)->first();
-
-            if(is_null($order)) {
-                Order::create([
-                    'customer_id' => $this->customer->id,
-                    'delivery_id' => $delivery->id,
-                    'product_id' => $this->buy->bundle->product->id,
-                ]);
-
-                $count++;
-
-                if($count >= $max_orders) {
-                    break; // nicht mehr Orders erstellen, als im Abo sind...
-                }
-            }
-
-
-        }
+        CreateOrders::dispatch($this->customer, $this->buy->bundle->product, $this->from);
     }
 }

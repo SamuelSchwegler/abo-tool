@@ -36,9 +36,9 @@ class DeliveryAddresses implements FromCollection, WithMapping, ShouldAutoSize, 
         return [
             'first name' => $customer->first_name,
             'last_name' => $customer->last_name,
-            'street' => $address->street,
-            'postcode' => $address->postcode,
-            'city' => $address->city,
+            'street' => $address?->street,
+            'postcode' => $address?->postcode,
+            'city' => $address?->city,
             'product' => $order->product->name
         ];
     }

@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -39,12 +40,14 @@ class DeliveryCreateOrders implements ShouldQueue
     {
         $customers = $this->service->customers();
         foreach ($customers as $customer) {
+
             foreach ($customer->productBalances() ?? [] as $balance) {
-                if($balance->balance > 0) {
-                    $order = Order::where('customer_id',$customer->id)->where('delivery_id',$this->delivery->id)
+                $credit = $customer->creditOfProduct(Product::find($balance->product_id));
+                if ($credit > 0) {
+                    $order = Order::where('customer_id', $customer->id)->where('delivery_id', $this->delivery->id)
                         ->where('product_id', $balance->product_id)->first();
 
-                    if(is_null($order)) {
+                    if (is_null($order)) {
                         $order = Order::create([
                             'customer_id' => $customer->id,
                             'delivery_id' => $this->delivery->id,

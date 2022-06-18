@@ -28,7 +28,8 @@ class Delivery extends Model
 
     public function active_orders(): HasMany
     {
-        return $this->hasMany(Order::class)->where('canceled', 0);
+        return $this->hasMany(Order::class)->where('canceled', 0)
+            ->where('affordable', 1);
     }
 
     /**

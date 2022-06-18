@@ -63,7 +63,7 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ],
-        "serve": "php artisan serve & php artisan queue:work --queue=high,default,low & ~/go/bin/MailHog",
+        "serve": "php artisan serve & php artisan queue:listen --queue=high,default,low & ~/go/bin/MailHog",
         "setup": [
             "git pull",
             "composer install",

@@ -17,7 +17,8 @@ class Order extends Model
     protected $guarded = ['id'];
     protected $casts = [
         'canceled' => 'boolean',
-        'reminded' => 'boolean'
+        'reminded' => 'boolean',
+        'affordable' => 'boolean'
     ];
 
     const PREVIEW_OFFSET = 10; // wie viele Lieferungen voraus werden Orders angezeigt.

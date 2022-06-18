@@ -6,6 +6,8 @@ use App\Exceptions\DeliveryException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\OrderResource;
+use App\Jobs\CreateOrders;
+use App\Jobs\CreateOrdersForBuy;
 use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Contracts\Foundation\Application;
@@ -68,6 +70,9 @@ class OrderController extends Controller
         $order->update([
             'canceled' => !$order->canceled
         ]);
+
+        // falls abgemeldet neue Lieferung erstellen
+        CreateOrders::dispatchSync($order->customer, $order->product);
 
         return response(['order' => OrderResource::make($order)]);
     }

@@ -27,7 +27,7 @@
         </div>
     </div>
     <div class="mt-4 grid grid-cols-1 gap-4" v-bind:class="{'lg:grid-cols-2': !can('manage customers')}">
-        <div class="box bg-white" v-if="orders.length > 0">
+        <div class="box bg-white" v-if="orders.length > 0" :key="'orders_key_' + orders_key">
             <h3 class="title">Kommende Lieferungen</h3>
             <table class="border-collapse table-auto w-full text-sm">
                 <thead>
@@ -47,7 +47,7 @@
                 </th>
                 </thead>
                 <tbody class="bg-white dark:bg-slate-800">
-                <order v-for="(order, index) in orders" :input_order="order" @toggleOrder="toggleOrder"></order>
+                <order v-for="(order, index) in orders" :input_order="order" :key="'order_key_' + order.id + '_affordable_' + order.affordable" @toggleOrder="toggleOrder"></order>
                 </tbody>
             </table>
         </div>
@@ -181,6 +181,7 @@ export default {
         return {
             product_balances: {},
             balances_key: 0,
+            orders_key: 0,
             orders: [],
             customer_id: 0,
             customer: {}
@@ -195,6 +196,8 @@ export default {
                 this.product_balances[action.product_id].ordered += action.running ? 1 : -1;
             }
 
+            this.loadData();
+
             this.balances_key++;
         },
         async updateUsedOrders(product_id, value) {
@@ -207,24 +210,27 @@ export default {
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+        async loadData() {
+            let route = '';
+            if (this.can('manage customers') && this.$route.params.hasOwnProperty('id')) {
+                route = `/api/orders/${this.$route.params.id}`;
+            } else {
+                route = `/api/orders/`;
+            }
+            await this.$axios.get(route)
+                .then(response => {
+                    this.customer = response.data.customer;
+                    this.orders = response.data.orders;
+                    this.product_balances = response.data.product_balances;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
     },
     created() {
-        let route = '';
-        if (this.can('manage customers') && this.$route.params.hasOwnProperty('id')) {
-            route = `/api/orders/${this.$route.params.id}`;
-        } else {
-            route = `/api/orders/`;
-        }
-        this.$axios.get(route)
-            .then(response => {
-                this.customer = response.data.customer;
-                this.orders = response.data.orders;
-                this.product_balances = response.data.product_balances;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+       this.loadData();
     }
 }
 </script>

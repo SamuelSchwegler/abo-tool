@@ -1,5 +1,6 @@
 <template>
-    <tr  v-bind:class="{'bg-gray-200': order.deadline_passed}" :key="'order_key_' + order.id + '_' + key">
+    <tr  v-bind:class="{'bg-gray-200': order.deadline_passed, 'bg-red-200': !order.affordable}" :key="'order_key_' + order.id + '_' + key"
+        v-bind:title="!order.affordable ? 'diese Bestellung ist Momentan nicht möglich, weil zu wenig Guthaben besteht.' : ''">
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
             <Toggle class="h-5 w-5" v-model="running" @change="toggleCancel" :disabled="toggleDisabled"
                     :classes="{ toggleOnDisabled: 'bg-green-300'}"></Toggle>

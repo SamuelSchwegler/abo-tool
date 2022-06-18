@@ -31,6 +31,7 @@ class BuyTest extends TestCase
         $customer = Customer::factory()->create();
         $buy = Buy::factory([
             'customer_id' => $customer->id,
+            'paid' => 1
         ])->create();
 
         self::assertEquals(0, $customer->orders->count());
