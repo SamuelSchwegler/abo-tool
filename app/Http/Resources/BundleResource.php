@@ -21,7 +21,7 @@ class BundleResource extends JsonResource
             'deliveries' => $this->deliveries,
             'price_per_delivery' => $this->price_per_delivery,
             'trial' => $this->trial,
-            'short_description' => $this->short_description
+            'short_description' => $this->short_description,
         ];
     }
 }

@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Address;
 use App\Models\Bundle;
-use App\Models\Item;
-use App\Models\ItemOrigin;
 use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Database\Seeder;

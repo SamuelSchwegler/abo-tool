@@ -40,7 +40,7 @@ class DeliveryService extends Model
 
     public function customers()
     {
-        if(!$this->pickup) {
+        if(! $this->pickup) {
             return Customer::leftJoin('addresses', 'addresses.id', 'customers.delivery_address_id')
                 ->leftJoin('postcodes', 'postcodes.postcode', 'addresses.postcode')
                 ->leftJoin('delivery_services', 'delivery_services.id', 'postcodes.delivery_service_id')

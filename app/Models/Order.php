@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\Exception\CopyFileException;
 use PhpOffice\PhpWord\Exception\CreateTemporaryFileException;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -18,7 +17,7 @@ class Order extends Model
     protected $casts = [
         'canceled' => 'boolean',
         'reminded' => 'boolean',
-        'affordable' => 'boolean'
+        'affordable' => 'boolean',
     ];
 
     const PREVIEW_OFFSET = 10; // wie viele Lieferungen voraus werden Orders angezeigt.
@@ -45,7 +44,7 @@ class Order extends Model
 
     public function deliveryNoteName(): string
     {
-        return str_replace(' ', '_', $this->customer->name) . '_' . $this->id . '.docx';
+        return str_replace(' ', '_', $this->customer->name).'_'.$this->id.'.docx';
     }
 
     /**
@@ -92,7 +91,7 @@ class Order extends Model
         }
         $template->cloneRowAndSetValues('item_name', $item_rows);
 
-        $word_output = storage_path('app/delivery-notes/delivery-note_' . $this->id . '.docx');
+        $word_output = storage_path('app/delivery-notes/delivery-note_'.$this->id.'.docx');
         $template->saveAs($word_output);
 
         return $word_output;

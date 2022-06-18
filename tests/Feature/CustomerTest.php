@@ -8,7 +8,6 @@ use App\Models\Customer;
 use App\Models\Postcode;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -29,7 +28,7 @@ class CustomerTest extends TestCase
         Sanctum::actingAs($this->admin);
         $customer = Customer::inRandomOrder()->first();
 
-        $response = $this->json('get', '/api/customer/' . $customer->id);
+        $response = $this->json('get', '/api/customer/'.$customer->id);
         $response->assertOk();
     }
 
@@ -47,10 +46,10 @@ class CustomerTest extends TestCase
                 'street' => $this->faker->streetAddress(),
                 'postcode' => Postcode::inRandomOrder()->first()->postcode,
                 'city' => $this->faker->city(),
-            ]
+            ],
         ];
 
-        $response = $this->json('patch', '/api/customer/' . $customer->id, $data);
+        $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
 
         $response->assertOk();
         $customer->refresh();
@@ -63,7 +62,7 @@ class CustomerTest extends TestCase
             'city' => $this->faker->city(),
         ];
 
-        $response = $this->json('patch', '/api/customer/' . $customer->id, $data);
+        $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
 
         $response->assertOk();
         $customer->refresh();
@@ -72,21 +71,21 @@ class CustomerTest extends TestCase
         $data['delivery_option'] = 'pickup';
         $data['delivery_address'] = null;
 
-        $response = $this->json('patch', '/api/customer/' . $customer->id, $data);
+        $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
         $response->assertOk();
     }
 
     public function test_store()
     {
         $customer_count = Customer::count();
-        $user_count =  User::count();
+        $user_count = User::count();
         Sanctum::actingAs($this->admin);
 
         $data = [
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'phone' => $this->faker->phoneNumber(),
-            'email' => $this->faker->email()
+            'email' => $this->faker->email(),
         ];
 
         $response = $this->json('post', '/api/customer/', $data);
@@ -102,14 +101,14 @@ class CustomerTest extends TestCase
 
         $customer = Customer::factory()->create([
             'used_orders' => [
-                $bundle->product->id => 12
-            ]
+                $bundle->product->id => 12,
+            ],
         ]);
 
         $buy = Buy::factory()->create([
             'customer_id' => $customer->id,
             'bundle_id' => $bundle->id,
-            'paid' => true
+            'paid' => true,
         ]);
         $customer->refresh();
         self::assertEquals(1, $customer->buys->count());
@@ -117,14 +116,13 @@ class CustomerTest extends TestCase
 
         $product_balances = $customer->productBalances();
         self::assertIsArray($product_balances);
-        Log::info($product_balances);
         self::assertEquals($bundle->deliveries - 12, $product_balances[$bundle->product->id]->balance);
 
         // update
         Sanctum::actingAs($this->admin);
-        $response = $this->patch('/api/customer/' . $customer->id . '/used-orders', [
+        $response = $this->patch('/api/customer/'.$customer->id.'/used-orders', [
             'product_id' => $bundle->product_id,
-            'value' => 6
+            'value' => 6,
         ]);
         $response->assertOk();
 

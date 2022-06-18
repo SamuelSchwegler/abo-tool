@@ -31,11 +31,12 @@ class SetupDeliveries extends Command
     {
         foreach (Delivery::all() as $d) {
             if($d->approved) {
-                $this->info('lieferungen für ' . $d->date->format('d.m.Y') . ' mit ' .$d->delivery_service->name. ' erstellen');
+                $this->info('lieferungen für '.$d->date->format('d.m.Y').' mit '.$d->delivery_service->name.' erstellen');
                 DeliveryCreateOrders::dispatch($d);
             }
 
         }
+
         return 0;
     }
 }

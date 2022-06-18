@@ -20,8 +20,9 @@ class AddressFactory extends Factory
         $postcode_options = [
             $this->faker->postcode(),
             Postcode::inRandomOrder()->first()->postcode,
-            Postcode::inRandomOrder()->first()->postcode
+            Postcode::inRandomOrder()->first()->postcode,
         ];
+
         return [
             'street' => $this->faker->streetAddress(),
             'postcode' => $this->faker->randomElement($postcode_options),

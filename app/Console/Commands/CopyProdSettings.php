@@ -11,7 +11,6 @@ use App\Models\Postcode;
 use App\Models\Product;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class CopyProdSettings extends Command
 {
@@ -30,7 +29,7 @@ class CopyProdSettings extends Command
     protected $description = 'Command description';
 
     protected array $models_to_copy = [DeliveryService::class, Postcode::class, Product::class, Bundle::class,
-        Delivery::class, ItemOrigin::class, Item::class];
+        Delivery::class, ItemOrigin::class, Item::class, ];
 
     /**
      * Execute the console command.
@@ -45,18 +44,18 @@ class CopyProdSettings extends Command
             $hasRun = DB::connection('mysql-copy')->table('migrations')->where('migration', $latest)->exists();
 
             if ($hasRun) {
-                $this->info($latest . ' has run');
+                $this->info($latest.' has run');
                 $this->info('start with copy');
 
                 foreach ($this->models_to_copy as $model) {
-                    $this->info('kopieren von ' . $model);
+                    $this->info('kopieren von '.$model);
                     DB::connection('mysql')->table((new $model)->getTable())->truncate();
                     foreach ((new $model)->on('mysql-copy')->get() as $service) {
                         $this->copyModel($service);
                     }
                 }
             } else {
-                $this->info('dbs are not equal, migration: ' . $latest . ' does not exists');
+                $this->info('dbs are not equal, migration: '.$latest.' does not exists');
             }
         } else {
             $this->info('no copy db defined');

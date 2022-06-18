@@ -38,7 +38,7 @@ class CustomerResource extends JsonResource
             'balances' => $balances,
             'buys' => $buys,
             'internal_comment' => $this->internal_comment,
-            'discount' => $this->discount
+            'discount' => $this->discount,
         ];
     }
 }

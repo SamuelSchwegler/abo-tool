@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\OrderResource;
 use App\Jobs\CreateOrders;
-use App\Jobs\CreateOrdersForBuy;
 use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Contracts\Foundation\Application;
@@ -15,7 +14,6 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use function response;
 
 class OrderController extends Controller
@@ -49,7 +47,7 @@ class OrderController extends Controller
 
         $validated = $request->validate([
             'depository' => ['nullable', 'string'],
-            'internal_comment' => ['nullable', 'string']
+            'internal_comment' => ['nullable', 'string'],
         ]);
         $order->update($validated);
 
@@ -63,12 +61,12 @@ class OrderController extends Controller
      */
     public function toggleCancel(Order $order): Response|Application|ResponseFactory
     {
-        if (!\auth()->user()->can('manage customers') && $order->deadlinePassed()) {
+        if (! \auth()->user()->can('manage customers') && $order->deadlinePassed()) {
             throw DeliveryException::deadlineHasPassed($order->delivery);
         }
 
         $order->update([
-            'canceled' => !$order->canceled
+            'canceled' => ! $order->canceled,
         ]);
 
         // falls abgemeldet neue Lieferung erstellen

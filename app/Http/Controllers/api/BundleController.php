@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Mailer\Exception\TransportException;
-use const http\Client\Curl\AUTH_ANY;
 
 class BundleController extends Controller
 {
@@ -39,8 +38,8 @@ class BundleController extends Controller
     /**
      * Zahlung mit allen Daten absenden.
      *
-     * @param Bundle $bundle
-     * @param Request $request
+     * @param  Bundle  $bundle
+     * @param  Request  $request
      * @return Application|ResponseFactory|Response
      */
     public function submitBuy(Bundle $bundle, Request $request)
@@ -68,8 +67,8 @@ class BundleController extends Controller
         if ($validator->fails()) {
             return \response([
                 'errors' => $validator->errors()->toArray(),
-                'authenticated' => !Auth::guest(),
-                'user' => UserResource::make(Auth::user())
+                'authenticated' => ! Auth::guest(),
+                'user' => UserResource::make(Auth::user()),
             ], 422);
         }
         $customerValidated = $validator->validated();

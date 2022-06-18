@@ -15,7 +15,7 @@ class BuyResource extends JsonResource
     public function toArray($request)
     {
         $user = [];
-        if(!is_null($this->customer->user)) {
+        if(! is_null($this->customer->user)) {
             $user = [
                 'email' => $this->customer->user->email,
             ];

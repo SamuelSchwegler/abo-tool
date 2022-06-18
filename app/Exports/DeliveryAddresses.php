@@ -21,8 +21,8 @@ class DeliveryAddresses implements FromCollection, WithMapping, ShouldAutoSize, 
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return $this->delivery->active_orders;
@@ -39,7 +39,7 @@ class DeliveryAddresses implements FromCollection, WithMapping, ShouldAutoSize, 
             'street' => $address?->street,
             'postcode' => $address?->postcode,
             'city' => $address?->city,
-            'product' => $order->product->name
+            'product' => $order->product->name,
         ];
     }
 
@@ -48,7 +48,7 @@ class DeliveryAddresses implements FromCollection, WithMapping, ShouldAutoSize, 
         return [
             ['Adressen für '.$this->delivery->delivery_service->name.' am '.$this->delivery->date->format('d.m.Y')],
             ['Exportiert am '.now()->format('d.m.Y').' von '.Auth::user()->email],
-            ['Vorname','Nachname','Strasse','PLZ','Ort','Produkt']
+            ['Vorname', 'Nachname', 'Strasse', 'PLZ', 'Ort', 'Produkt'],
         ];
     }
 

@@ -13,7 +13,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -28,21 +27,21 @@ class CustomerController extends Controller
     {
         return response([
             'customer' => CustomerResource::make($customer),
-            'user' => !is_null($customer->user) ? UserResource::make($customer->user) : null
+            'user' => ! is_null($customer->user) ? UserResource::make($customer->user) : null,
         ]);
     }
 
     public function store(Request $request): Response|Application|ResponseFactory
     {
         $customerValidated = $request->validate(Customer::rules() + [
-                'email' => ['nullable', 'email', 'unique:users,email']
-            ]);
+            'email' => ['nullable', 'email', 'unique:users,email'],
+        ]);
         $customer = Customer::create($customerValidated);
 
-        if (!is_null($customerValidated['email'])) {
+        if (! is_null($customerValidated['email'])) {
             $user = User::create([
                 'email' => $customerValidated['email'],
-                'password' => 'keinPasswort'
+                'password' => 'keinPasswort',
             ])->syncRoles(['customer']);
             $customer->update([
                 'user_id' => $user->id,
@@ -51,7 +50,7 @@ class CustomerController extends Controller
 
         return \response([
             'msg' => 'ok',
-            'customer' => CustomerResource::make($customer)
+            'customer' => CustomerResource::make($customer),
         ]);
     }
 
@@ -106,7 +105,7 @@ class CustomerController extends Controller
         return response([
             'msg' => 'ok',
             'customer' => CustomerResource::make($customer),
-            'user' => UserResource::make($customer->user)
+            'user' => UserResource::make($customer->user),
         ]);
     }
 
@@ -114,11 +113,11 @@ class CustomerController extends Controller
     {
         $validated = $request->validate([
             'product_id' => ['required', 'exists:products,id'],
-            'value' => ['required', 'numeric']
+            'value' => ['required', 'numeric'],
         ]);
 
         $customer->update([
-            'used_orders' => [$validated['product_id'] => $validated['value']]
+            'used_orders' => [$validated['product_id'] => $validated['value']],
         ]);
 
         return \response([

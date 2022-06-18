@@ -29,13 +29,13 @@ class BuyController extends Controller
     {
         $validated = $request->validate([
             'paid' => ['nullable', 'boolean'],
-            'discount' => ['nullable', 'numeric', 'between:0,100']
+            'discount' => ['nullable', 'numeric', 'between:0,100'],
         ]);
         $buy->update($validated);
 
         if ($request->has('paid') && $buy->paid) {
             CreateOrdersForBuy::dispatch($buy);
-            if (!is_null($buy->customer->user)) {
+            if (! is_null($buy->customer->user)) {
                 try {
                     $buy->customer->user->notify(new ConfirmPayment($buy));
                 } catch (TransportException $exception) {
@@ -50,8 +50,9 @@ class BuyController extends Controller
     public function delete(Buy $buy): Response
     {
         $buy->delete();
+
         return response([
-            'msg' => 'ok'
+            'msg' => 'ok',
         ]);
     }
 
@@ -68,7 +69,8 @@ class BuyController extends Controller
 
     /**
      * Manuelles Ausstellen einer neuen Rechnung. Bspw. weil Guthaben nicht mehr so hoch ist.
-     * @param Request $request
+     *
+     * @param  Request  $request
      * @return Response
      */
     public function issue(Request $request): Response
@@ -92,11 +94,11 @@ class BuyController extends Controller
             'bundle_id' => $bundle->id,
             'price' => $bundle->price,
             'delivery_cost' => ($delivery_service?->delivery_cost ?? 0) * $bundle->deliveries,
-            'issued' => now()
+            'issued' => now(),
         ]);
 
         $user = $customer->user;
-        if (!is_null($user)) {
+        if (! is_null($user)) {
             $user->notify(new SendInvoice($buy));
         }
 
@@ -104,7 +106,7 @@ class BuyController extends Controller
 
         return response([
             'msg' => 'ok',
-            'customer' => CustomerResource::make($customer)
+            'customer' => CustomerResource::make($customer),
         ]);
     }
 
@@ -115,7 +117,7 @@ class BuyController extends Controller
         return response([
             'msg' => 'ok',
             'customer' => CustomerResource::make($customer),
-            'buys' => BuyResource::collection($buys)
+            'buys' => BuyResource::collection($buys),
         ]);
     }
 }

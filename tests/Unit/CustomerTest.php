@@ -10,7 +10,6 @@ use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Order;
 use App\Models\Postcode;
-use App\Models\Product;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -72,14 +71,14 @@ class CustomerTest extends TestCase
         $deliveryPast = Delivery::factory()->create([
             'date' => now()->subWeeks(2),
             'deadline' => now()->subWeeks(2),
-            'approved' => true
+            'approved' => true,
         ]);
 
         Order::factory()->create([
             'customer_id' => $customer->id,
             'product_id' => $product->id,
             'delivery_id' => $deliveryPast->id,
-            'canceled' => 0
+            'canceled' => 0,
         ]);
 
         $customer->refresh();
@@ -89,14 +88,14 @@ class CustomerTest extends TestCase
         $deliverySoon = Delivery::factory()->create([
             'date' => now()->addDays(2),
             'deadline' => now()->addDays(2),
-            'approved' => true
+            'approved' => true,
         ]);
 
         Order::factory()->create([
             'customer_id' => $customer->id,
             'product_id' => $product->id,
             'delivery_id' => $deliverySoon->id,
-            'canceled' => 0
+            'canceled' => 0,
         ]);
 
         $customer->refresh();

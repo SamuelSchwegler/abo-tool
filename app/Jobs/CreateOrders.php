@@ -7,12 +7,10 @@ use App\Models\Order;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class CreateOrders implements ShouldQueue
 {
@@ -66,10 +64,10 @@ class CreateOrders implements ShouldQueue
                 }
             }
 
-            if (!is_null($order)) {
-                if (!$order->affordable) {
+            if (! is_null($order)) {
+                if (! $order->affordable) {
                     $order->update([
-                        'affordable' => true
+                        'affordable' => true,
                     ]);
                 }
                 $orders[] = $order;
@@ -85,15 +83,14 @@ class CreateOrders implements ShouldQueue
 
             foreach ($non_affordable as $order) {
                 if ($count < abs($max_orders)) {
-                    Log::info($order->delivery->date->format('d.m.Y'));
-                    if (!$order->canceled) {
+                    if (! $order->canceled) {
                         $order->update([
-                            'affordable' => false
+                            'affordable' => false,
                         ]);
                         $count++;
-                    } elseif (!$order->affordable) {
+                    } elseif (! $order->affordable) {
                         $order->update([
-                            'affordable' => true
+                            'affordable' => true,
                         ]);
                     }
 

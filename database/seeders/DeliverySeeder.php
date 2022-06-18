@@ -8,7 +8,6 @@ use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Item;
 use App\Models\ItemOrigin;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +59,7 @@ class DeliverySeeder extends Seeder
         }
 
         foreach ($paidBuys as $buy) {
-            $date = $start->copy()->addDays(rand(0,14));
+            $date = $start->copy()->addDays(rand(0, 14));
             CreateOrdersForBuy::dispatch($buy, $date);
         }
 

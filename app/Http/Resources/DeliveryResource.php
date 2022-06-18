@@ -10,7 +10,7 @@ class DeliveryResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -53,7 +53,7 @@ class DeliveryResource extends JsonResource
             $summary[] = [
                 'product_id' => $product_id,
                 'name' => $product->name,
-                'count' => $c
+                'count' => $c,
             ];
         }
 
@@ -76,7 +76,7 @@ class DeliveryResource extends JsonResource
             'approved' => ($this->approved === 1),
             'orders' => $orders_array,
             'items' => $items_array,
-            'summary' => $summary
+            'summary' => $summary,
         ];
     }
 }

@@ -5,7 +5,6 @@ namespace App\Observers;
 use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Log;
 
 class CustomerObserver
 {
@@ -18,10 +17,10 @@ class CustomerObserver
 
                 $customer->orders()->whereHas('delivery', function ($query) {
                     $query->where('date', '>=', now()->subDay());
-                })->where(function(Builder $query) use ($old) {
+                })->where(function (Builder $query) use ($old) {
                     $query->where('depository', $old)->orWhereNull('depository');
                 })->update([
-                    'depository' => $new
+                    'depository' => $new,
                 ]);
             });
         }

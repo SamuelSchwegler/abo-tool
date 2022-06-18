@@ -84,6 +84,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/customer/{customer}', [CustomerController::class, 'update']);
     Route::post('/customer', [CustomerController::class, 'store']);
 
-
     Route::patch('/customer/{customer}/used-orders', [CustomerController::class, 'updateUsedOrders']);
 });

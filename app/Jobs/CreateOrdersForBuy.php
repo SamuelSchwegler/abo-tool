@@ -4,8 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Buy;
 use App\Models\Customer;
-use App\Models\Delivery;
-use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

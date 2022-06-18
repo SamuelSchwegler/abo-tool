@@ -14,7 +14,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class DeliveryController extends Controller
@@ -62,7 +61,7 @@ class DeliveryController extends Controller
         }
 
         $validated = $request->validate([
-            'date' => ['nullable', 'date_format:d.m.Y']
+            'date' => ['nullable', 'date_format:d.m.Y'],
         ]);
 
         $delivery->update($validated);
@@ -71,7 +70,7 @@ class DeliveryController extends Controller
     }
 
     /**
-     * @param Delivery $delivery
+     * @param  Delivery  $delivery
      * @return Response|Application|ResponseFactory
      *
      * @throws DeliveryException
@@ -83,15 +82,15 @@ class DeliveryController extends Controller
         }
 
         $delivery->update([
-            'approved' => !$delivery->approved,
+            'approved' => ! $delivery->approved,
         ]);
 
         return $this->delivery($delivery);
     }
 
     /**
-     * @param Delivery $delivery
-     * @param Request $request
+     * @param  Delivery  $delivery
+     * @param  Request  $request
      * @return Response|Application|ResponseFactory
      */
     public function addItem(Delivery $delivery, Request $request): Response|Application|ResponseFactory
@@ -106,8 +105,8 @@ class DeliveryController extends Controller
     }
 
     /**
-     * @param Delivery $delivery
-     * @param Item $item
+     * @param  Delivery  $delivery
+     * @param  Item  $item
      * @return Response|Application|ResponseFactory
      */
     public function removeItem(Delivery $delivery, Item $item): Response|Application|ResponseFactory

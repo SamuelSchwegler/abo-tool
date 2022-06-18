@@ -39,7 +39,7 @@ class Buy extends Model
             QrBill\DataGroup\Element\CombinedAddress::create(
                 $setting->name,
                 $setting->address->street,
-                $setting->address->postcode . ' ' . $setting->address->city,
+                $setting->address->postcode.' '.$setting->address->city,
                 'CH'
             ));
 
@@ -87,18 +87,18 @@ class Buy extends Model
         // Optionally, add some human-readable information about what the bill is for.
         $qrBill->setAdditionalInformation(
             QrBill\DataGroup\Element\AdditionalInformation::create(
-                'Rechnungsnr: ' . $this->bill_number
+                'Rechnungsnr: '.$this->bill_number
             )
         );
 
         // Now get the QR code image and save it as a file.
         $qr_code_path = storage_path('app/bills/qr_codes');
-        if (!is_dir($qr_code_path)) {
+        if (! is_dir($qr_code_path)) {
             $dirs = explode('/', $qr_code_path);
             $path = '';
             foreach ($dirs as $dir) {
-                $path .= $dir . '/';
-                if (!is_dir($path)) {
+                $path .= $dir.'/';
+                if (! is_dir($path)) {
                     mkdir($path, '0770', true);
                     chmod($path, 02775);
                 }
@@ -106,11 +106,11 @@ class Buy extends Model
         }
 
         try {
-            $qrBill->getQrCode()->writeFile($qr_code_path . '/qr.png');
-            $qrBill->getQrCode()->writeFile($qr_code_path . '/qr.svg');
+            $qrBill->getQrCode()->writeFile($qr_code_path.'/qr.png');
+            $qrBill->getQrCode()->writeFile($qr_code_path.'/qr.svg');
         } catch (Exception $e) {
             foreach ($qrBill->getViolations() as $violation) {
-                echo $violation->getMessage() . "\n";
+                echo $violation->getMessage()."\n";
             }
 
             echo $e->getMessage(); // vorangehend wird nur anderes zeugs gemacht...
@@ -131,8 +131,8 @@ class Buy extends Model
     protected function deliveryCost(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => number_format($value / 100, 2, '.', '\''),
-            set: fn($value) => $value * 100,
+            get: fn ($value) => number_format($value / 100, 2, '.', '\''),
+            set: fn ($value) => $value * 100,
         );
     }
 
@@ -142,8 +142,8 @@ class Buy extends Model
     protected function price(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value / 100,
-            set: fn($value) => $value * 100,
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100,
         );
     }
 
@@ -153,6 +153,7 @@ class Buy extends Model
     protected function getTotalCostAttribute(): string
     {
         $amount = (($this->delivery_cost + ($this->price * (100 - $this->discount_percent)) / 100));
+
         return number_format($amount, 2, '.', '\'');
     }
 

@@ -31,7 +31,7 @@ class BuyTest extends TestCase
         $customer = Customer::factory()->create();
         $buy = Buy::factory([
             'customer_id' => $customer->id,
-            'paid' => 1
+            'paid' => 1,
         ])->create();
 
         self::assertEquals(0, $customer->orders->count());
@@ -90,7 +90,7 @@ class BuyTest extends TestCase
         $bundle = Bundle::where('trial', 0)->first();
         $previous_buy = Buy::factory()->create([
             'customer_id' => $customer->id,
-            'bundle_id' => $bundle->id
+            'bundle_id' => $bundle->id,
         ]);
         $customer->refresh();
 
@@ -102,7 +102,7 @@ class BuyTest extends TestCase
         Sanctum::actingAs($this->admin);
         $response = $this->json('post', '/api/buy', [
             'customer_id' => $customer->id,
-            'product_id' => $bundle->product->id
+            'product_id' => $bundle->product->id,
         ]);
         $customer->refresh();
 
@@ -128,7 +128,7 @@ class BuyTest extends TestCase
     public function test_customer() {
         $customer = Customer::factory()->create();
         $buy = Buy::factory([
-            'customer_id' => $customer->id
+            'customer_id' => $customer->id,
         ])->count(3)->create();
 
         Sanctum::actingAs($this->admin);

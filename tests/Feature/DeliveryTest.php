@@ -7,7 +7,6 @@ use App\Jobs\DeliveryCreateOrders;
 use App\Jobs\DeliveryOrderReminder;
 use App\Jobs\DeliveryRemoveOrders;
 use App\Models\Address;
-use App\Models\Bundle;
 use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\Delivery;
@@ -32,10 +31,10 @@ class DeliveryTest extends TestCase
         $response = $this->json('get', '/api/deliveries');
         $response->assertOk();
 
-        $response = $this->json('get', '/api/deliveries?start=' . now()->format('Y-m-d') . '&order_by=deadline');
+        $response = $this->json('get', '/api/deliveries?start='.now()->format('Y-m-d').'&order_by=deadline');
         $response->assertOk();
 
-        $response = $this->json('get', '/api/deliveries?start=' . now()->format('Y-m-d') . '&delivery_service_ids[]=' . DeliveryService::inRandomOrder()->first()->id);
+        $response = $this->json('get', '/api/deliveries?start='.now()->format('Y-m-d').'&delivery_service_ids[]='.DeliveryService::inRandomOrder()->first()->id);
         $response->assertOk();
     }
 
@@ -45,7 +44,7 @@ class DeliveryTest extends TestCase
 
         Sanctum::actingAs($this->admin);
 
-        $response = $this->json('get', '/api/delivery/' . $delivery->id);
+        $response = $this->json('get', '/api/delivery/'.$delivery->id);
         $response->assertOk();
     }
 
@@ -69,13 +68,13 @@ class DeliveryTest extends TestCase
     public function test_update()
     {
         $delivery = Delivery::factory()->create([
-            'deadline' => now()->addDays(2)
+            'deadline' => now()->addDays(2),
         ]);
         $new_date = $delivery->date->addDay();
 
         Sanctum::actingAs($this->admin);
-        $response = $this->json('patch', 'api/delivery/' . $delivery->id, [
-            'date' => $new_date->format('d.m.Y')
+        $response = $this->json('patch', 'api/delivery/'.$delivery->id, [
+            'date' => $new_date->format('d.m.Y'),
         ]);
         $response->assertOk();
         $delivery->refresh();
@@ -92,13 +91,13 @@ class DeliveryTest extends TestCase
         Queue::fake();
         Sanctum::actingAs($this->admin);
 
-        $response = $this->json('patch', '/api/delivery/' . $delivery->id . '/toggle-approved');
+        $response = $this->json('patch', '/api/delivery/'.$delivery->id.'/toggle-approved');
         $response->assertOk();
         $delivery->refresh();
         self::assertEquals(1, $delivery->approved);
         Queue::assertPushed(DeliveryCreateOrders::class);
 
-        $response = $this->json('patch', '/api/delivery/' . $delivery->id . '/toggle-approved');
+        $response = $this->json('patch', '/api/delivery/'.$delivery->id.'/toggle-approved');
         $response->assertOk();
         $delivery->refresh();
         self::assertEquals(0, $delivery->approved);
@@ -130,7 +129,7 @@ class DeliveryTest extends TestCase
         self::assertEquals(0, $customer->orders->count());
         $buy = Buy::factory()->create([
             'customer_id' => $customer->id,
-            'paid' => false
+            'paid' => false,
         ]);
         $delivery = Delivery::factory()->create([
             'delivery_service_id' => $service->id,
@@ -196,15 +195,15 @@ class DeliveryTest extends TestCase
     public function test_sendOrderReminder()
     {
         $tomorrow = Delivery::factory([
-            'deadline' => now()->addDay()
+            'deadline' => now()->addDay(),
         ])->create();
 
         $today = Delivery::factory([
-            'deadline' => now()
+            'deadline' => now(),
         ])->create();
 
         $yesterday = Delivery::factory([
-            'deadline' => now()->subDay()
+            'deadline' => now()->subDay(),
         ])->create();
 
         $deliveries = Delivery::deadlineOnNextDay();
@@ -222,7 +221,7 @@ class DeliveryTest extends TestCase
         $order = Order::factory([
             'customer_id' => $this->customer->customer->id,
             'delivery_id' => $tomorrow->id,
-            'canceled' => 0
+            'canceled' => 0,
         ])->create();
         self::assertEquals(0, $order->reminded);
 

@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Delivery;
 use App\Models\Order;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class OrderTest extends TestCase

@@ -6,7 +6,6 @@ use App\Models\Address;
 use App\Models\Customer;
 use App\Models\Postcode;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Dusk\Browser;
@@ -20,6 +19,7 @@ class OrderTest extends DuskTestCase
      * A basic browser test example.
      *
      * @return void
+     *
      * @throws \Throwable
      */
     public function testUnauthenticatedOrder()

@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Buy;
-use Illuminate\Support\Facades\Log;
 
 class BuyObserver
 {
