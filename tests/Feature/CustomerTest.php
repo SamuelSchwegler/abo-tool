@@ -122,7 +122,7 @@ class CustomerTest extends TestCase
         Sanctum::actingAs($this->admin);
         $response = $this->patch('/api/customer/'.$customer->id.'/used-orders', [
             'product_id' => $bundle->product_id,
-            'value' => 6,
+            'used_orders' => 6,
         ]);
         $response->assertOk();
 
