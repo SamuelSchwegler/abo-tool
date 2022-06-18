@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\DeliveryProductItem;
 use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class DeliveryResource extends JsonResource
 {
@@ -39,8 +41,17 @@ class DeliveryResource extends JsonResource
         }
 
         $items_array = [];
-        foreach ($this->items as $item) {
-            $items_array[] = [
+        $pivots = DeliveryProductItem::where('delivery_id', $this->id)->get();
+        foreach ($pivots as $pivot) {
+            $item = $pivot->item;
+            if(!array_key_exists($pivot->product->id, $items_array)) {
+                $items_array[$pivot->product_id] = [
+                    'product_id' => $pivot->product->id,
+                    'name' => $pivot->product->name,
+                ];
+            }
+
+            $items_array[$pivot->product_id]['items'][] = [
                 'id' => $item->id,
                 'name' => $item->name,
             ];

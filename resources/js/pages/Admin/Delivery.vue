@@ -104,18 +104,18 @@
         </div>
     </div>
     <div class="box bg-white">
-        <delivery-items :delivery-items="delivery.items" :key="'delivery_items_' + deliveryItemsKey"></delivery-items>
+        <delivery-product-items v-for="(product_items, product) in delivery.items" :delivery-items="product_items" :key="'delivery_items_' + deliveryItemsKey"></delivery-product-items>
     </div>
 </template>
 
 <script>
 import {PaperClipIcon} from "@heroicons/vue/solid";
-import DeliveryItems from "./DeliveryItems";
+import DeliveryProductItems from "./DeliveryProductItems";
 
 export default {
     name: "Delivery",
     components: {
-        PaperClipIcon, DeliveryItems
+        PaperClipIcon, DeliveryProductItems
     },
     data() {
         return {

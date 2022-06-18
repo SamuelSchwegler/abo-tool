@@ -18,7 +18,7 @@
     <div class="max-w-md mx-auto sm:max-w-3xl">
         <div>
             <div class="text-center">
-                <h2 class="mt-2 text-lg font-medium text-gray-900">Lieferinhalte</h2>
+                <h2 class="mt-2 text-lg font-medium text-gray-900">Lieferinhalte für {{deliveryItems.name}}</h2>
                 <p class="mt-1 text-sm text-gray-500" v-if="items.length === 0">Momentan wurden noch keine Produkte der
                     Lieferung hinzugefügt</p>
             </div>
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-        <div class="mt-10">
+        <div class="my-10">
             <ul role="list" class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <li v-for="(item, itemIdx) in items" :key="itemIdx">
                     <button type="button"
@@ -63,18 +63,20 @@ import SearchSelect from "../parts/SearchSelect";
 export default {
     props: {
         deliveryItems: {
-            type: Array,
+            type: Object,
             default: function () {
-                return [];
+                return {
+                    items: []
+                };
             }
-        }
+        },
     },
     components: {
         MinusIcon, ShoppingBagIcon, SearchSelect
     },
     data: function () {
         return {
-            items: this.deliveryItems,
+            items: this.deliveryItems.items,
             item: "",
             allItems: [],
             itemSearchKey: 0
@@ -89,12 +91,13 @@ export default {
         },
         async addItem() {
             if(this.item.length > 0) {
-                await axios.post('/api/delivery/' + this.$route.params.id + '/item/', {
+                await axios.post('/api/delivery/' + this.$route.params.id + '/' + this.deliveryItems.product_id + '/item/', {
                     item: this.item
                 }).then(response => {
                     this.item = "";
                     this.itemSearchKey++;
-                    this.items = response.data.delivery.items;
+
+                    this.items = response.data.delivery.items.filter(item => item.product_id === this.deliveryItems.product_id)[0].items;
                 }).catch(errors => {
                     console.log(errors);
                 })
@@ -102,8 +105,8 @@ export default {
 
         },
         async removeItem(item_id) {
-            await axios.delete('/api/delivery/' + this.$route.params.id + '/item/' + item_id).then(response => {
-                this.items = response.data.delivery.items;
+            await axios.delete('/api/delivery/' + this.$route.params.id  + '/' + this.deliveryItems.product_id+ '/item/' + item_id).then(response => {
+                this.items = response.data.delivery.items.filter(item => item.product_id === this.deliveryItems.product_id)[0].items;
             }).catch(errors => {
                 console.log(errors);
             })

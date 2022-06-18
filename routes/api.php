@@ -74,8 +74,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/delivery/{delivery}', [DeliveryController::class, 'update']);
 
     // delivery items
-    Route::post('/delivery/{delivery}/item', [DeliveryController::class, 'addItem']);
-    Route::delete('/delivery/{delivery}/item/{item}', [DeliveryController::class, 'removeItem']);
+    Route::post('/delivery/{delivery}/{product}/item', [DeliveryController::class, 'addItem']);
+    Route::delete('/delivery/{delivery}/{product}/item/{item}', [DeliveryController::class, 'removeItem']);
 
     Route::get('/items', [ItemController::class, 'items']);
 

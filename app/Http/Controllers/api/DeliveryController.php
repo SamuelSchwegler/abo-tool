@@ -7,13 +7,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DeliveryResource;
 use App\Http\Resources\DeliveryServiceResource;
 use App\Models\Delivery;
+use App\Models\DeliveryProductItem;
 use App\Models\DeliveryService;
 use App\Models\Item;
 use App\Models\ItemOrigin;
+use App\Models\Product;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class DeliveryController extends Controller
@@ -89,14 +92,21 @@ class DeliveryController extends Controller
     }
 
     /**
-     * @param  Delivery  $delivery
-     * @param  Request  $request
+     * @param Delivery $delivery
+     * @param Product $product
+     * @param Request $request
      * @return Response|Application|ResponseFactory
      */
-    public function addItem(Delivery $delivery, Request $request): Response|Application|ResponseFactory
+    public function addItem(Delivery $delivery, Product $product, Request $request): Response|Application|ResponseFactory
     {
         $item = Item::firstOrCreate(['name' => $request->item], ['item_origin_id' => ItemOrigin::first()->id]);
-        $delivery->items()->attach($item->id);
+        DeliveryProductItem::firstOrCreate([
+            'delivery_id' => $delivery->id,
+            'product_id' => $product->id,
+            'item_id' => $item->id
+        ]);
+
+        $delivery->refresh();
 
         return \response([
             'msg' => 'ok',
@@ -105,13 +115,15 @@ class DeliveryController extends Controller
     }
 
     /**
-     * @param  Delivery  $delivery
-     * @param  Item  $item
+     * @param Delivery $delivery
+     * @param Product $product
+     * @param Item $item
      * @return Response|Application|ResponseFactory
      */
-    public function removeItem(Delivery $delivery, Item $item): Response|Application|ResponseFactory
+    public function removeItem(Delivery $delivery, Product $product, Item $item): Response|Application|ResponseFactory
     {
-        $delivery->items()->detach($item->id);
+        DB::table('delivery_product_items')->where('delivery_id', $delivery->id)
+            ->where('product_id', $product->id)->where('item_id', $item->id)->delete();
         $delivery->refresh();
 
         return \response([

@@ -58,7 +58,7 @@ class Delivery extends Model
     }
 
     public function items() {
-        return $this->belongsToMany(Item::class);
+        return $this->belongsToMany(Item::class, 'delivery_product_items');
     }
 
     /**

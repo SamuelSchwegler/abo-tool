@@ -173,6 +173,8 @@ return new class extends Migration {
             $table->foreignId('delivery_id');
             $table->foreignId('item_id');
         });
+
+
     }
 
     /**
