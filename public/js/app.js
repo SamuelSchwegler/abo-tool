@@ -20444,6 +20444,11 @@ __webpack_require__.r(__webpack_exports__);
     return {
       onChanged: onChanged
     };
+  },
+  watch: {
+    error: function error(newValue, old) {
+      this.hasError = Object.keys(newValue).length > 0;
+    }
   }
 });
 
@@ -22423,7 +22428,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       orders_key: 0,
       orders: [],
       customer_id: 0,
-      customer: {}
+      customer: {},
+      errors: []
     };
   },
   methods: {
@@ -22444,22 +22450,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var vm;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                vm = _this;
+                _context.next = 3;
                 return axios.patch('/api/customer/' + _this.customer.id + '/used-orders', {
                   'product_id': product_id,
-                  'value': parseInt(value)
+                  'used_orders': parseInt(value)
                 }).then(function (response) {
                   _this.product_balances = response.data.product_balances;
                   _this.balances_key++;
+                  vm.errors = [];
                 })["catch"](function (error) {
-                  console.log(error);
+                  vm.errors = error.response.data.errors;
+                }).then(function () {
+                  vm.loadData();
                 });
 
-              case 2:
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -26460,7 +26471,7 @@ var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
 }, " davon geplant "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
-}, " davon vor Systemstart "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+}, " davon manuell korrigiert "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
 }, " Guthaben* ")])], -1
 /* HOISTED */
@@ -26604,13 +26615,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_text_input, {
       value: balance.ordered_before,
+      name: "used_orders",
       "class": "w-32",
+      error: _ctx.errors['used_orders'],
       onChange: function onChange($event) {
         return $options.updateUsedOrders(balance.product_id, $event.target.value);
       }
     }, null, 8
     /* PROPS */
-    , ["value", "onChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_45, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.balance + balance.planned), 1
+    , ["value", "error", "onChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_45, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(balance.balance + balance.planned), 1
     /* TEXT */
     )]);
   }), 256

@@ -130,7 +130,7 @@
                         davon geplant
                     </th>
                     <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                        davon vor Systemstart
+                        davon manuell korrigiert
                     </th>
                     <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                         Guthaben*
@@ -152,7 +152,7 @@
                         {{ balance.planned }}
                     </td>
                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
-                        <text-input :value="balance.ordered_before" class="w-32"
+                        <text-input :value="balance.ordered_before" name="used_orders" class="w-32" :error="errors['used_orders']"
                                     @change="updateUsedOrders(balance.product_id, $event.target.value)">
                         </text-input>
                     </td>
@@ -184,7 +184,8 @@ export default {
             orders_key: 0,
             orders: [],
             customer_id: 0,
-            customer: {}
+            customer: {},
+            errors: []
         }
     },
     methods: {
@@ -201,14 +202,18 @@ export default {
             this.balances_key++;
         },
         async updateUsedOrders(product_id, value) {
+            let vm = this;
             await axios.patch('/api/customer/' + this.customer.id + '/used-orders', {
                 'product_id': product_id,
-                'value': parseInt(value)
+                'used_orders': parseInt(value)
             }).then(response => {
                 this.product_balances = response.data.product_balances;
                 this.balances_key++;
+                vm.errors = [];
             }).catch(function (error) {
-                console.log(error);
+                vm.errors = error.response.data.errors;
+            }).then(function () {
+                vm.loadData();
             });
         },
         async loadData() {

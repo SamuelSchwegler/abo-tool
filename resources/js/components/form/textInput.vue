@@ -65,6 +65,11 @@ export default {
         return {
             onChanged
         }
+    },
+    watch: {
+        error: function (newValue, old){
+            this.hasError = Object.keys(newValue).length > 0
+        }
     }
 }
 </script>

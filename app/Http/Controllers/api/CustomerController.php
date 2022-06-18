@@ -5,14 +5,17 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\UserResource;
+use App\Jobs\CreateOrders;
 use App\Models\Address;
 use App\Models\Customer;
+use App\Models\Product;
 use App\Models\User;
 use App\Rules\DeliveryPossibleToPostcode;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Queue\Jobs\Job;
 
 class CustomerController extends Controller
 {
@@ -113,12 +116,18 @@ class CustomerController extends Controller
     {
         $validated = $request->validate([
             'product_id' => ['required', 'exists:products,id'],
-            'value' => ['required', 'numeric'],
+            'used_orders' => ['required', 'numeric'],
+        ], [
+            'used_orders.required' => 'Geben Sie eine Zahl an (kann auch 0 sein)'
         ]);
 
+        $product = Product::find($validated['product_id']);
+
         $customer->update([
-            'used_orders' => [$validated['product_id'] => $validated['value']],
+            'used_orders' => [$product->id => $validated['used_orders']],
         ]);
+
+        CreateOrders::dispatchSync($customer, $product);
 
         return \response([
             'msg' => 'ok',
