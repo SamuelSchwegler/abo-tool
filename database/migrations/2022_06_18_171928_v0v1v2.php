@@ -1,11 +1,9 @@
 <?php
 
 use App\Models\Delivery;
-use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -19,9 +17,10 @@ return new class extends Migration {
         // Pivot Tabelle
         if (!Schema::hasTable('delivery_product_items')) {
             Schema::create('delivery_product_items', function (Blueprint $table) {
-                $table->foreignId('delivery_id');
+                $table->foreignId('delivery_id')->nullable();
                 $table->foreignId('product_id');
                 $table->foreignId('item_id');
+                $table->date('date')->nullable();
             });
         }
 

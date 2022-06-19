@@ -5,6 +5,7 @@ use App\Http\Controllers\api\BundleController;
 use App\Http\Controllers\api\BuyController;
 use App\Http\Controllers\api\CustomerController;
 use App\Http\Controllers\api\DeliveryController;
+use App\Http\Controllers\api\DeliveryItemController;
 use App\Http\Controllers\api\DeliveryServiceController;
 use App\Http\Controllers\api\ItemController;
 use App\Http\Controllers\api\OrderController;
@@ -75,9 +76,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::patch('/delivery/{delivery}', [DeliveryController::class, 'update']);
 
+    // deliveries items
+    Route::post('/deliveries/{date}/{product}/item', [DeliveryItemController::class, 'addDeliveriesItem']);
+    Route::delete('/deliveries/{date}/{product}/item/{item}', [DeliveryItemController::class, 'removeDeliveriesItem']);
+
     // delivery items
-    Route::post('/delivery/{delivery}/{product}/item', [DeliveryController::class, 'addItem']);
-    Route::delete('/delivery/{delivery}/{product}/item/{item}', [DeliveryController::class, 'removeItem']);
+    Route::post('/delivery/{delivery}/{product}/item', [DeliveryItemController::class, 'addItem']);
+    Route::delete('/delivery/{delivery}/{product}/item/{item}', [DeliveryItemController::class, 'removeItem']);
 
     Route::get('/items', [ItemController::class, 'items']);
 

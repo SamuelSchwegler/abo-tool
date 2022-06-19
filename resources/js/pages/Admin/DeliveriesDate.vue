@@ -56,19 +56,27 @@
             </tbody>
         </table>
     </div>
+    <div class="box bg-white">
+        <delivery-product-items v-for="item in items" :delivery-items="item" :date-format="date_format"></delivery-product-items>
+    </div>
 </template>
 
 <script>
 import formats from "../../formats";
+import DeliveryProductItems from "./DeliveryProductItems";
 
 export default {
     name: "DeliveriesDate",
+    components: {
+        DeliveryProductItems
+    },
     data: function () {
         let date = new Date(this.$route.params.date);
         return {
             date: date,
             deliveries: [],
             delivery_services: [],
+            items: [],
             date_format: {
                 'Y-m-d': formats.getDateString(date, 'Y-m-d'),
                 'd.m.Y': formats.getDateString(date, 'd.m.Y'),
@@ -80,6 +88,7 @@ export default {
             await axios.get('/api/deliveries/' + this.date_format['Y-m-d']).then(response => {
                 this.deliveries = response.data.deliveries;
                 this.delivery_services = response.data.delivery_services;
+                this.items = response.data.items;
             }).catch(function (error) {
                 console.log(error);
             });

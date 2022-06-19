@@ -9,9 +9,6 @@ use App\Http\Resources\DeliveryServiceResource;
 use App\Models\Delivery;
 use App\Models\DeliveryProductItem;
 use App\Models\DeliveryService;
-use App\Models\Item;
-use App\Models\ItemOrigin;
-use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -56,9 +53,35 @@ class DeliveryController extends Controller
 
         $deliveries = Delivery::whereDate('date', $date->format('Y-m-d'))->get();
 
+        $items = [];
+
+        $products = DB::table('products')
+            ->join('orders', 'orders.product_id','=', 'products.id')
+            ->join('deliveries', 'orders.delivery_id','=', 'deliveries.id')
+            ->whereIn('deliveries.id', $deliveries->pluck('id')->toArray())
+            ->select('products.*')
+            ->groupBy('products.id')->get();
+
+        foreach($products as $product) {
+            $items[$product->id] = [
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'items' => []
+            ];
+        }
+
+        $dpis = DeliveryProductItem::whereNull('delivery_id')->whereDate('date', $date->format('Y-m-d'))->get();
+        foreach($dpis as $dpi) {
+            $items[$dpi->product_id]['items'][] = [
+                'id' => $dpi->item->id,
+                'name' => $dpi->item->name
+            ];
+        }
+
         return response([
             'deliveries' => DeliveryResource::collection($deliveries),
-            'delivery_services' => DeliveryServiceResource::collection(DeliveryService::all())
+            'delivery_services' => DeliveryServiceResource::collection(DeliveryService::all()),
+            'items' => $items
         ]);
     }
 
@@ -101,46 +124,5 @@ class DeliveryController extends Controller
         ]);
 
         return $this->delivery($delivery);
-    }
-
-    /**
-     * @param Delivery $delivery
-     * @param Product $product
-     * @param Request $request
-     * @return Response|Application|ResponseFactory
-     */
-    public function addItem(Delivery $delivery, Product $product, Request $request): Response|Application|ResponseFactory
-    {
-        $item = Item::firstOrCreate(['name' => $request->item], ['item_origin_id' => ItemOrigin::first()->id]);
-        DeliveryProductItem::firstOrCreate([
-            'delivery_id' => $delivery->id,
-            'product_id' => $product->id,
-            'item_id' => $item->id
-        ]);
-
-        $delivery->refresh();
-
-        return \response([
-            'msg' => 'ok',
-            'delivery' => DeliveryResource::make($delivery),
-        ]);
-    }
-
-    /**
-     * @param Delivery $delivery
-     * @param Product $product
-     * @param Item $item
-     * @return Response|Application|ResponseFactory
-     */
-    public function removeItem(Delivery $delivery, Product $product, Item $item): Response|Application|ResponseFactory
-    {
-        DB::table('delivery_product_items')->where('delivery_id', $delivery->id)
-            ->where('product_id', $product->id)->where('item_id', $item->id)->delete();
-        $delivery->refresh();
-
-        return \response([
-            'msg' => 'ok',
-            'delivery' => DeliveryResource::make($delivery),
-        ]);
     }
 }

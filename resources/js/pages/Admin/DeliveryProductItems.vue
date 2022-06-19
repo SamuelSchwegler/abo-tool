@@ -70,6 +70,10 @@ export default {
                 };
             }
         },
+        dateFormat: {
+            type: [Object, Boolean],
+            default: false
+        }
     },
     components: {
         MinusIcon, ShoppingBagIcon, SearchSelect
@@ -91,13 +95,25 @@ export default {
         },
         async addItem() {
             if(this.item.length > 0) {
-                await axios.post('/api/delivery/' + this.$route.params.id + '/' + this.deliveryItems.product_id + '/item/', {
+                let route = "";
+                if(!this.dateFormat) {
+                    route = '/api/delivery/' + this.$route.params.id + '/' + this.deliveryItems.product_id + '/item/'
+                } else {
+                    route = '/api/deliveries/' + this.dateFormat['Y-m-d'] + '/' + this.deliveryItems.product_id + '/item/'
+                }
+
+                await axios.post(route, {
                     item: this.item
                 }).then(response => {
+                    if(!this.dateFormat) {
+                        this.items = response.data.delivery.items.filter(item => item.product_id === this.deliveryItems.product_id)[0].items;
+                    } else {
+                        this.items = response.data.items;
+                    }
+
                     this.item = "";
                     this.itemSearchKey++;
 
-                    this.items = response.data.delivery.items.filter(item => item.product_id === this.deliveryItems.product_id)[0].items;
                 }).catch(errors => {
                     console.log(errors);
                 })
@@ -105,8 +121,19 @@ export default {
 
         },
         async removeItem(item_id) {
-            await axios.delete('/api/delivery/' + this.$route.params.id  + '/' + this.deliveryItems.product_id+ '/item/' + item_id).then(response => {
-                this.items = response.data.delivery.items.filter(item => item.product_id === this.deliveryItems.product_id)[0].items;
+            let route = "";
+            if(!this.dateFormat) {
+                route = '/api/delivery/' + this.$route.params.id  + '/' + this.deliveryItems.product_id+ '/item/' + item_id
+            } else {
+                route = '/api/deliveries/' + this.dateFormat['Y-m-d'] + '/' + this.deliveryItems.product_id + '/item/' + item_id
+            }
+
+            await axios.delete(route).then(response => {
+                if(!this.dateFormat) {
+                    this.items = response.data.delivery.items.filter(item => item.product_id === this.deliveryItems.product_id)[0].items;
+                } else {
+                    this.items = response.data.items;
+                }
             }).catch(errors => {
                 console.log(errors);
             })

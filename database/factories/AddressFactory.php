@@ -21,6 +21,9 @@ class AddressFactory extends Factory
             $this->faker->postcode(),
             Postcode::inRandomOrder()->first()->postcode,
             Postcode::inRandomOrder()->first()->postcode,
+            Postcode::inRandomOrder()->first()->postcode,
+            Postcode::inRandomOrder()->first()->postcode,
+            Postcode::inRandomOrder()->first()->postcode,
         ];
 
         return [

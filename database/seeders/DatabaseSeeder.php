@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $pickup = DeliveryService::create([
             'name' => 'Abholung in Hünibach',
             'pickup' => 1,
-            'days' => ['sat'],
+            'days' => ['tue'],
         ]);
 
         $post = DeliveryService::factory()->create([
