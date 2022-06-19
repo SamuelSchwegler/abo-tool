@@ -709,6 +709,10 @@ select{
   margin-left: -1rem;
   margin-right: -1rem;
 }
+.my-10{
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
 .my-6{
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
@@ -716,10 +720,6 @@ select{
 .my-4{
   margin-top: 1rem;
   margin-bottom: 1rem;
-}
-.my-10{
-  margin-top: 2.5rem;
-  margin-bottom: 2.5rem;
 }
 .ml-3{
   margin-left: 0.75rem;
@@ -780,9 +780,6 @@ select{
 }
 .mt-6{
   margin-top: 1.5rem;
-}
-.mt-10{
-  margin-top: 2.5rem;
 }
 .mb-2{
   margin-bottom: 0.5rem;
@@ -2050,6 +2047,9 @@ select{
   .sm\:grid-cols-2{
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .sm\:grid-cols-4{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
   .sm\:flex-row{
     flex-direction: row;
   }
@@ -2067,6 +2067,9 @@ select{
   }
   .sm\:gap-8{
     gap: 2rem;
+  }
+  .sm\:gap-4{
+    gap: 1rem;
   }
   .sm\:divide-y > :not([hidden]) ~ :not([hidden]){
     --tw-divide-y-reverse: 0;

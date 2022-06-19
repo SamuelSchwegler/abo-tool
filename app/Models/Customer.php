@@ -105,6 +105,8 @@ class Customer extends Model
             }
         }
 
+        Log::info($balances);
+
         return $balances;
     }
 

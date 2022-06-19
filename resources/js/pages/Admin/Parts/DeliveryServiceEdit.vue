@@ -45,11 +45,13 @@
         <p>Kommende Lieferungen</p>
         <div class="border-t border-gray-200 py-5 sm:p-0">
             <dl class="sm:divide-y sm:divide-gray-200">
-                <div class="py-4 sm:py-2 sm:grid sm:grid-cols-3 sm:gap-3">
+                <div class="py-4 sm:py-2 sm:grid sm:grid-cols-4 sm:gap-3">
                     <dt class="text-sm font-medium text-gray-500">Liefertag</dt>
                     <dt class="text-sm font-medium text-gray-500">Stichtag</dt>
+                    <dt class="text-sm font-medium text-gray-500">Aktiv</dt>
+                    <dt class="text-sm font-medium text-gray-500">Link</dt>
                 </div>
-                <div class="py-4 sm:py-2 sm:grid sm:grid-cols-3 sm:gap-3"
+                <div class="py-4 sm:py-2 sm:grid sm:grid-cols-4 sm:gap-3"
                      v-for="(delivery, index) in unapproved_deliveries">
                     <dd v-if="delivery.approved" class="mt-1 text-sm text-gray-900 sm:mt-0">{{
                             delivery.date['d.m.Y']
@@ -62,6 +64,11 @@
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0">{{ delivery.deadline['d.m.Y'] }}</dd>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0">
                         <toggle v-model="delivery.approved" @change="approveDelivery(delivery.id)"></toggle>
+                    </dd>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0">
+                        <router-link :to="'/delivery/' + delivery.id" class="text-indigo-600 hover:text-indigo-900">
+                            mehr
+                        </router-link>
                     </dd>
                 </div>
             </dl>

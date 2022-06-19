@@ -83,10 +83,13 @@ class Order extends Model
 
         // Items
         $item_rows = [];
-        foreach ($this->delivery->items as $item) {
+        $items = DeliveryProductItem::where('product_id', $this->product->id)
+            ->where('delivery_id', $this->delivery->id)->get();
+
+        foreach ($items as $item) {
             $item_rows[] = [
-                'item_name' => $item->name,
-                'item_origin' => $item->item_origin->name,
+                'item_name' => $item->item->name,
+                'item_origin' => $item->item->item_origin->name,
             ];
         }
         $template->cloneRowAndSetValues('item_name', $item_rows);

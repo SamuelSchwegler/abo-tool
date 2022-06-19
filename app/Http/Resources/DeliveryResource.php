@@ -41,15 +41,18 @@ class DeliveryResource extends JsonResource
         }
 
         $items_array = [];
+        foreach($count as $product_id => $amount) {
+            $product = Product::find($product_id);
+            $items_array[$product_id] = [
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'items' => []
+            ];
+        }
+
         $pivots = DeliveryProductItem::where('delivery_id', $this->id)->get();
         foreach ($pivots as $pivot) {
             $item = $pivot->item;
-            if(!array_key_exists($pivot->product->id, $items_array)) {
-                $items_array[$pivot->product_id] = [
-                    'product_id' => $pivot->product->id,
-                    'name' => $pivot->product->name,
-                ];
-            }
 
             $items_array[$pivot->product_id]['items'][] = [
                 'id' => $item->id,
