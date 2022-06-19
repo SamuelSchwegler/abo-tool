@@ -111,8 +111,17 @@
         </div>
     </div>
     <div class="box bg-white" v-if="delivery.hasOwnProperty('items')">
-        <delivery-product-items v-for="(product_items, product) in delivery.items" :delivery-items="product_items"
-                                :key="'delivery_items_' + deliveryItemsKey"></delivery-product-items>
+        <template  v-for="(product_items, product) in delivery.items">
+            <delivery-product-items :delivery-items="product_items"
+                                    :key="'delivery_items_' + deliveryItemsKey"></delivery-product-items>
+            <template  v-if="product_items.synced">
+                <hr class="my-4">
+                <router-link :to="'/deliveries/' + delivery.date['Y-m-d']"  class="text-indigo-600 hover:text-indigo-900">
+                    Lieferinhalte sind synchronisiert
+                </router-link>
+            </template>
+        </template>
+
     </div>
 </template>
 

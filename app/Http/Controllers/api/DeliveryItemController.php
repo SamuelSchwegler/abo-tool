@@ -56,6 +56,11 @@ class DeliveryItemController extends Controller
      */
     public function addItem(Delivery $delivery, Product $product, Request $request): Response|Application|ResponseFactory
     {
+        $pivots = DeliveryProductItem::where('delivery_id', $delivery->id)->where('product_id', $product->id)->get();
+        if($pivots->count() === 0) {
+            $delivery->copyItemsFromDate();
+        }
+
         $item = Item::firstOrCreate(['name' => $request->item], ['item_origin_id' => ItemOrigin::first()->id]);
         DeliveryProductItem::firstOrCreate([
             'delivery_id' => $delivery->id,
@@ -93,6 +98,10 @@ class DeliveryItemController extends Controller
      */
     public function removeItem(Delivery $delivery, Product $product, Item $item): Response|Application|ResponseFactory
     {
+        $pivots = DeliveryProductItem::where('delivery_id', $delivery->id)->where('product_id', $product->id)->get();
+        if($pivots->count() === 0) {
+            $delivery->copyItemsFromDate();
+        }
         DB::table('delivery_product_items')->where('delivery_id', $delivery->id)
             ->where('product_id', $product->id)->where('item_id', $item->id)->delete();
         $delivery->refresh();

@@ -40,6 +40,7 @@
             <ul role="list" class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <li v-for="(item, itemIdx) in items" :key="itemIdx">
                     <button type="button"
+                            v-bind:class="{'bg-indigo-200': deliveryItems.synced}"
                             class="group p-2 w-full flex items-center justify-between rounded-full border border-gray-300 shadow-sm space-x-3 text-left hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <span class="min-w-0 flex-1 flex items-center space-x-3">
               <span class="block min-w-0 flex-1 pl-4">

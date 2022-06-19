@@ -12,7 +12,7 @@ class DeliveryResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -38,26 +38,6 @@ class DeliveryResource extends JsonResource
             ];
 
             $count[$product_id] = (1 + (array_key_exists($product_id, $count) ? $count[$product_id] : 0));
-        }
-
-        $items_array = [];
-        foreach($count as $product_id => $amount) {
-            $product = Product::find($product_id);
-            $items_array[$product_id] = [
-                'product_id' => $product->id,
-                'name' => $product->name,
-                'items' => []
-            ];
-        }
-
-        $pivots = DeliveryProductItem::where('delivery_id', $this->id)->get();
-        foreach ($pivots as $pivot) {
-            $item = $pivot->item;
-
-            $items_array[$pivot->product_id]['items'][] = [
-                'id' => $item->id,
-                'name' => $item->name,
-            ];
         }
 
         $summary = [];
@@ -89,8 +69,39 @@ class DeliveryResource extends JsonResource
             ],
             'approved' => ($this->approved === 1),
             'orders' => $orders_array,
-            'items' => $items_array,
+            'items' => $this->items($count),
             'summary' => $summary,
         ];
+    }
+
+    public function items(array $situation): array
+    {
+        $items_array = [];
+        foreach ($situation as $product_id => $amount) {
+            $product = Product::find($product_id);
+            $items_array[$product_id] = [
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'items' => [],
+                'synced' => false
+            ];
+
+            $pivots = DeliveryProductItem::where('delivery_id', $this->id)
+                ->where('product_id', $product->id)->get();
+
+            if ($pivots->count() === 0) {
+                $pivots = DeliveryProductItem::whereDate('date', $this->date->format('Y-m-d'))
+                    ->where('product_id', $product->id)->get();
+
+                $items_array[$product_id]['synced'] = true;
+            }
+
+            foreach ($pivots as $pivot) {
+                $items_array[$pivot->product_id]['items'][] = ItemResource::make($pivot->item);
+            }
+        }
+
+
+        return $items_array;
     }
 }

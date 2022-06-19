@@ -53,11 +53,13 @@ class Delivery extends Model
         return $query->where('deadline', '>=', now()->startOfDay()->format('Y-m-d'));
     }
 
-    public static function deadlineOnNextDay() {
+    public static function deadlineOnNextDay()
+    {
         return self::deadlineNotPassed()->where('deadline', '<=', now()->addDay()->endOfDay()->format('Y-m-d H:i:s'))->get();
     }
 
-    public function items() {
+    public function items()
+    {
         return $this->belongsToMany(Item::class, 'delivery_product_items');
     }
 
@@ -66,7 +68,7 @@ class Delivery extends Model
      */
     public function exportDeliveryNotes(): string
     {
-        $path = storage_path('app/delivery-notes/delivery-notes_'.$this->id.'.zip');
+        $path = storage_path('app/delivery-notes/delivery-notes_' . $this->id . '.zip');
         if (file_exists($path)) {
             unlink($path);
         }
@@ -80,5 +82,17 @@ class Delivery extends Model
         }
 
         return $path;
+    }
+
+    public function copyItemsFromDate(): void
+    {
+        $pivots = DeliveryProductItem::whereDate('date', $this->date->format('Y-m-d'))->get();
+        foreach ($pivots as $pivot) {
+            DeliveryProductItem::firstOrCreate([
+                'delivery_id' => $this->id,
+                'product_id' => $pivot->product_id,
+                'item_id' => $pivot->item_id
+            ]);
+        }
     }
 }
