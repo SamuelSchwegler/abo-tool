@@ -12,6 +12,7 @@ use App\Models\DeliveryService;
 use App\Models\Item;
 use App\Models\ItemOrigin;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ use Illuminate\Validation\Rule;
 
 class DeliveryController extends Controller
 {
-    public function deliveries(Request $request)
+    public function deliveries(Request $request): Response
     {
         $validated = $request->validate([
             'start' => ['nullable', 'date_format:Y-m-d'],
@@ -47,6 +48,17 @@ class DeliveryController extends Controller
         return response([
             'deliveries' => DeliveryResource::collection($deliveries->get()),
             'delivery_services' => DeliveryServiceResource::collection(DeliveryService::all()),
+        ]);
+    }
+
+    public function deliveriesForDate(string $date, Request $request): Response {
+        $date = Carbon::parse($date);
+
+        $deliveries = Delivery::whereDate('date', $date->format('Y-m-d'))->get();
+
+        return response([
+            'deliveries' => DeliveryResource::collection($deliveries),
+            'delivery_services' => DeliveryServiceResource::collection(DeliveryService::all())
         ]);
     }
 

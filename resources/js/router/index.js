@@ -16,6 +16,7 @@ import Delivery from "../pages/Admin/Delivery";
 import Customer from "../pages/Admin/Customer";
 import CustomerCreate from "../pages/Admin/CustomerCreate";
 import CustomerBuys from "../pages/Admin/CustomerBuys";
+import DeliveriesDate from "../pages/Admin/DeliveriesDate";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -119,6 +120,18 @@ export const routes = [
         name: 'deliveries',
         path: '/deliveries',
         component: Deliveries,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage deliveries')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'deliveries-date',
+        path: '/deliveries/:date',
+        component: DeliveriesDate,
         beforeEnter: (to, from, next) => {
             if (window.Laravel.isLoggedIn && can('manage deliveries')) {
                 next();

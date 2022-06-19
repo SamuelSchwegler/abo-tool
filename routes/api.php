@@ -68,6 +68,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/delivery-service/{service}/remove/', [DeliveryServiceController::class, 'apiRemovePostcode']);
 
     Route::get('/deliveries', [DeliveryController::class, 'deliveries']);
+    Route::get('/deliveries/{date}', [DeliveryController::class, 'deliveriesForDate']);
+
     Route::get('/delivery/{delivery}', [DeliveryController::class, 'delivery']);
     Route::patch('/delivery/{delivery}/toggle-approved', [DeliveryController::class, 'toggleApproved']);
 

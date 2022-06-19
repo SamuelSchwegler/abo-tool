@@ -18,14 +18,20 @@
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-3">
                         <dt class="text-sm font-medium text-gray-500">Liederdienst</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            <router-link :to="'/delivery-service/' + delivery.delivery_service.id" class="text-indigo-600 hover:text-indigo-900">
+                            <router-link :to="'/delivery-service/' + delivery.delivery_service.id"
+                                         class="text-indigo-600 hover:text-indigo-900">
                                 {{ delivery.delivery_service.name }}
                             </router-link>
                         </dd>
                     </div>
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-3">
                         <dt class="text-sm font-medium text-gray-500">Datum</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ delivery.date['d.m.Y'] }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            <router-link :to="'/deliveries/' + delivery.date['Y-m-d']"
+                                         class="text-indigo-600 hover:text-indigo-900">
+                                {{ delivery.date['d.m.Y'] }}
+                            </router-link>
+                        </dd>
                     </div>
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-3">
                         <dt class="text-sm font-medium text-gray-500">Stichtag</dt>
@@ -65,7 +71,7 @@
                         <dt class="text-sm font-medium text-gray-500">Produkte</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                             <div v-for="product in delivery.summary">
-                                {{product.name}}: {{product.count}}
+                                {{ product.name }}: {{ product.count }}
                             </div>
                         </dd>
                     </div>
@@ -105,7 +111,8 @@
         </div>
     </div>
     <div class="box bg-white" v-if="delivery.hasOwnProperty('items')">
-        <delivery-product-items v-for="(product_items, product) in delivery.items" :delivery-items="product_items" :key="'delivery_items_' + deliveryItemsKey"></delivery-product-items>
+        <delivery-product-items v-for="(product_items, product) in delivery.items" :delivery-items="product_items"
+                                :key="'delivery_items_' + deliveryItemsKey"></delivery-product-items>
     </div>
 </template>
 
