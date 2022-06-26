@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Delivery;
 use App\Models\Order;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class OrderTest extends TestCase
@@ -38,11 +39,22 @@ class OrderTest extends TestCase
         $delivery->update(['deadline' => $deadline->subMinute()]);
         $order->refresh();
 
+        $text = Str::random();
         $response = $this->patch('/api/order/'.$order->id, [
-            'depository' => 'Komm wir gehen',
+            'depository' => $text,
         ]);
         self::assertTrue($order->deadlinePassed());
+        $response->assertOk(); // exception
+        $order->refresh();
+        self::assertEquals($text, $order->depository);
+
+        $this->actingAs($this->customer);
+        $response = $this->patch('/api/order/'.$order->id, [
+            'depository' => 'Komm wir 333',
+        ]);
         $response->assertStatus(500); // exception
+        $order->refresh();
+        self::assertEquals($text, $order->depository);
     }
 
     public function test_toggleCancel() {

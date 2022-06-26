@@ -83,8 +83,13 @@ class Order extends Model
 
         // Items
         $item_rows = [];
-        $items = DeliveryProductItem::where('product_id', $this->product->id)
-            ->where('delivery_id', $this->delivery->id)->get();
+
+        $items_query = DeliveryProductItem::where('product_id', $this->product->id);
+        $items = (clone $items_query)->where('delivery_id', $this->delivery->id)->get();
+
+        if($items->count() === 0) {
+            $items = (clone $items_query)->whereDate('date', $this->delivery->date->format('Y-m-d'))->get();
+        }
 
         foreach ($items as $item) {
             $item_rows[] = [

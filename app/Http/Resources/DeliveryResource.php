@@ -29,6 +29,8 @@ class DeliveryResource extends JsonResource
                 'customer' => [
                     'id' => $order->customer->id,
                     'name' => $order->customer->name,
+                    'first_name' => $order->customer->first_name,
+                    'last_name' => $order->customer->last_name
                 ],
                 'product' => [
                     'id' => $product_id,
@@ -39,6 +41,10 @@ class DeliveryResource extends JsonResource
 
             $count[$product_id] = (1 + (array_key_exists($product_id, $count) ? $count[$product_id] : 0));
         }
+
+        usort($orders_array, function ($a, $b) {
+            return strcmp($a["customer"]['last_name'], $b["customer"]['last_name']);
+        });
 
         $summary = [];
         foreach ($count as $product_id => $c) {
