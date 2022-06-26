@@ -110,11 +110,10 @@
             <p v-else>Momentan gibt es noch keine Bestellungen für diese Lieferung.</p>
         </div>
     </div>
-    <div class="box bg-white" v-if="delivery.hasOwnProperty('items')">
-        <template  v-for="(product_items, product) in delivery.items">
-            <delivery-product-items :delivery-items="product_items"
-                                    :key="'delivery_items_' + deliveryItemsKey"></delivery-product-items>
-            <template  v-if="product_items.synced">
+    <div class="box bg-white" v-if="delivery.hasOwnProperty('items')" :key="'delivery_items_' + deliveryItemsKey">
+        <template  v-for="(product_items, product) in delivery.items" >
+            <delivery-product-items :delivery-items="product_items"></delivery-product-items>
+            <template v-if="product_items.synced">
                 <hr class="my-4">
                 <router-link :to="'/deliveries/' + delivery.date['Y-m-d']"  class="text-indigo-600 hover:text-indigo-900">
                     Lieferinhalte sind synchronisiert

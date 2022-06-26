@@ -41,7 +41,7 @@ class OrderController extends Controller
      */
     public function update(Order $order, Request $request): Response|Application|ResponseFactory
     {
-        if ($order->deadlinePassed()) {
+        if (! \auth()->user()->can('manage customers') && $order->deadlinePassed()) {
             throw DeliveryException::deadlineHasPassed($order->delivery);
         }
 

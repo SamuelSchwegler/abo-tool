@@ -14,6 +14,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -94,7 +95,7 @@ class DeliveryController extends Controller
 
     public function update(Delivery $delivery, Request $request)
     {
-        if ($delivery->deadlinePassed()) {
+        if (!Auth::user()->can('manage deliveries') && $delivery->deadlinePassed()) {
             throw DeliveryException::deadlineHasPassed($delivery);
         }
 

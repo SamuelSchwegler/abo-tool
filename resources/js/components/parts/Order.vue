@@ -6,7 +6,14 @@
                     :classes="{ toggleOnDisabled: 'bg-green-300'}"></Toggle>
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
-            {{ order.delivery.date['d.m.Y'] }}
+            <template v-if="can('manage customers')">
+                <router-link :to="'/delivery/' + order.delivery.id" class="text-indigo-600 hover:text-indigo-900">
+                    {{ order.delivery.date['d.m.Y'] }}
+                </router-link>
+            </template>
+            <template v-else>
+                {{ order.delivery.date['d.m.Y'] }}
+            </template>
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
             <text-input v-model="this.order.depository"  :value="this.order.depository" :disabled="toggleDisabled" @change="updateOrder"></text-input>
