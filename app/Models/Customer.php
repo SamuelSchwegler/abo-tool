@@ -99,11 +99,13 @@ class Customer extends Model
             }
         }
 
+        /*
         foreach ($balances as $key => $balance) {
             if ($balance->last_issue->lt(now()->subMonths(6)) && $balance->balance === 0 && $balance->planned === 0) {
                 unset($balances[$key]);
             }
         }
+        */
 
         return $balances;
     }
