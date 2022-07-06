@@ -46,7 +46,7 @@
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                 <span v-for="balance in person.balances.filter(b => b.balance > 0)" class="whitespace-nowrap">
-                                    {{balance.name}}: {{balance.balance}};
+                                    {{balance.name}}: {{balance.balance + balance.planned}};
                                 </span>
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -54,7 +54,7 @@
                                     Offene Rechnung
                                 </span>
                                 <span v-else-if="person.active">
-                                    <button v-for="balance in person.balances.filter(b => b.balance + b.planned < 4)" @click="issue(person.id, balance.product_id)"
+                                    <button v-for="balance in person.balances.filter(b => b.balance + b.planned < 4 && b.planned > 0)" @click="issue(person.id, balance.product_id, balance.name)"
                                             class="text-indigo-600 hover:text-indigo-900 whitespace-nowrap">
                                     {{balance.name}} verlängern
                                 </button>
@@ -74,17 +74,26 @@
             </div>
         </div>
     </div>
+    <create-buy-confirm-modal :show="showCreateBuyConfirmModal" :customer="createBuyConfirmModalCustomer"
+                              :product="createBuyConfirmModalProduct" :key="createBuyConfirmModalKey"
+                              v-on:issued="issued"
+    ></create-buy-confirm-modal>
 </template>
 
 <script>
 
+import CreateBuyConfirmModal from "./Parts/CreateBuyConfirmModal";
 export default {
     name: "Customers",
-    components: {},
+    components: {CreateBuyConfirmModal},
 
     data() {
         return {
-            customers: []
+            customers: [],
+            showCreateBuyConfirmModal: false,
+            createBuyConfirmModalCustomer: {},
+            createBuyConfirmModalProduct: {},
+            createBuyConfirmModalKey: 0
         }
     },
     methods: {
@@ -95,18 +104,16 @@ export default {
                 console.log(error);
             })
         },
-        async issue(customer_id, product_id) {
-            await axios.post('/api/buy', {
-                product_id: product_id,
-                customer_id: customer_id
-            }).then(response => {
-                let customer = response.data.customer;
-                this.customers = this.customers.map(c => {
-                   return (c.id === customer.id ? customer : c);
-                });
-            }).catch(error => {
-                console.log(error);
-            })
+        issue(customer_id, product_id, product_name) {
+            this.showCreateBuyConfirmModal = true;
+            this.createBuyConfirmModalCustomer = this.customers.filter(c => c.id === customer_id)[0];
+            this.createBuyConfirmModalProduct = {id: product_id, name: product_name}
+            this.createBuyConfirmModalKey++;
+        },
+        issued(customer) {
+            this.customers = this.customers.map(c => {
+                return (c.id === customer.id ? customer : c);
+            });
         }
     },
     created() {
