@@ -94,6 +94,7 @@ export default {
     components: {TextInput, Toggle},
     data() {
         return {
+            s: this.service,
             name: (this.service !== null) ? this.service.name : '',
             days: [
                 {id: 'mon', name: 'Montag'},
@@ -109,7 +110,7 @@ export default {
             errors: [],
             unapproved_deliveries: (this.service !== null) ? this.service.unapproved_deliveries : [],
             delivery_cost: (this.service !== null) ? this.service.delivery_cost : 0,
-            key: 0
+            key: 0,
         }
     },
     methods: {
@@ -151,8 +152,8 @@ export default {
             this.$axios.patch(`/api/delivery/${id}`, {
                 date: event.target.value
             }).then(response => {
+                this.s = response.data.delivery_service;
                 this.$notify({type: "success", text: 'Bearbeiten erfolgreich'});
-                // this.delivery = response.data.delivery;
             }).catch(errors => {
                 this.$notify({type: "error", text: 'Es ist ein Fehler aufgetreten'});
                 console.log(errors);
@@ -161,6 +162,11 @@ export default {
         toggleDays(id) {
             this.delivery_days = helpers.toggleValueInArray(this.delivery_days, id);
             this.updateDeliveryService();
+        }
+    },
+    watch: {
+        s: function (newValue, old) {
+            this.unapproved_deliveries = (newValue !== null) ? newValue.unapproved_deliveries : [];
         }
     }
 }

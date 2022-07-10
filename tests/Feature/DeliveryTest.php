@@ -79,6 +79,7 @@ class DeliveryTest extends TestCase
         $response->assertOk();
         $delivery->refresh();
         self::assertEquals($new_date->format('Y-m-d'), $delivery->date->format('Y-m-d'));
+        self::assertEquals($new_date->subDays(2)->format('Y-m-d'), $delivery->deadline->format('Y-m-d'));
     }
 
     public function test_toggleApproved()

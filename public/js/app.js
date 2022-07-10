@@ -21887,6 +21887,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      s: this.service,
       name: this.service !== null ? this.service.name : '',
       days: [{
         id: 'mon',
@@ -22014,11 +22015,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.$axios.patch("/api/delivery/".concat(id), {
                   date: event.target.value
                 }).then(function (response) {
+                  _this3.s = response.data.delivery_service;
+
                   _this3.$notify({
                     type: "success",
                     text: 'Bearbeiten erfolgreich'
-                  }); // this.delivery = response.data.delivery;
-
+                  });
                 })["catch"](function (errors) {
                   _this3.$notify({
                     type: "error",
@@ -22039,6 +22041,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     toggleDays: function toggleDays(id) {
       this.delivery_days = _helpers__WEBPACK_IMPORTED_MODULE_1__["default"].toggleValueInArray(this.delivery_days, id);
       this.updateDeliveryService();
+    }
+  },
+  watch: {
+    s: function s(newValue, old) {
+      this.unapproved_deliveries = newValue !== null ? newValue.unapproved_deliveries : [];
     }
   }
 });

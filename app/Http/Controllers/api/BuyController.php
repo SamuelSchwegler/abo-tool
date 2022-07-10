@@ -99,7 +99,7 @@ class BuyController extends Controller
 
         $user = $customer->user;
         if (! is_null($user)) {
-            $user->notify(new SendInvoice($buy));
+            $user->notify(new SendInvoice($buy, true));
         }
 
         $customer->refresh();

@@ -103,9 +103,17 @@ class DeliveryController extends Controller
             'date' => ['nullable', 'date_format:d.m.Y'],
         ]);
 
+        if(!is_null($validated['date'])) {
+            $validated['deadline'] = Carbon::parse($validated['date'])->subDays($delivery->delivery_service->deadline_distance)->format('Y-m-d');
+        }
+
         $delivery->update($validated);
 
-        return \response(['msg' => 'ok', 'delivery' => DeliveryResource::make($delivery)]);
+        return \response([
+            'msg' => 'ok',
+            'delivery' => DeliveryResource::make($delivery),
+            'delivery_service' => DeliveryServiceResource::make($delivery->delivery_service)
+        ]);
     }
 
     /**
