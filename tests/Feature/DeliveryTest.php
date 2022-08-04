@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\CancelUnaffordableDeliveries;
+use App\Jobs\CancelUnaffordableOrders;
 use App\Jobs\CreateDeliveries;
 use App\Jobs\DeliveryCreateOrders;
 use App\Jobs\DeliveryOrderReminder;
@@ -219,10 +221,25 @@ class DeliveryTest extends TestCase
             return $d->id === $tomorrow->id;
         }));
 
+        $unaffordable = Order::factory([
+            'customer_id' => $this->customer->customer->id,
+            'delivery_id' => $tomorrow->id,
+            'canceled' => 0,
+            'affordable' => 0
+        ])->create();
+
+        $canceled = Order::factory([
+            'customer_id' => $this->customer->customer->id,
+            'delivery_id' => $tomorrow->id,
+            'canceled' => 1,
+            'affordable' => 1
+        ])->create();
+
         $order = Order::factory([
             'customer_id' => $this->customer->customer->id,
             'delivery_id' => $tomorrow->id,
             'canceled' => 0,
+            'affordable' => 1
         ])->create();
         self::assertEquals(0, $order->reminded);
 
@@ -232,5 +249,28 @@ class DeliveryTest extends TestCase
 
         $order->refresh();
         self::assertEquals(1, $order->reminded);
+        self::assertEquals(0, $unaffordable->reminded);
+        self::assertEquals(0, $canceled->reminded);
+
+    }
+
+    public function test_cancelUnaffordableDeliveries()
+    {
+        $tomorrow = Delivery::factory([
+            'deadline' => now()->addDay(),
+        ])->create();
+
+        $order = Order::factory([
+            'customer_id' => $this->customer->customer->id,
+            'delivery_id' => $tomorrow->id,
+            'canceled' => 0,
+            'affordable' => 0
+        ])->create();
+        self::assertEquals(0, $order->reminded);
+
+        CancelUnaffordableOrders::dispatchSync();
+
+        $order->refresh();
+        self::assertEquals(1, $order->canceled);
     }
 }

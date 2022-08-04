@@ -5,12 +5,13 @@ namespace App\Jobs;
 use App\Models\Delivery;
 use App\Notifications\OrderReminder;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class DeliveryOrderReminder implements ShouldQueue
+class CancelUnaffordableOrders implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -21,7 +22,7 @@ class DeliveryOrderReminder implements ShouldQueue
      */
     public function __construct()
     {
-
+        //
     }
 
     /**
@@ -35,8 +36,10 @@ class DeliveryOrderReminder implements ShouldQueue
 
         foreach ($due_deliveries as $delivery) {
             foreach ($delivery->orders as $order) {
-                if (! $order->reminded && ! $order->canceled && $order->affordable) {
-                    $order->customer?->user?->notify(new OrderReminder($order));
+                if(!$order->affordable) {
+                    $order->update([
+                        'canceled' => 1
+                    ]);
                 }
             }
         }
