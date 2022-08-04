@@ -22886,10 +22886,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "login",
   data: function data() {
+    var _this$$route$query$re;
+
     return {
       email: "",
       password: "",
-      error: null
+      error: null,
+      redirect: (_this$$route$query$re = this.$route.query.redirect) !== null && _this$$route$query$re !== void 0 ? _this$$route$query$re : ''
     };
   },
   components: {
@@ -22910,7 +22913,11 @@ __webpack_require__.r(__webpack_exports__);
             console.log(response.data);
 
             if (response.data.success) {
-              _this.$router.push('/dashboard');
+              if (_this.redirect.length > 0) {
+                _this.$router.push('/' + _this.redirect);
+              } else {
+                _this.$router.push('/');
+              }
             } else {
               _this.error = response.data.message;
             }
@@ -22923,7 +22930,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     if (window.Laravel.isLoggedIn) {
-      return next('dashboard');
+      if (to.query.hasOwnProperty('redirect')) {
+        return next('/' + to.query.redirect);
+      }
+
+      return next('/');
     }
 
     next();
@@ -27563,7 +27574,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     type: "submit",
     "class": "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green hover:bg-green-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-  }, "Anmelden")])])])])]);
+  }, " Anmelden ")])])])])]);
 }
 
 /***/ }),
@@ -29051,7 +29062,7 @@ var routes = [{
     if (window.Laravel.isLoggedIn) {
       next();
     } else {
-      window.location.href = "/";
+      window.location.href = "/login?redirect=my-orders";
     }
   }
 }, {

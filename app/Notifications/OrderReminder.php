@@ -52,7 +52,7 @@ class OrderReminder extends Notification
             ->subject('Lieferung vom '.$this->delivery->date->format('d.m.Y'))
             ->greeting('Guten Morgen '.$notifiable->name)
             ->line('Die Abmeldefrist für Ihre nächste Bestellung läuft am '.$this->delivery->deadline->format('d.m.Y').' ab. Falls Sie abwesend sind, können Sie sich online abmelden.')
-            ->action('Zur Lieferverwaltung', url('/'))
+            ->action('Zur Lieferverwaltung', url('/my-orders'))
             ->line('Falls Sie sich nicht abmelden erhalten Sie die Lieferung am '.$this->delivery->date->format('d.m.Y').'.')
             ->line('Danke für Ihre Bestellungen');
     }

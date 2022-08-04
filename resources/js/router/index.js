@@ -76,7 +76,7 @@ export const routes = [
             if (window.Laravel.isLoggedIn) {
                 next();
             } else {
-                window.location.href = "/";
+                window.location.href = "/login?redirect=my-orders";
             }
         }
     },
