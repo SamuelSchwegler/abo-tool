@@ -22910,13 +22910,11 @@ __webpack_require__.r(__webpack_exports__);
             email: _this.email,
             password: _this.password
           }).then(function (response) {
-            console.log(response.data);
-
             if (response.data.success) {
               if (_this.redirect.length > 0) {
-                _this.$router.push('/' + _this.redirect);
+                _this.$router.go('/' + _this.redirect);
               } else {
-                _this.$router.push('/');
+                _this.$router.go('/');
               }
             } else {
               _this.error = response.data.message;
@@ -29033,7 +29031,7 @@ var routes = [{
   component: _pages_Buy_Bill__WEBPACK_IMPORTED_MODULE_4__["default"],
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     if (!window.Laravel.isLoggedIn) {
-      window.location.href = "/";
+      window.location.href = "/login";
     }
 
     next();
@@ -29073,7 +29071,7 @@ var routes = [{
     if (window.Laravel.isLoggedIn && can('manage payments')) {
       next();
     } else {
-      window.location.href = "/";
+      window.location.href = "/login";
     }
   }
 }, {
@@ -29084,7 +29082,7 @@ var routes = [{
     if (window.Laravel.isLoggedIn && can('manage delivery services')) {
       next();
     } else {
-      window.location.href = "/";
+      window.location.href = "/login";
     }
   }
 }, {
@@ -29095,7 +29093,7 @@ var routes = [{
     if (window.Laravel.isLoggedIn && can('manage delivery services')) {
       next();
     } else {
-      window.location.href = "/";
+      window.location.href = "/login";
     }
   }
 }, {

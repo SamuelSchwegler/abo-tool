@@ -43,7 +43,7 @@ export const routes = [
         component: Bill,
         beforeRouteEnter(to, from, next) {
             if (!window.Laravel.isLoggedIn) {
-                window.location.href = "/";
+                window.location.href = "/login";
             }
             next();
         }
@@ -88,7 +88,7 @@ export const routes = [
             if (window.Laravel.isLoggedIn && can('manage payments')) {
                 next();
             } else {
-                window.location.href = "/";
+                window.location.href = "/login";
             }
         }
     },
@@ -100,7 +100,7 @@ export const routes = [
             if (window.Laravel.isLoggedIn && can('manage delivery services')) {
                 next();
             } else {
-                window.location.href = "/";
+                window.location.href = "/login";
             }
         }
     },
@@ -112,7 +112,7 @@ export const routes = [
             if (window.Laravel.isLoggedIn && can('manage delivery services')) {
                 next();
             } else {
-                window.location.href = "/";
+                window.location.href = "/login";
             }
         }
     },

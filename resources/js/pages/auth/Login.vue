@@ -74,12 +74,11 @@ export default {
                         password: this.password,
                     })
                         .then(response => {
-                            console.log(response.data)
                             if (response.data.success) {
                                 if (this.redirect.length > 0) {
-                                    this.$router.push('/' + this.redirect);
+                                    this.$router.go('/' + this.redirect);
                                 } else {
-                                    this.$router.push('/')
+                                    this.$router.go('/')
                                 }
                             } else {
                                 this.error = response.data.message
@@ -93,10 +92,9 @@ export default {
         }
     },
     beforeRouteEnter(to, from, next) {
-
         if (window.Laravel.isLoggedIn) {
             if (to.query.hasOwnProperty('redirect')) {
-                return next('/' + to.query.redirect)
+                return next('/' + to.query.redirect);
             }
             return next('/');
         }
