@@ -20,10 +20,12 @@ use Illuminate\Support\Facades\DB;
 
 class DeliveryItemController extends Controller
 {
-    private static function itemResourceForDate(Carbon $date): JsonResource
+    private static function itemResourceForDate(Carbon $date, Product $product): JsonResource
     {
         $items = [];
-        foreach (DeliveryProductItem::whereDate('date', $date->format('Y-m-d'))->get() as $item) {
+        $dpi = DeliveryProductItem::whereDate('date', $date->format('Y-m-d'))
+            ->where('product_id', $product->id)->get();
+        foreach ($dpi as $item) {
             $items[] = $item->item;
         }
 
@@ -44,7 +46,7 @@ class DeliveryItemController extends Controller
 
         return \response([
             'msg' => 'ok',
-            'items' => self::itemResourceForDate($date)
+            'items' => self::itemResourceForDate($date, $product)
         ]);
     }
 
@@ -57,8 +59,8 @@ class DeliveryItemController extends Controller
     public function addItem(Delivery $delivery, Product $product, Request $request): Response|Application|ResponseFactory
     {
         $pivots = DeliveryProductItem::where('delivery_id', $delivery->id)->where('product_id', $product->id)->get();
-        if($pivots->count() === 0) {
-            $delivery->copyItemsFromDate();
+        if ($pivots->count() === 0) {
+            $delivery->copyItemsFromDate($product);
         }
 
         $item = Item::firstOrCreate(['name' => $request->item], ['item_origin_id' => ItemOrigin::first()->id]);
@@ -76,7 +78,13 @@ class DeliveryItemController extends Controller
         ]);
     }
 
-
+    /**
+     * Item entfernen aus allgemeinen Lieferungen (synced)
+     * @param string $date
+     * @param Product $product
+     * @param Item $item
+     * @return Response
+     */
     public function removeDeliveriesItem(string $date, Product $product, Item $item): Response
     {
         $date = Carbon::parse($date);
@@ -86,7 +94,7 @@ class DeliveryItemController extends Controller
 
         return \response([
             'msg' => 'ok',
-            'items' => self::itemResourceForDate($date)
+            'items' => self::itemResourceForDate($date, $product)
         ]);
     }
 
@@ -99,11 +107,12 @@ class DeliveryItemController extends Controller
     public function removeItem(Delivery $delivery, Product $product, Item $item): Response|Application|ResponseFactory
     {
         $pivots = DeliveryProductItem::where('delivery_id', $delivery->id)->where('product_id', $product->id)->get();
-        if($pivots->count() === 0) {
-            $delivery->copyItemsFromDate();
+        if ($pivots->count() === 0) {
+            $delivery->copyItemsFromDate($product);
         }
         DB::table('delivery_product_items')->where('delivery_id', $delivery->id)
             ->where('product_id', $product->id)->where('item_id', $item->id)->delete();
+
         $delivery->refresh();
 
         return \response([

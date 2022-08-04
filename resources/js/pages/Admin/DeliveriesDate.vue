@@ -57,7 +57,7 @@
         </table>
     </div>
     <div class="box bg-white">
-        <delivery-product-items v-for="item in items" :delivery-items="item" :date-format="date_format"></delivery-product-items>
+        <delivery-product-items v-for="item in items" :delivery-items="item" :overall="true"></delivery-product-items>
     </div>
 </template>
 

@@ -12,6 +12,10 @@ use App\Models\Product;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Hilfsfunktion
+ * @codeCoverageIgnore
+ */
 class CopyProdSettings extends Command
 {
     /**

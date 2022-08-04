@@ -67,7 +67,11 @@ class DeliveryController extends Controller
             $items[$product->id] = [
                 'product_id' => $product->id,
                 'name' => $product->name,
-                'items' => []
+                'items' => [],
+                'dateFormat' => [
+                    'd.m.Y' => $date->format('d.m.Y'),
+                    'Y-m-d' => $date->format('Y-m-d')
+                ]
             ];
         }
 

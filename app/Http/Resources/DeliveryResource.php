@@ -89,7 +89,11 @@ class DeliveryResource extends JsonResource
                 'product_id' => $product->id,
                 'name' => $product->name,
                 'items' => [],
-                'synced' => false
+                'synced' => false,
+                'dateFormat' => [
+                    'd.m.Y' => $this->date->format('d.m.Y'),
+                    'Y-m-d' => $this->date->format('Y-m-d')
+                ]
             ];
 
             $pivots = DeliveryProductItem::where('delivery_id', $this->id)

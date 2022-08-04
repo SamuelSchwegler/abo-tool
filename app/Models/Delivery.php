@@ -84,9 +84,9 @@ class Delivery extends Model
         return $path;
     }
 
-    public function copyItemsFromDate(): void
+    public function copyItemsFromDate(Product $product): void
     {
-        $pivots = DeliveryProductItem::whereDate('date', $this->date->format('Y-m-d'))->get();
+        $pivots = DeliveryProductItem::whereDate('date', $this->date->format('Y-m-d'))->where('product_id', $product->id)->get();
         foreach ($pivots as $pivot) {
             DeliveryProductItem::firstOrCreate([
                 'delivery_id' => $this->id,
