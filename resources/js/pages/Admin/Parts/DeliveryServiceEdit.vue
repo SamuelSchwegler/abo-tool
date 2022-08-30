@@ -6,6 +6,19 @@
                 <text-input name="name" label="Bezeichnung" v-model="name" :value="name"
                             :error="errors['name']" @change="updateDeliveryService"></text-input>
             </div>
+                <div class="grid gap-4">
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="pickup" name="pickup"
+                                   type="checkbox" @click="togglePickup()"
+                                   :checked="pickup"
+                                   class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"/>
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="pickup" class="font-medium text-gray-700">Abholbar</label>
+                        </div>
+                    </div>
+                </div>
             <fieldset>
                 <legend class="sr-only">Liefertage</legend>
                 <div class="space-y-3">
@@ -95,6 +108,7 @@ export default {
     data() {
         return {
             s: this.service,
+            pickup: (this.service !== null) ? this.service.pickup : false,
             name: (this.service !== null) ? this.service.name : '',
             days: [
                 {id: 'mon', name: 'Montag'},
@@ -119,7 +133,8 @@ export default {
                 'name': this.name,
                 'days': this.delivery_days,
                 'deadline_distance': this.deadline_distance,
-                'delivery_cost': this.delivery_cost
+                'delivery_cost': this.delivery_cost,
+                'pickup': this.pickup
             }
             if (this.service === null) {
                 await axios.post(`/api/delivery-service/`, data).then(response => {
@@ -161,6 +176,10 @@ export default {
         },
         toggleDays(id) {
             this.delivery_days = helpers.toggleValueInArray(this.delivery_days, id);
+            this.updateDeliveryService();
+        },
+        togglePickup() {
+            this.pickup = !this.pickup;
             this.updateDeliveryService();
         }
     },

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import {LockClosedIcon} from "@heroicons/vue/solid";
+import {LockClosedIcon} from "@heroicons/vue/20/solid";
 
 export default {
     name: "ForgotPassword",

@@ -48,6 +48,9 @@
                     class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Interner Kommentar
                 </th>
+                <th v-if="can('manage customers')"
+                    class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                </th>
                 </thead>
                 <tbody class="bg-white dark:bg-slate-800">
                 <order v-for="(order, index) in orders" :input_order="order" :multiple_products="multiple_products"

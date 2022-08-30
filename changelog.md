@@ -1,5 +1,21 @@
 # Abo Tool Changelog
 
+## [0.1.3] - 2022-09-15
+
+## [0.1.2] - 2022-08-30
+
+### Added
+
+- Lieferübersicht über alle Lieferungen eines Tages
+  - Lieferinhalte synchronisieren für alle Produkte
+- Bestätigung bei Rechnungsauslösung
+- Bestellung deaktiveren, falls zuwenig Guthaben besteht
+
+### Fixed
+
+- Reminder Email soll nur raus, wenn es nur noch Guthaben gibt
+- Kontostand berücksichtigt die bereits bestellten Werte nicht
+
 ## [0.1.1] - 2022-05-27
 
 ### Added

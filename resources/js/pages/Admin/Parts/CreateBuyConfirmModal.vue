@@ -44,7 +44,7 @@
 
 <script>
 import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue'
-import {CheckIcon} from '@heroicons/vue/outline'
+import {CheckIcon} from '@heroicons/vue/20/solid'
 
 export default {
     props: {

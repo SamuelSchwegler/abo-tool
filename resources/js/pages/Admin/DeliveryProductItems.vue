@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import {MinusIcon, ShoppingBagIcon} from '@heroicons/vue/solid'
+import {MinusIcon, ShoppingBagIcon} from '@heroicons/vue/20/solid'
 import SearchSelect from "../parts/SearchSelect";
 
 export default {

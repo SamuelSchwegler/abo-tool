@@ -92,7 +92,7 @@
                                 <PopoverButton
                                     class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                                     <span class="sr-only">Close menu</span>
-                                    <XIcon class="h-6 w-6" aria-hidden="true"/>
+                                    <XMarkIcon class="h-6 w-6" aria-hidden="true"/>
                                 </PopoverButton>
                             </div>
                         </div>
@@ -133,10 +133,9 @@
 <script>
 import {Popover, PopoverButton, PopoverGroup, PopoverPanel} from '@headlessui/vue'
 import {
-    MenuIcon,
-    XIcon,
-} from '@heroicons/vue/outline'
-import {CashIcon, ChevronDownIcon, MailIcon, MapIcon, UserGroupIcon, HomeIcon, BookOpenIcon} from '@heroicons/vue/solid'
+    Bars3Icon,
+    BanknotesIcon, ChevronDownIcon, MapIcon, UserGroupIcon, HomeIcon, BookOpenIcon, EnvelopeIcon, XMarkIcon
+} from '@heroicons/vue/20/solid'
 
 export default {
     components: {
@@ -145,10 +144,10 @@ export default {
         PopoverGroup,
         PopoverPanel,
         ChevronDownIcon,
-        MenuIcon,
-        MailIcon,
+        Bars3Icon,
+        EnvelopeIcon,
         HomeIcon,
-        XIcon,
+        XMarkIcon,
         BookOpenIcon
     },
     name: 'Navigation',
@@ -176,7 +175,7 @@ export default {
                 name: 'Rechnungen',
                 description: 'Zahlungen verwalten.',
                 href: '/manage-payments',
-                icon: CashIcon,
+                icon: BanknotesIcon,
                 can: this.can('manage payments')
             });
         }
@@ -186,7 +185,7 @@ export default {
                 name: 'Lieferungen',
                 description: 'Lieferungen bearbeiten',
                 href: '/deliveries',
-                icon: MailIcon,
+                icon: EnvelopeIcon,
                 can: this.can('manage deliveries')
             });
         }

@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import {CheckIcon} from '@heroicons/vue/solid'
+import {CheckIcon} from '@heroicons/vue/20/solid'
 
 export default {
     components: {

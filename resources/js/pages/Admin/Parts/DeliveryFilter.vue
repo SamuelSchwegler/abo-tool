@@ -128,8 +128,7 @@ import {
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue'
-import {XIcon} from '@heroicons/vue/outline'
-import {ChevronDownIcon} from '@heroicons/vue/solid'
+import {ChevronDownIcon, XMarkIcon} from '@heroicons/vue/20/solid'
 
 const sortOptions = [
     {value: 'date', name: 'Datum', href: '#', current: true},
@@ -154,7 +153,7 @@ export default {
         TransitionChild,
         TransitionRoot,
         ChevronDownIcon,
-        XIcon,
+        XMarkIcon,
     },
     props: ['delivery_services', 'filter'],
     data() {

@@ -22,7 +22,7 @@ huenibach.ch/Angebote/Gemueseabo">unserer Website</a>
 </template>
 
 <script>
-import {LinkIcon} from "@heroicons/vue/solid";
+import {LinkIcon} from "@heroicons/vue/20/solid";
 
 const navigation = [
     {

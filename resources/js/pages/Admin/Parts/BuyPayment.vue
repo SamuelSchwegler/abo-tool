@@ -12,7 +12,7 @@
         <td v-if="show_customer"
             class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
             <router-link :to="'/customer/' + buy.customer.id + '/buys'" class="text-indigo-600 hover:text-indigo-900">
-                <ArchiveIcon class="h-6 w-6"></ArchiveIcon>
+                <ArchiveBoxIcon class="h-6 w-6"></ArchiveBoxIcon>
             </router-link>
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
@@ -59,7 +59,7 @@
 <script>
 import Toggle from "@vueform/toggle";
 import TextInput from "../../../components/form/textInput";
-import {ArchiveIcon, TrashIcon} from "@heroicons/vue/solid";
+import {ArchiveBoxIcon, TrashIcon} from "@heroicons/vue/20/solid";
 import DeleteModal from "../../parts/DeleteModal";
 
 export default {
@@ -78,7 +78,7 @@ export default {
         }
     },
     components: {
-        Toggle, TextInput, ArchiveIcon, TrashIcon, DeleteModal
+        Toggle, TextInput, ArchiveBoxIcon, TrashIcon, DeleteModal
     },
     data: function () {
         return {
