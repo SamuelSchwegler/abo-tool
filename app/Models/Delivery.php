@@ -95,4 +95,16 @@ class Delivery extends Model
             ]);
         }
     }
+
+    /**
+     * Ist eine Lieferung im Zeitraum, in dem man bestellen kann?
+     * @param $query
+     * @return mixed
+     */
+    public function scopeReadyToOrder($query)
+    {
+        return $query->where('date', '>=', now()->subDay())
+            ->where('date', '<=', now()->addDays(Order::PREVIEW_OFFSET_DAYS))
+            ->where('approved', '=', 1);
+    }
 }

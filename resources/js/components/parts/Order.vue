@@ -15,6 +15,9 @@
                 {{ order.delivery.date['d.m.Y'] }}
             </template>
         </td>
+        <td v-if="multiple_products" class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
+            {{ order.product.name }}
+        </td>
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
             <text-input v-model="this.order.depository"  :value="this.order.depository" :disabled="toggleDisabled" @change="updateOrder"></text-input>
         </td>
@@ -33,7 +36,13 @@ import textInput from "../form/textInput";
 
 export default {
     name: "Order",
-    props: ["input_order"],
+    props: {
+        input_order: Object,
+        multiple_products: {
+            type: Boolean,
+            default: false
+        }
+    },
     emits: ['toggleOrder'],
     components: {
         Toggle, textInput

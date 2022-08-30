@@ -112,6 +112,12 @@ class CustomerController extends Controller
         ]);
     }
 
+    /**
+     * @param Customer $customer
+     * @param Request $request
+     * @return Response
+     * @changes v0.1.2 - user orders überschrieben alle Produkte
+     */
     public function updateUsedOrders(Customer $customer, Request $request): Response
     {
         $validated = $request->validate([
@@ -123,8 +129,11 @@ class CustomerController extends Controller
 
         $product = Product::find($validated['product_id']);
 
+        $used_orders = $customer->used_orders;
+        $used_orders[$product->id] =  $validated['used_orders'];
+
         $customer->update([
-            'used_orders' => [$product->id => $validated['used_orders']],
+            'used_orders' => $used_orders,
         ]);
 
         CreateOrders::dispatchSync($customer, $product);

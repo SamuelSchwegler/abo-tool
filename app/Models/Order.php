@@ -20,7 +20,7 @@ class Order extends Model
         'affordable' => 'boolean',
     ];
 
-    const PREVIEW_OFFSET = 10; // wie viele Lieferungen voraus werden Orders angezeigt.
+    const PREVIEW_OFFSET_DAYS = 60; // wie viele Tage Lieferungen voraus werden Orders angezeigt.
 
     public function delivery(): BelongsTo
     {

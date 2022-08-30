@@ -6,10 +6,10 @@
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <div class="inline-flex mr-3">
                 <span class="mr-3 text-sm font-medium text-gray-700">
-                    <template v-if="customer.active">Aktiv</template>
-                    <template v-if="!customer.active">Passiv</template>
+                    <template v-if="active">Aktiv</template>
+                    <template v-if="!active">Passiv</template>
                 </span>
-                <Toggle v-model="customer.active"></Toggle>
+                <Toggle v-model="active"></Toggle>
             </div>
             <router-link :to="'/customer/' + customer.id + '/orders'" type="button"
                          class="inline-flex items-center justify-center rounded-md border border-transparent bg-violet mr-3 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
@@ -119,7 +119,8 @@ export default {
             errors: [],
             delivery_address_errors: {},
             billing_address_errors: {},
-            user: {}
+            user: {},
+            active: true
         }
     },
     methods: {
@@ -127,6 +128,7 @@ export default {
             await axios.get('/api/customer/' + this.$route.params.id).then(response => {
                 this.customer = response.data.customer;
                 this.user = response.data.user;
+                this.active = this.customer.active;
             });
             this.key++;
         },
@@ -151,6 +153,7 @@ export default {
         async update() {
             await axios.patch('/api/customer/' + this.$route.params.id, {
                 ...this.customer,
+                active: this.active
             }).then(response => {
                 this.customer = response.data.customer;
                 this.errors = [];

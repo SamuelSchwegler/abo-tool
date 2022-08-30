@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class DeliveryCreateOrders implements ShouldQueue
 {
@@ -34,14 +35,14 @@ class DeliveryCreateOrders implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @changes v0.1.2 credit of product muss die geplanten Lieferungen einbeziehen
      */
     public function handle()
     {
         $customers = $this->service->customers();
         foreach ($customers as $customer) {
-
             foreach ($customer->productBalances() ?? [] as $balance) {
-                $credit = $customer->creditOfProduct(Product::find($balance->product_id));
+                $credit = $customer->creditOfProduct(Product::find($balance->product_id), true);
                 if ($credit > 0) {
                     $order = Order::where('customer_id', $customer->id)->where('delivery_id', $this->delivery->id)
                         ->where('product_id', $balance->product_id)->first();

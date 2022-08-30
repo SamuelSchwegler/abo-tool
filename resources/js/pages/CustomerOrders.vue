@@ -35,6 +35,9 @@
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Lieferdatum
                 </th>
+                <th v-if="multiple_products" class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    Produkt
+                </th>
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Abstellort
                 </th>
@@ -47,7 +50,8 @@
                 </th>
                 </thead>
                 <tbody class="bg-white dark:bg-slate-800">
-                <order v-for="(order, index) in orders" :input_order="order" :key="'order_key_' + order.id + '_affordable_' + order.affordable" @toggleOrder="toggleOrder"></order>
+                <order v-for="(order, index) in orders" :input_order="order" :multiple_products="multiple_products"
+                       :key="'order_key_' + order.id + '_affordable_' + order.affordable" @toggleOrder="toggleOrder"></order>
                 </tbody>
             </table>
         </div>
@@ -185,7 +189,8 @@ export default {
             orders: [],
             customer_id: 0,
             customer: {},
-            errors: []
+            errors: [],
+            multiple_products: false
         }
     },
     methods: {
@@ -228,6 +233,8 @@ export default {
                     this.customer = response.data.customer;
                     this.orders = response.data.orders;
                     this.product_balances = response.data.product_balances;
+
+                    this.multiple_products = (Object.keys(this.product_balances).length > 1);
                 })
                 .catch(function (error) {
                     console.log(error);
