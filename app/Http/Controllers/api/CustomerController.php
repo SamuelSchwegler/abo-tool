@@ -15,7 +15,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Queue\Jobs\Job;
 
 class CustomerController extends Controller
 {
@@ -113,8 +112,8 @@ class CustomerController extends Controller
     }
 
     /**
-     * @param Customer $customer
-     * @param Request $request
+     * @param  Customer  $customer
+     * @param  Request  $request
      * @return Response
      * @changes v0.1.2 - user orders überschrieben alle Produkte
      */
@@ -124,13 +123,13 @@ class CustomerController extends Controller
             'product_id' => ['required', 'exists:products,id'],
             'used_orders' => ['required', 'numeric'],
         ], [
-            'used_orders.required' => 'Geben Sie eine Zahl an (kann auch 0 sein)'
+            'used_orders.required' => 'Geben Sie eine Zahl an (kann auch 0 sein)',
         ]);
 
         $product = Product::find($validated['product_id']);
 
         $used_orders = $customer->used_orders;
-        $used_orders[$product->id] =  $validated['used_orders'];
+        $used_orders[$product->id] = $validated['used_orders'];
 
         $customer->update([
             'used_orders' => $used_orders,

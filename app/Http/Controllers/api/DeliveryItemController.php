@@ -40,20 +40,19 @@ class DeliveryItemController extends Controller
             'delivery_id' => null,
             'product_id' => $product->id,
             'item_id' => $item->id,
-            'date' => $date->format('Y-m-d')
+            'date' => $date->format('Y-m-d'),
         ]);
-
 
         return \response([
             'msg' => 'ok',
-            'items' => self::itemResourceForDate($date, $product)
+            'items' => self::itemResourceForDate($date, $product),
         ]);
     }
 
     /**
-     * @param Delivery $delivery
-     * @param Product $product
-     * @param Request $request
+     * @param  Delivery  $delivery
+     * @param  Product  $product
+     * @param  Request  $request
      * @return Response|Application|ResponseFactory
      */
     public function addItem(Delivery $delivery, Product $product, Request $request): Response|Application|ResponseFactory
@@ -67,7 +66,7 @@ class DeliveryItemController extends Controller
         DeliveryProductItem::firstOrCreate([
             'delivery_id' => $delivery->id,
             'product_id' => $product->id,
-            'item_id' => $item->id
+            'item_id' => $item->id,
         ]);
 
         $delivery->refresh();
@@ -79,10 +78,11 @@ class DeliveryItemController extends Controller
     }
 
     /**
-     * Item entfernen aus allgemeinen Lieferungen (synced)
-     * @param string $date
-     * @param Product $product
-     * @param Item $item
+     * Item entfernen aus allgemeinen Lieferungen (synced).
+     *
+     * @param  string  $date
+     * @param  Product  $product
+     * @param  Item  $item
      * @return Response
      */
     public function removeDeliveriesItem(string $date, Product $product, Item $item): Response
@@ -94,14 +94,14 @@ class DeliveryItemController extends Controller
 
         return \response([
             'msg' => 'ok',
-            'items' => self::itemResourceForDate($date, $product)
+            'items' => self::itemResourceForDate($date, $product),
         ]);
     }
 
     /**
-     * @param Delivery $delivery
-     * @param Product $product
-     * @param Item $item
+     * @param  Delivery  $delivery
+     * @param  Product  $product
+     * @param  Item  $item
      * @return Response|Application|ResponseFactory
      */
     public function removeItem(Delivery $delivery, Product $product, Item $item): Response|Application|ResponseFactory

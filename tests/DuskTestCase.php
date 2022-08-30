@@ -8,7 +8,6 @@ use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Support\Facades\Artisan;
 use Laravel\Dusk\TestCase as BaseTestCase;
-use function Symfony\Component\String\b;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -23,7 +22,7 @@ abstract class DuskTestCase extends BaseTestCase
     {
         parent::setUp();
 
-        if (!self::$seeded) {
+        if (! self::$seeded) {
             Artisan::call('migrate:fresh --seed');
 
             self::$seeded = true;
@@ -42,7 +41,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        if (!static::runningInSail()) {
+        if (! static::runningInSail()) {
             static::startChromeDriver();
         }
     }
@@ -60,7 +59,7 @@ abstract class DuskTestCase extends BaseTestCase
             return $items->merge([
                 '--disable-gpu',
                 '--headless',
-                '--enable-file-cookies'
+                '--enable-file-cookies',
             ]);
         })->all());
 

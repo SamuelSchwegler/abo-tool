@@ -2,14 +2,9 @@
 
 namespace Tests\Browser;
 
-use App\Models\Address;
 use App\Models\Customer;
-use App\Models\Postcode;
-use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Dusk\Browser;
-use Laravel\Sanctum\Sanctum;
 use Tests\DuskTestCase;
 
 class CustomerTest extends DuskTestCase

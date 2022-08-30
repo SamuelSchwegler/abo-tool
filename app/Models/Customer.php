@@ -44,7 +44,7 @@ class Customer extends Model
             ->leftJoin('bundles', 'buys.bundle_id', 'bundles.id')
             ->leftJoin('products', 'products.id', 'bundles.product_id');
 
-        if (!is_null($product)) {
+        if (! is_null($product)) {
             $query = $query->where('products.id', $product->id);
         }
 
@@ -59,7 +59,7 @@ class Customer extends Model
             ->leftJoin('deliveries', 'deliveries.id', 'orders.delivery_id')
             ->where('canceled', 0);
 
-        if (!is_null($product)) {
+        if (! is_null($product)) {
             $query = $query->where('products.id', $product->id);
         }
 
@@ -79,23 +79,23 @@ class Customer extends Model
             $order = $this->productOrders(Product::find($buy->product_id))->first();
             $balance = $buy;
             $balance->ordered_before = 0;
-            $balance->total_deliveries = (int)$buy->total_deliveries;
-            $balance->ordered = (int)$order?->ordered ?? 0;
-            $balance->planned = (int)$order?->planned ?? 0;
+            $balance->total_deliveries = (int) $buy->total_deliveries;
+            $balance->ordered = (int) $order?->ordered ?? 0;
+            $balance->planned = (int) $order?->planned ?? 0;
             $balance->balance = $balance->total_deliveries - $balance->ordered;
             $balance->last_issue = Carbon::parse($buy->last_issue);
             $balances[$buy->product_id] = $balance;
         }
 
         foreach ($this->used_orders ?? [] as $key => $used) {
-            if (array_key_exists((int)$key, $balances)) {
-                $balance = $balances[(int)$key];
+            if (array_key_exists((int) $key, $balances)) {
+                $balance = $balances[(int) $key];
                 $balance->ordered_before = $used;
                 $balance->ordered += $used;
                 $balance->balance -= $used;
-                $balances[(int)$key] = $balance;
+                $balances[(int) $key] = $balance;
             } else {
-                Log::error('balance key ' . $key . ' not existing for customer: ' . $this->id);
+                Log::error('balance key '.$key.' not existing for customer: '.$this->id);
             }
         }
 
@@ -113,8 +113,8 @@ class Customer extends Model
     /**
      * Wie viel Guthaben für ein Produkt besteht noch?
      *
-     * @param Product $product
-     * @param bool $with_planned
+     * @param  Product  $product
+     * @param  bool  $with_planned
      * @return int
      */
     public function creditOfProduct(Product $product, bool $with_planned = false): int
@@ -124,7 +124,7 @@ class Customer extends Model
 
         $balance = $buys?->total_deliveries ?? 0;
 
-        if (!is_null($orders)) {
+        if (! is_null($orders)) {
             if ($with_planned) {
                 $balance -= $orders->ordered;
             } else {
@@ -133,7 +133,7 @@ class Customer extends Model
         }
 
         // bereits bestellt
-        if (!is_null($this->used_orders) && array_key_exists($product->id, $this->used_orders)) {
+        if (! is_null($this->used_orders) && array_key_exists($product->id, $this->used_orders)) {
             $balance -= $this->used_orders[$product->id];
         }
 
@@ -157,7 +157,7 @@ class Customer extends Model
 
     public function getNameAttribute(): string
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function getDeliveryOptionAttribute(): string

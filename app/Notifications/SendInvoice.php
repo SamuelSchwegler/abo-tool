@@ -29,7 +29,7 @@ class SendInvoice extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -40,14 +40,14 @@ class SendInvoice extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
         $mail_message = (new MailMessage)
             ->subject('Ihre Rechnung vom Gemüse-Abo')
-            ->greeting('Guten Tag ' . $notifiable->customer->name);
+            ->greeting('Guten Tag '.$notifiable->customer->name);
 
         if ($this->extension) {
             $mail_message = $mail_message
@@ -66,13 +66,12 @@ freigeschaltet. Vor der ersten Bio-Gemüse-Lieferung erhalten Sie von uns eine B
 unterstützen Sie auch die Ausbildung von Bio-Gärtner:innen an unserer Schule!')
             ->salutation(new HtmlString('Freundliche Grüsse<br>Gartenbauschule Hünibach'));
 
-
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function toArray($notifiable)

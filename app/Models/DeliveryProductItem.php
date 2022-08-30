@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class DeliveryProductItem extends Pivot
 {
-    protected $table = "delivery_product_items";
+    protected $table = 'delivery_product_items';
     public $timestamps = false;
 
     public function item()

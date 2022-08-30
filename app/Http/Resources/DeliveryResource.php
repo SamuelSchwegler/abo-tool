@@ -5,14 +5,13 @@ namespace App\Http\Resources;
 use App\Models\DeliveryProductItem;
 use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Log;
 
 class DeliveryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -30,7 +29,7 @@ class DeliveryResource extends JsonResource
                     'id' => $order->customer->id,
                     'name' => $order->customer->name,
                     'first_name' => $order->customer->first_name,
-                    'last_name' => $order->customer->last_name
+                    'last_name' => $order->customer->last_name,
                 ],
                 'product' => [
                     'id' => $product_id,
@@ -43,7 +42,7 @@ class DeliveryResource extends JsonResource
         }
 
         usort($orders_array, function ($a, $b) {
-            return strcmp($a["customer"]['last_name'], $b["customer"]['last_name']);
+            return strcmp($a['customer']['last_name'], $b['customer']['last_name']);
         });
 
         $summary = [];
@@ -92,8 +91,8 @@ class DeliveryResource extends JsonResource
                 'synced' => false,
                 'dateFormat' => [
                     'd.m.Y' => $this->date->format('d.m.Y'),
-                    'Y-m-d' => $this->date->format('Y-m-d')
-                ]
+                    'Y-m-d' => $this->date->format('Y-m-d'),
+                ],
             ];
 
             $pivots = DeliveryProductItem::where('delivery_id', $this->id)
@@ -110,7 +109,6 @@ class DeliveryResource extends JsonResource
                 $items_array[$pivot->product_id]['items'][] = ItemResource::make($pivot->item);
             }
         }
-
 
         return $items_array;
     }

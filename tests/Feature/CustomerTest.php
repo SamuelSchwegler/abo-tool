@@ -30,7 +30,7 @@ class CustomerTest extends TestCase
         Sanctum::actingAs($this->admin);
         $customer = Customer::inRandomOrder()->first();
 
-        $response = $this->json('get', '/api/customer/' . $customer->id);
+        $response = $this->json('get', '/api/customer/'.$customer->id);
         $response->assertOk();
     }
 
@@ -51,7 +51,7 @@ class CustomerTest extends TestCase
             ],
         ];
 
-        $response = $this->json('patch', '/api/customer/' . $customer->id, $data);
+        $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
 
         $response->assertOk();
         $customer->refresh();
@@ -64,7 +64,7 @@ class CustomerTest extends TestCase
             'city' => $this->faker->city(),
         ];
 
-        $response = $this->json('patch', '/api/customer/' . $customer->id, $data);
+        $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
 
         $response->assertOk();
         $customer->refresh();
@@ -73,7 +73,7 @@ class CustomerTest extends TestCase
         $data['delivery_option'] = 'pickup';
         $data['delivery_address'] = null;
 
-        $response = $this->json('patch', '/api/customer/' . $customer->id, $data);
+        $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
         $response->assertOk();
     }
 
@@ -125,7 +125,7 @@ class CustomerTest extends TestCase
 
         // update
         Sanctum::actingAs($this->admin);
-        $response = $this->patch('/api/customer/' . $customer->id . '/used-orders', [
+        $response = $this->patch('/api/customer/'.$customer->id.'/used-orders', [
             'product_id' => $bundle->product_id,
             'used_orders' => 6,
         ]);

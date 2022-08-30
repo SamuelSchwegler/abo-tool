@@ -57,8 +57,8 @@ class DeliveryController extends Controller
         $items = [];
 
         $products = DB::table('products')
-            ->join('orders', 'orders.product_id','=', 'products.id')
-            ->join('deliveries', 'orders.delivery_id','=', 'deliveries.id')
+            ->join('orders', 'orders.product_id', '=', 'products.id')
+            ->join('deliveries', 'orders.delivery_id', '=', 'deliveries.id')
             ->whereIn('deliveries.id', $deliveries->pluck('id')->toArray())
             ->select('products.*')
             ->groupBy('products.id')->get();
@@ -70,8 +70,8 @@ class DeliveryController extends Controller
                 'items' => [],
                 'dateFormat' => [
                     'd.m.Y' => $date->format('d.m.Y'),
-                    'Y-m-d' => $date->format('Y-m-d')
-                ]
+                    'Y-m-d' => $date->format('Y-m-d'),
+                ],
             ];
         }
 
@@ -79,14 +79,14 @@ class DeliveryController extends Controller
         foreach($dpis as $dpi) {
             $items[$dpi->product_id]['items'][] = [
                 'id' => $dpi->item->id,
-                'name' => $dpi->item->name
+                'name' => $dpi->item->name,
             ];
         }
 
         return response([
             'deliveries' => DeliveryResource::collection($deliveries),
             'delivery_services' => DeliveryServiceResource::collection(DeliveryService::all()),
-            'items' => $items
+            'items' => $items,
         ]);
     }
 
@@ -99,7 +99,7 @@ class DeliveryController extends Controller
 
     public function update(Delivery $delivery, Request $request)
     {
-        if (!Auth::user()->can('manage deliveries') && $delivery->deadlinePassed()) {
+        if (! Auth::user()->can('manage deliveries') && $delivery->deadlinePassed()) {
             throw DeliveryException::deadlineHasPassed($delivery);
         }
 
@@ -107,7 +107,7 @@ class DeliveryController extends Controller
             'date' => ['nullable', 'date_format:d.m.Y'],
         ]);
 
-        if(!is_null($validated['date'])) {
+        if(! is_null($validated['date'])) {
             $validated['deadline'] = Carbon::parse($validated['date'])->subDays($delivery->delivery_service->deadline_distance)->format('Y-m-d');
         }
 
@@ -116,7 +116,7 @@ class DeliveryController extends Controller
         return \response([
             'msg' => 'ok',
             'delivery' => DeliveryResource::make($delivery),
-            'delivery_service' => DeliveryServiceResource::make($delivery->delivery_service)
+            'delivery_service' => DeliveryServiceResource::make($delivery->delivery_service),
         ]);
     }
 

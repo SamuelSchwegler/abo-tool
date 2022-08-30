@@ -2,17 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Models\Customer;
 use App\Models\Delivery;
 use App\Models\Order;
-use App\Models\Product;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class CreateReadyOrders implements ShouldQueue
 {
@@ -25,7 +21,6 @@ class CreateReadyOrders implements ShouldQueue
      */
     public function __construct()
     {
-
 
     }
 

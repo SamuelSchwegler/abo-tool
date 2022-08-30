@@ -3,9 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Delivery;
-use App\Notifications\OrderReminder;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -36,9 +34,9 @@ class CancelUnaffordableOrders implements ShouldQueue
 
         foreach ($due_deliveries as $delivery) {
             foreach ($delivery->orders as $order) {
-                if(!$order->affordable) {
+                if(! $order->affordable) {
                     $order->update([
-                        'canceled' => 1
+                        'canceled' => 1,
                     ]);
                 }
             }

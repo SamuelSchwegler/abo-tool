@@ -68,7 +68,7 @@ class Delivery extends Model
      */
     public function exportDeliveryNotes(): string
     {
-        $path = storage_path('app/delivery-notes/delivery-notes_' . $this->id . '.zip');
+        $path = storage_path('app/delivery-notes/delivery-notes_'.$this->id.'.zip');
         if (file_exists($path)) {
             unlink($path);
         }
@@ -91,13 +91,14 @@ class Delivery extends Model
             DeliveryProductItem::firstOrCreate([
                 'delivery_id' => $this->id,
                 'product_id' => $pivot->product_id,
-                'item_id' => $pivot->item_id
+                'item_id' => $pivot->item_id,
             ]);
         }
     }
 
     /**
      * Ist eine Lieferung im Zeitraum, in dem man bestellen kann?
+     *
      * @param $query
      * @return mixed
      */

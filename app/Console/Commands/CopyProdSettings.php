@@ -13,7 +13,8 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Hilfsfunktion
+ * Hilfsfunktion.
+ *
  * @codeCoverageIgnore
  */
 class CopyProdSettings extends Command
