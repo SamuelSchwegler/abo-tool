@@ -52,7 +52,9 @@ class DeliveryController extends Controller
     public function deliveriesForDate(string $date, Request $request): Response {
         $date = Carbon::parse($date);
 
-        $deliveries = Delivery::whereDate('date', $date->format('Y-m-d'))->get();
+        $deliveries = Delivery::whereDate('date', $date->format('Y-m-d'))->get()->sort(function ($a, $b) {
+            return strcasecmp($a->delivery_service->name, $b->delivery_service->name);
+        });
 
         $items = [];
 

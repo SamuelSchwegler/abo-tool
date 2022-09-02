@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Models\Buy;
 use App\Models\Customer;
 use App\Models\Delivery;
+use App\Models\DeliveryService;
 use App\Models\Order;
 use App\Observers\BuyObserver;
 use App\Observers\CustomerObserver;
 use App\Observers\DeliveryObserver;
+use App\Observers\DeliveryServiceObserver;
 use App\Observers\OrderObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -39,5 +41,6 @@ class EventServiceProvider extends ServiceProvider
         Customer::observe(CustomerObserver::class);
         Order::observe(OrderObserver::class);
         Buy::observe(BuyObserver::class);
+        DeliveryService::observe(DeliveryServiceObserver::class);
     }
 }

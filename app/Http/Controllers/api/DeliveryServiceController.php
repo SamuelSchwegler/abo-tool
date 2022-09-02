@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DeliveryServiceResource;
+use App\Jobs\CreateDeliveries;
 use App\Models\DeliveryService;
 use App\Models\Postcode;
 use Illuminate\Contracts\Foundation\Application;
@@ -20,18 +21,19 @@ class DeliveryServiceController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $validated = $request->validate(DeliveryService::rules());
 
         $service = DeliveryService::create($validated);
+        CreateDeliveries::dispatchSync($service);
 
         return \response([
             'service' => DeliveryServiceResource::make($service),
         ]);
     }
 
-    public function update(DeliveryService $service, Request $request)
+    public function update(DeliveryService $service, Request $request): Response|Application|ResponseFactory
     {
         $validated = $request->validate(DeliveryService::rules());
 
@@ -43,7 +45,7 @@ class DeliveryServiceController extends Controller
         ], 200);
     }
 
-    public function apiAddPostcode(DeliveryService $service, Request $request)
+    public function apiAddPostcode(DeliveryService $service, Request $request): Response|Application|ResponseFactory
     {
         $validated = $request->validate([
             'postcode' => ['required'],
@@ -63,7 +65,7 @@ class DeliveryServiceController extends Controller
         ], 200);
     }
 
-    public function apiRemovePostcode(DeliveryService $service, Request $request)
+    public function apiRemovePostcode(DeliveryService $service, Request $request): Response|Application|ResponseFactory
     {
         $validated = $request->validate([
             'postcode' => ['required'],
