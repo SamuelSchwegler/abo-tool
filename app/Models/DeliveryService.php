@@ -35,7 +35,8 @@ class DeliveryService extends Model
             'days.*' => ['required', 'string'],
             'deadline_distance' => ['required', 'min:0', 'max:14', 'numeric'],
             'delivery_cost' => ['required', 'min:0', 'max:9999', 'numeric'],
-            'pickup' => ['required', 'boolean']
+            'pickup' => ['required', 'boolean'],
+            'option_description' => ['nullable', 'string']
         ];
     }
 

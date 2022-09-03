@@ -26,20 +26,45 @@
             <customer-data :customer="user.customer" :errors="errors"></customer-data>
             <fieldset>
                 <legend class="sr-only">Plan</legend>
-                <div class="space-y-5">
+                <div class="space-y-3">
                     <div v-for="option in delivery_options" :key="option.id" class="relative flex items-start">
                         <div class="flex items-center h-5">
                             <input :id="option.id" :aria-describedby="`${option.id}-description`" name="plan"
                                    type="radio"
                                    :checked="option.id === delivery_option" @change="changeDeliveryOption(option.id)"
                                    class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"
-                                   v-bind:class="'delivery-option-' + option.id"/>
+                                   v-bind:class="'delivery-option-' + option.type"/>
                         </div>
                         <div class="ml-3 text-sm">
                             <label :for="option.id" class="font-medium text-gray-700">{{ option.name }}</label>
                             <span :id="`${option.id}-description`" class="text-gray-500">{{ option.description }}</span>
                         </div>
                     </div>
+                </div>
+                <div class="mt-2">
+                    <label class="text-base font-medium text-gray-900">Abholung</label>
+                    <fieldset class="mt-1">
+                        <legend class="sr-only">Abholungsort</legend>
+                        <div class="space-y-3">
+                            <div v-for="option in pickup_options" :key="option.id"
+                                 class="relative flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input :id="option.id" :aria-describedby="`${option.id}-description`" name="plan"
+                                           type="radio"
+                                           :checked="option.type === 'pickup' && user.customer.delivery_service.id === option.id"
+                                           @change="changeDeliveryOption(option.type, option)"
+                                           class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"
+                                           v-bind:class="'delivery-option-' + option.id"/>
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label :for="option.id" class="font-medium text-gray-700">{{ option.name }}</label>
+                                    <span :id="`${option.id}-description`" class="text-gray-500">{{
+                                            option.description
+                                        }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
             </fieldset>
             <div v-if="delivery_option !== 'pickup'" class="mt-5 delivery-address">
@@ -88,9 +113,8 @@ export default {
     emits: ['authentication'],
     data: function () {
         const delivery_options = [
-            {id: 'match', name: 'Liefer- und Rechnungsadresse stimmen überein', description: ''},
-            {id: 'split', name: 'Unterschiedliche Liefer- und Rechnungsadresse', description: ''},
-            {id: 'pickup', name: 'Ich hole mein Gemüse im Bioladen der Gartenbauschule Hünibach ab', description: ''},
+            {id: 'match', name: 'Liefer- und Rechnungsadresse stimmen überein', description: '', type: 'match'},
+            {id: 'split', name: 'Unterschiedliche Liefer- und Rechnungsadresse', description: '', type: 'split'},
         ]
 
         const steps = [
@@ -117,7 +141,10 @@ export default {
                 customer: {
                     delivery_address: {},
                     billing_address: {},
-                    delivery_options: 'match'
+                    delivery_option: 'match',
+                    delivery_service: {
+                        id: 0
+                    }
                 }
             }
         }
@@ -125,8 +152,10 @@ export default {
         return {
             bundle: {},
             delivery_options: delivery_options,
+            pickup_options: [],
             steps: steps,
             delivery_option: user.customer.delivery_option,
+            delivery_service_id: user.customer.delivery_service.id,
             isLoggedIn: window.Laravel.isLoggedIn,
             user: user,
             show_loginModal: false,
@@ -139,7 +168,8 @@ export default {
             },
             delivery_address_errors: [],
             billing_address_errors: [],
-            delivery_service: {}
+            delivery_service: {},
+            delivery_services: []
         }
     },
     methods: {
@@ -185,15 +215,19 @@ export default {
                 this.bundleBuyKey++;
             });
         },
-        changeDeliveryOption: function (id) {
-            this.delivery_option = id;
-            if ((id === 'match' || id === 'split') && this.user.customer.delivery_address === null) {
+        changeDeliveryOption: function (type, service = null) {
+            this.delivery_option = type;
+            if(service !== null) {
+                this.user.customer.delivery_service = service;
+            }
+
+            if ((type === 'match' || type === 'split') && this.user.customer.delivery_address === null) {
                 this.user.customer.delivery_address = {
                     street: '',
                     city: '',
                     postcode: ''
                 }
-            } else if ((id === 'pickup' || id === 'split') && this.user.customer.billing_address === null) {
+            } else if ((type === 'pickup' || type === 'split') && this.user.customer.billing_address === null) {
                 this.user.customer.billing_address = {
                     street: '',
                     city: '',
@@ -241,6 +275,23 @@ export default {
             .catch(function (error) {
                 console.log(error);
             });
+
+        this.$axios.get('/api/delivery-services').then(response => {
+            this.delivery_services = response.data.services;
+
+            this.delivery_services.filter(s => s.pickup).forEach(s => {
+                console.log(s);
+
+                this.pickup_options.push({
+                    id: s.id,
+                    type: 'pickup',
+                    name: s.option_description,
+                    description: ''
+                });
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
 
         this.getDeliveryService();
     }

@@ -10,6 +10,7 @@ use App\Models\Address;
 use App\Models\Bundle;
 use App\Models\Buy;
 use App\Models\Customer;
+use App\Models\DeliveryService;
 use App\Models\User;
 use App\Notifications\SendInvoice;
 use App\Rules\DeliveryPossibleToPostcode;
@@ -38,8 +39,8 @@ class BundleController extends Controller
     /**
      * Zahlung mit allen Daten absenden.
      *
-     * @param  Bundle  $bundle
-     * @param  Request  $request
+     * @param Bundle $bundle
+     * @param Request $request
      * @return Application|ResponseFactory|Response
      */
     public function submitBuy(Bundle $bundle, Request $request)
@@ -67,7 +68,7 @@ class BundleController extends Controller
         if ($validator->fails()) {
             return \response([
                 'errors' => $validator->errors()->toArray(),
-                'authenticated' => ! Auth::guest(),
+                'authenticated' => !Auth::guest(),
                 'user' => UserResource::make(Auth::user()),
             ], 422);
         }
@@ -125,7 +126,14 @@ class BundleController extends Controller
         }
         $user->refresh(); // customer für user nachladen
 
-        $service = $customer->delivery_service();
+        if ($request->delivery_option === "pickup") {
+            $service = DeliveryService::find($request->delivery_service['id']);
+            $customer->update([
+                'delivery_service_id' => $service->id
+            ]);
+        } else {
+            $service = $customer->delivery_service();
+        }
 
         $buy = Buy::create([
             'customer_id' => $customer->id,

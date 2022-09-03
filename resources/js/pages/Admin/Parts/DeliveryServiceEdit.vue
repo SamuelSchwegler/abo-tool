@@ -6,19 +6,24 @@
                 <text-input name="name" label="Bezeichnung" v-model="name" :value="name"
                             :error="errors['name']" @change="updateDeliveryService"></text-input>
             </div>
-                <div class="grid gap-4">
-                    <div class="relative flex items-start">
-                        <div class="flex items-center h-5">
-                            <input id="pickup" name="pickup"
-                                   type="checkbox" @click="togglePickup()"
-                                   :checked="pickup"
-                                   class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"/>
-                        </div>
-                        <div class="ml-3 text-sm">
-                            <label for="pickup" class="font-medium text-gray-700">Abholbar</label>
-                        </div>
+            <div class="grid gap-4">
+                <div class="relative flex items-start">
+                    <div class="flex items-center h-5">
+                        <input id="pickup" name="pickup"
+                               type="checkbox" @click="togglePickup()"
+                               :checked="pickup"
+                               class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"/>
+                    </div>
+                    <div class="ml-3 text-sm">
+                        <label for="pickup" class="font-medium text-gray-700">Abholbar</label>
                     </div>
                 </div>
+            </div>
+            <div v-if="pickup">
+                <text-input name="option_description" label="Beschrieb Abholoption" v-model="option_description"
+                            :value="option_description"
+                            :error="errors['option_description']" @change="updateDeliveryService"></text-input>
+            </div>
             <fieldset>
                 <legend class="sr-only">Liefertage</legend>
                 <div class="space-y-3">
@@ -124,6 +129,7 @@ export default {
             errors: [],
             unapproved_deliveries: (this.service !== null) ? this.service.unapproved_deliveries : [],
             delivery_cost: (this.service !== null) ? this.service.delivery_cost : 0,
+            option_description: (this.service !== null) ? this.service.option_description : '',
             key: 0,
         }
     },
@@ -134,7 +140,8 @@ export default {
                 'days': this.delivery_days,
                 'deadline_distance': this.deadline_distance,
                 'delivery_cost': this.delivery_cost,
-                'pickup': this.pickup
+                'pickup': this.pickup,
+                'option_description': this.option_description
             }
             if (this.service === null) {
                 await axios.post(`/api/delivery-service/`, data).then(response => {
@@ -142,6 +149,7 @@ export default {
                     this.$emit('stored', response.data.service.id);
                     this.service = response.data.service;
                     this.errors = [];
+                    this.$notify({type: "success", text: 'Erstellen erfolgreich'});
                 }).catch(error => {
                     this.errors = error.response.data.errors;
                 });
@@ -149,6 +157,7 @@ export default {
                 await axios.patch(`/api/delivery-service/` + this.service.id + `/`, data).then(response => {
                     this.name = response.data.service.name;
                     this.errors = [];
+                    this.$notify({type: "success", text: 'Bearbeiten erfolgreich'});
                 }).catch(error => {
                     this.errors = error.response.data.errors;
                 });

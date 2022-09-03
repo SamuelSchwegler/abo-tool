@@ -3,10 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -32,6 +32,22 @@ return new class extends Migration
 
             $table->index([$morphPrefix . '_id', $morphPrefix . '_type']);
         });
+
+        if (!Schema::hasColumn('delivery_services', 'option_description')) {
+            Schema::table('delivery_services', function (Blueprint $table) {
+                $table->string('option_description')->after('delivery_cost')->nullable();
+            });
+
+            DB::table('delivery_services')->where('pickup', '=', 1)->update([
+                'option_description' => 'Ich hole mein Gemüse im Bioladen der Gartenbauschule Hünibach ab'
+            ]);
+        }
+
+        if (!Schema::hasColumn('customers', 'delivery_service_id')) {
+            Schema::table('customers', function (Blueprint $table) {
+                $table->foreignId('delivery_service_id')->nullable()->after('delivery_address_id');
+            });
+        }
     }
 
     /**
@@ -42,5 +58,13 @@ return new class extends Migration
     public function down()
     {
         Schema::connection(config('audit.drivers.database.connection', config('database.default')))->drop('audits');
+
+        if (Schema::hasColumn('delivery_services', 'option_description')) {
+            Schema::dropColumns('delivery_services', ['option_description']);
+        }
+
+        if (Schema::hasColumn('customers', 'delivery_service_id')) {
+            Schema::dropColumns('customers', ['delivery_service_id']);
+        }
     }
 };
