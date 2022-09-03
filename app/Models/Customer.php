@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 class Customer extends Model implements Auditable
 {
@@ -188,17 +188,16 @@ class Customer extends Model implements Auditable
     /**
      * Gibt Lieferservice für Adresse des Kundens, falls diese nicht in den Lieferzonen ist wird Selbstabholung gewählt.
      *
-     * @return mixed
+     * @return DeliveryService|null
      */
-    public function delivery_service()
+    public function delivery_service(): ?DeliveryService
     {
         $postcode = $this->delivery_address?->postcode;
-        $pickup = DeliveryService::where('pickup', 1)->first();
         if (is_null($postcode)) {
-            return $pickup;
+            return DeliveryService::find($this->delivery_service_id);
         }
 
-        return DeliveryService::findServiceForPostcode($postcode) ?? $pickup;
+        return DeliveryService::findServiceForPostcode($postcode);
     }
 
     public static function rules(): array

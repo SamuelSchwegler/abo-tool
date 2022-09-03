@@ -22,6 +22,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'Abholung in Hünibach',
             'pickup' => 1,
             'days' => ['tue'],
+            'option_description' => 'Abholung der Lieferung in Hünibach',
+        ]);
+
+        $pickup = DeliveryService::create([
+            'name' => 'Cafe Sattler',
+            'pickup' => 1,
+            'days' => ['tue'],
+            'option_description' => 'Gemüse im Cafe Sattler in der Länggasse Bern abholen',
         ]);
 
         $post = DeliveryService::factory()->create([

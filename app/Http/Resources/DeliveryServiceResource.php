@@ -46,7 +46,7 @@ class DeliveryServiceResource extends JsonResource
             'deadline_distance' => $this->deadline_distance,
             'unapproved_deliveries' => $unapproved_array,
             'delivery_cost' => $this->delivery_cost,
-            'option_description' => $this->option_description
+            'option_description' => $this->option_description,
         ];
     }
 }

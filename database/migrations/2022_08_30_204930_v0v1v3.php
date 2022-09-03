@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Customer;
+use App\Models\DeliveryService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
@@ -47,6 +49,13 @@ return new class extends Migration {
             Schema::table('customers', function (Blueprint $table) {
                 $table->foreignId('delivery_service_id')->nullable()->after('delivery_address_id');
             });
+
+            $pickup = DeliveryService::where('pickup', '=', 1)->first();
+            foreach(Customer::whereNull('delivery_address_id')->get() as $customer) {
+                $customer->update([
+                    'delivery_service_id' => $pickup->id
+                ]);
+            }
         }
     }
 

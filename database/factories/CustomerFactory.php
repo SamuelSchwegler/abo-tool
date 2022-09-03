@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Address;
+use App\Models\DeliveryService;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -30,6 +31,7 @@ class CustomerFactory extends Factory
             'depository' => $this->faker->randomElement([$this->faker->sentence, null, null]),
             'delivery_address_id' => $delivery,
             'billing_address_id' => $billing,
+            'delivery_service_id' => is_null($delivery) ? DeliveryService::where('pickup', 1)->inRandomOrder()->first()->id : null,
             'discount' => $this->faker->randomElement([0, 0, 0, 0, 0, 0, 0, 0, 20, 40]),
         ];
     }

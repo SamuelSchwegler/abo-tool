@@ -44,7 +44,7 @@ class CreateOrders implements ShouldQueue
         $delivery_service = $this->customer->delivery_service();
 
         // Erstelle Orders auch über Deadline hinaus.
-        $deliveries = $delivery_service->deliveries()->where('date', '>=', $this->from)->readyToOrder()->get();
+        $deliveries = $delivery_service?->deliveries()->where('date', '>=', $this->from)->readyToOrder()->get() ?? [];
         $count = 0;
         $max_orders = $this->customer->creditOfProduct($this->product, true);
 

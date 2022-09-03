@@ -6,6 +6,7 @@ use App\Jobs\CreateOrdersForBuy;
 use App\Models\Bundle;
 use App\Models\Buy;
 use App\Models\Customer;
+use App\Models\DeliveryService;
 use App\Notifications\SendInvoice;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
@@ -28,7 +29,10 @@ class BuyTest extends TestCase
 
     public function test_createOrdersForBuyJob()
     {
-        $customer = Customer::factory()->create();
+        $customer = Customer::factory([
+            'delivery_address_id' => null,
+            'delivery_service_id' => DeliveryService::where('pickup', '=', 1)->inRandomOrder()->first()->id,
+        ])->create();
         $buy = Buy::factory([
             'customer_id' => $customer->id,
             'paid' => 1,

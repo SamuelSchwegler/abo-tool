@@ -39,8 +39,8 @@ class BundleController extends Controller
     /**
      * Zahlung mit allen Daten absenden.
      *
-     * @param Bundle $bundle
-     * @param Request $request
+     * @param  Bundle  $bundle
+     * @param  Request  $request
      * @return Application|ResponseFactory|Response
      */
     public function submitBuy(Bundle $bundle, Request $request)
@@ -68,7 +68,7 @@ class BundleController extends Controller
         if ($validator->fails()) {
             return \response([
                 'errors' => $validator->errors()->toArray(),
-                'authenticated' => !Auth::guest(),
+                'authenticated' => ! Auth::guest(),
                 'user' => UserResource::make(Auth::user()),
             ], 422);
         }
@@ -126,10 +126,13 @@ class BundleController extends Controller
         }
         $user->refresh(); // customer für user nachladen
 
-        if ($request->delivery_option === "pickup") {
+        if ($request->delivery_option === 'pickup') {
+            if(! isset($request->delivery_service['id'])) {
+                return abort(422);
+            }
             $service = DeliveryService::find($request->delivery_service['id']);
             $customer->update([
-                'delivery_service_id' => $service->id
+                'delivery_service_id' => $service->id,
             ]);
         } else {
             $service = $customer->delivery_service();

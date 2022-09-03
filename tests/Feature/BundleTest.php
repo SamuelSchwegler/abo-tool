@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Address;
 use App\Models\Bundle;
 use App\Models\Customer;
+use App\Models\DeliveryService;
 use App\Models\Postcode;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -109,6 +110,10 @@ class BundleTest extends TestCase
                 'city' => $this->faker->city(),
             ],
         ];
+        $response = $this->post('/api/bundle/'.$bundle->id.'/buy', $data);
+        $response->assertStatus(422);
+
+        $data['delivery_service']['id'] = DeliveryService::where('pickup', '=', 1)->inRandomOrder()->first()->id;
         $response = $this->post('/api/bundle/'.$bundle->id.'/buy', $data);
         self::assertEquals($customer_count + 1, Customer::count());
         self::assertEquals($address_count + 1, Address::count());
