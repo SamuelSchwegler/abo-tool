@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Mailer\Exception\TransportException;
+use const http\Client\Curl\AUTH_ANY;
 
 class BundleController extends Controller
 {
@@ -135,6 +136,9 @@ class BundleController extends Controller
                 'delivery_service_id' => $service->id,
             ]);
         } else {
+            $customer->update([
+                'delivery_service_id' => null,
+            ]);
             $service = $customer->delivery_service();
         }
 

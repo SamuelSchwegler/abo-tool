@@ -51,7 +51,7 @@
                                 <div class="flex items-center h-5">
                                     <input :id="option.id" :aria-describedby="`${option.id}-description`" name="plan"
                                            type="radio"
-                                           :checked="option.type === 'pickup' && user.customer.delivery_service.id === option.id"
+                                           :checked="option.type === 'pickup' && user.customer.hasOwnProperty('delivery_service') && user.customer.delivery_service.id === option.id"
                                            @change="changeDeliveryOption(option.type, option)"
                                            class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"
                                            v-bind:class="'delivery-option-' + option.id"/>
@@ -103,6 +103,7 @@ import AddressVue from "../parts/Address";
 import Bundle from "../parts/Bundle";
 import LoginModal from "./parts/LoginModal";
 import LoginCredentials from "./parts/LoginCredentials";
+import customerHelpers from "../Admin/Helpers/customerHelpers";
 
 export default {
     name: "BundleBuy",
@@ -112,11 +113,6 @@ export default {
     },
     emits: ['authentication'],
     data: function () {
-        const delivery_options = [
-            {id: 'match', name: 'Liefer- und Rechnungsadresse stimmen überein', description: '', type: 'match'},
-            {id: 'split', name: 'Unterschiedliche Liefer- und Rechnungsadresse', description: '', type: 'split'},
-        ]
-
         const steps = [
             {
                 id: '01',
@@ -151,11 +147,11 @@ export default {
 
         return {
             bundle: {},
-            delivery_options: delivery_options,
+            delivery_options: customerHelpers.getDeliveryOptions(),
             pickup_options: [],
             steps: steps,
             delivery_option: user.customer.delivery_option,
-            delivery_service_id: user.customer.delivery_service.id,
+            delivery_service_id: user.customer.hasOwnProperty('delivery_service') ? user.customer.delivery_service.id : 0,
             isLoggedIn: window.Laravel.isLoggedIn,
             user: user,
             show_loginModal: false,

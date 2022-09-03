@@ -54,7 +54,7 @@
                             <input :id="option.id" :aria-describedby="`${option.id}-description`" name="plan"
                                    type="radio"
                                    :checked="option.id === customer.delivery_option"
-                                   @change="changeDeliveryOption(option.id)"
+                                   @change="changeDeliveryOption(option.type)"
                                    class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"/>
                         </div>
                         <div class="ml-3 text-sm">
@@ -63,11 +63,36 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-2">
+                    <label class="text-base font-medium text-gray-900">Abholung</label>
+                    <fieldset class="mt-1">
+                        <legend class="sr-only">Abholungsort</legend>
+                        <div class="space-y-3">
+                            <div v-for="option in pickup_options" :key="option.id"
+                                 class="relative flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input :id="option.id" :aria-describedby="`${option.id}-description`" name="plan"
+                                           type="radio"
+                                           :checked="option.type === 'pickup' && user.customer.delivery_service.id === option.id"
+                                           @change="changeDeliveryOption(option.type, option)"
+                                           class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"
+                                           v-bind:class="'delivery-option-' + option.id"/>
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label :for="option.id" class="font-medium text-gray-700">{{ option.name }}</label>
+                                    <span :id="`${option.id}-description`" class="text-gray-500">{{
+                                            option.description
+                                        }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
             </fieldset>
             <div v-if="customer.delivery_option !== 'pickup'" class="mt-5">
                 <h4>Lieferadresse</h4>
                 <address-vue :address="customer.delivery_address ?? {}" class="mt-5"
-                             v-on:updated="deliveryAddressUpdated"
+                             v-on:updated="deliveryAddressUpdated" :key="'delivery_address'"
                              :errors="delivery_address_errors"></address-vue>
                 <div class="grid gap-4 grid-cols-4 pb-4" :key="key">
                     <div class="col-span-1">
@@ -87,6 +112,7 @@
             <div v-if="customer.delivery_option !== 'match'" class="mt-5">
                 <h4>Rechnungsadresse</h4>
                 <address-vue :address="customer.billing_address ?? {}" v-on:updated="billingAddressUpdated"
+                             :key="'billing_address'"
                              :errors="billing_address_errors"></address-vue>
             </div>
         </div>
@@ -116,6 +142,7 @@ export default {
             customer: {},
             key: 0,
             delivery_options: customerHelpers.getDeliveryOptions(),
+            pickup_options: [],
             errors: [],
             delivery_address_errors: {},
             billing_address_errors: {},
@@ -130,6 +157,22 @@ export default {
                 this.user = response.data.user;
                 this.active = this.customer.active;
             });
+
+            this.$axios.get('/api/delivery-services').then(response => {
+                this.delivery_services = response.data.services;
+
+                this.delivery_services.filter(s => s.pickup).forEach(s => {
+                    this.pickup_options.push({
+                        id: s.id,
+                        type: 'pickup',
+                        name: s.option_description,
+                        description: ''
+                    });
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+
             this.key++;
         },
         updated(customer) {
@@ -142,9 +185,14 @@ export default {
         billingAddressUpdated(address) {
             this.customer.billing_address = address;
         },
-        changeDeliveryOption: function (id) {
+        changeDeliveryOption: function (type, service = null) {
+            this.delivery_option = type;
+            if(service !== null) {
+                this.customer.delivery_service = service;
+            }
+
             let old = this.customer.delivery_option;
-            this.customer.delivery_option = id;
+            this.customer.delivery_option = type;
 
             if (old === 'pickup' && this.customer.delivery_address === null) {
                 this.customer.delivery_address = this.customer.billing_address

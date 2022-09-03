@@ -8,8 +8,11 @@ use App\Models\Postcode;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Dusk\Browser;
+use Laravel\Sanctum\Sanctum;
 use Tests\DuskTestCase;
+use const http\Client\Curl\AUTH_ANY;
 
 class OrderTest extends DuskTestCase
 {
@@ -45,8 +48,8 @@ class OrderTest extends DuskTestCase
                 ->type('last_name', $this->faker->lastName());
 
             $browser->click('button#proceed')
-                ->assertPathBeginsWith('/bundle/buy')
                 ->pause(150)
+                ->assertPathBeginsWith('/bundle/buy')
                 ->assertDontSee('Passwort muss ausgefüllt sein.') // Passwort Fehler ist weg
                 ->assertSee('Vorname muss ausgefüllt sein')
                 ->assertDontSee('Nachname muss ausgefüllt sein')
@@ -63,18 +66,20 @@ class OrderTest extends DuskTestCase
             // Lieferoptionen Testen
             $browser->click('input.delivery-option-match')->pause(80)
                 ->assertNotPresent('.billing-address')->assertPresent('.delivery-address');
-            $browser->click('input.delivery-option-pickup')->pause(80)
+            $browser->click('input.delivery-option-1')->pause(80) // ist pickup id
                 ->assertPresent('.billing-address')->assertNotPresent('.delivery-address');
             $browser->click('input.delivery-option-split')->pause(80)
                 ->assertPresent('.billing-address')->assertPresent('.delivery-address');
 
             $browser->type('delivery_address_street', $this->faker->streetAddress());
             $browser->type('delivery_address_postcode', Postcode::inRandomOrder()->first()->postcode);
-            $browser->type('delivery_address_city', $this->faker->city());
+            $browser->type('delivery_address_city', $this->faker->city())                ->screenshot(1)
+            ;
 
             $browser->click('button#proceed')
-                ->assertPathBeginsWith('/bundle/buy')
-                ->pause(250)
+                ->pause(350)
+                ->screenshot(2)
+                ->assertPathBeginsWith('/buy/')
                 ->assertDontSee('Passwort muss ausgefüllt sein.') // Passwort Fehler ist weg
                 ->assertDontSee('Vorname muss ausgefüllt sein')
                 ->assertDontSee('Nachname muss ausgefüllt sein')

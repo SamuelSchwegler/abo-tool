@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Jobs\CreateOrders;
 use App\Models\Address;
 use App\Models\Customer;
+use App\Models\DeliveryService;
 use App\Models\Product;
 use App\Models\User;
 use App\Rules\DeliveryPossibleToPostcode;
@@ -103,6 +104,20 @@ class CustomerController extends Controller
 
         $customer->update(array_merge($customerValidated, $address_data));
         $customer->refresh();
+
+        if ($request->delivery_option === 'pickup') {
+            if(! isset($request->delivery_service['id'])) {
+                return abort(422);
+            }
+            $service = DeliveryService::find($request->delivery_service['id']);
+            $customer->update([
+                'delivery_service_id' => $service->id,
+            ]);
+        } else {
+            $customer->update([
+                'delivery_service_id' => null,
+            ]);
+        }
 
         return response([
             'msg' => 'ok',
