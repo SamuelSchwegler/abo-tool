@@ -73,7 +73,7 @@
                                 <div class="flex items-center h-5">
                                     <input :id="option.id" :aria-describedby="`${option.id}-description`" name="plan"
                                            type="radio"
-                                           :checked="option.type === 'pickup' && user.customer.delivery_service.id === option.id"
+                                           :checked="option.type === 'pickup' && customer.hasOwnProperty('delivery_service') && customer.delivery_service !== null && customer.delivery_service.id === option.id"
                                            @change="changeDeliveryOption(option.type, option)"
                                            class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"
                                            v-bind:class="'delivery-option-' + option.id"/>
@@ -95,7 +95,7 @@
                              v-on:updated="deliveryAddressUpdated" :key="'delivery_address'"
                              :errors="delivery_address_errors"></address-vue>
                 <div class="grid gap-4 grid-cols-4 pb-4" :key="key">
-                    <div class="col-span-1">
+                    <div class="col-span-1" v-if="customer.hasOwnProperty('delivery_service') && customer.delivery_service !== null">
                         <label class="block text-sm font-medium text-gray-700">Lieferdienst</label>
                         <router-link :to="'/delivery-service/' + customer.delivery_service.id " type="button"
                                      class="mt-1 w-full inline-flex items-center justify-center rounded-md border border-transparent bg-violet px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -123,6 +123,7 @@
             Daten speichern
         </button>
     </div>
+    <audits class="mt-4" :audits="customer.audits"></audits>
 </template>
 
 <script>
@@ -133,10 +134,11 @@ import UserData from "../parts/UserData";
 import customerHelpers from "./Helpers/customerHelpers";
 import TextInput from "../../components/form/textInput";
 import Toggle from "@vueform/toggle";
+import Audits from "../parts/Audits";
 
 export default {
     name: "Customer",
-    components: {CustomerData, AddressVue, UserData, TextInput, Toggle},
+    components: {Audits, CustomerData, AddressVue, UserData, TextInput, Toggle},
     data() {
         return {
             customer: {},

@@ -39,6 +39,16 @@ class DeliveryTest extends TestCase
         $response->assertOk();
     }
 
+    public function test_deliveriesForDate()
+    {
+        Sanctum::actingAs($this->admin);
+
+        $delivery = Delivery::whereHas('active_orders')->inRandomOrder()->first();
+
+        $response = $this->json('get', '/api/deliveries/'.$delivery->date->format('Y-m-d'));
+        $response->assertOk();
+    }
+
     public function test_delivery()
     {
         $delivery = Delivery::factory()->create();

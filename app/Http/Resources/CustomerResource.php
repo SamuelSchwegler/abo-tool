@@ -39,6 +39,7 @@ class CustomerResource extends JsonResource
             'buys' => $buys,
             'internal_comment' => $this->internal_comment,
             'discount' => $this->discount,
+            'audits' => AuditResource::collection($this->audits)
         ];
     }
 }

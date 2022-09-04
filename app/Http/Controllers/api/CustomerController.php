@@ -69,7 +69,7 @@ class CustomerController extends Controller
                 $deliveryAddressRules['delivery_address.postcode'][] = new DeliveryPossibleToPostcode();
                 $deliveryAddressValidated = $request->validate($deliveryAddressRules, Address::messages('delivery_address'));
 
-                $address = Address::create($deliveryAddressValidated['delivery_address']);
+                $address = Address::firstOrCreate($deliveryAddressValidated['delivery_address']);
 
                 $address_data = [
                     'billing_address_id' => $address->id,
@@ -78,7 +78,7 @@ class CustomerController extends Controller
                 break;
             case 'pickup':
                 $billingAddressValidated = $request->validate($billingAddressRules, Address::messages('billing_address'));
-                $address = Address::create($billingAddressValidated['billing_address']);
+                $address = Address::firstOrCreate($billingAddressValidated['billing_address']);
 
                 $address_data = [
                     'billing_address_id' => $address->id,
@@ -90,8 +90,8 @@ class CustomerController extends Controller
                 $deliveryAddressValidated = $request->validate($deliveryAddressRules, Address::messages('delivery_address'));
                 $billingAddressValidated = $request->validate($billingAddressRules, Address::messages('billing_address'));
 
-                $delivery = Address::create($deliveryAddressValidated['delivery_address']);
-                $billing = Address::create($billingAddressValidated['billing_address']);
+                $delivery = Address::firstOrCreate($deliveryAddressValidated['delivery_address']);
+                $billing = Address::firstOrCreate($billingAddressValidated['billing_address']);
 
                 $address_data = [
                     'delivery_address_id' => $delivery->id,
@@ -99,8 +99,8 @@ class CustomerController extends Controller
                 ];
         }
 
-        $customer->delivery_address?->delete();
-        $customer->billing_address?->delete();
+        $old_delivery_address = $customer->delivery_address;
+        $old_billing_address = $customer->billing_address;
 
         $customer->update(array_merge($customerValidated, $address_data));
         $customer->refresh();
@@ -113,11 +113,23 @@ class CustomerController extends Controller
             $customer->update([
                 'delivery_service_id' => $service->id,
             ]);
-        } else {
+        } elseif(!is_null($customer->delivery_service_id)) {
             $customer->update([
                 'delivery_service_id' => null,
             ]);
         }
+
+        /*
+        $old_delivery_address?->refresh();
+        if(!is_null($old_delivery_address) && $old_delivery_address->customers->count() === 0) {
+            $old_delivery_address->delete();
+        }
+
+        $old_billing_address?->refresh();
+        if(!is_null($old_billing_address) && $old_billing_address->customers->count() === 0) {
+            $old_billing_address->delete();
+        }
+        */
 
         return response([
             'msg' => 'ok',

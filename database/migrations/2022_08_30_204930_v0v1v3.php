@@ -6,7 +6,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use Spatie\Permission\Models\Permission;
 
 return new class extends Migration {
     /**
@@ -57,6 +60,12 @@ return new class extends Migration {
                 ]);
             }
         }
+
+        if(is_null(Permission::where('name', 'see audits')->first())) {
+            Permission::create([
+                'name' => 'see audits'
+            ])->syncRoles(['admin', 'office']);
+        }
     }
 
     /**
@@ -74,6 +83,13 @@ return new class extends Migration {
 
         if (Schema::hasColumn('customers', 'delivery_service_id')) {
             Schema::dropColumns('customers', ['delivery_service_id']);
+        }
+
+        try {
+            $seeAudits = Permission::findByName('see audits');
+            $seeAudits->delete();
+        } catch (PermissionDoesNotExist $e) {
+            Log::warning($e);
         }
     }
 };

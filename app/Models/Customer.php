@@ -192,10 +192,10 @@ class Customer extends Model implements Auditable
      */
     public function delivery_service(): ?DeliveryService
     {
-        $postcode = $this->delivery_address?->postcode;
-        if (is_null($postcode)) {
+        if(is_null($this->delivery_address_id)) {
             return DeliveryService::find($this->delivery_service_id);
         }
+        $postcode = $this->delivery_address?->postcode;
 
         return DeliveryService::findServiceForPostcode($postcode);
     }
