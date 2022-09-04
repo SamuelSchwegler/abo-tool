@@ -46,6 +46,7 @@ class BundleController extends Controller
      */
     public function submitBuy(Bundle $bundle, Request $request)
     {
+        Log::info($request->all());
         $customer = null;
         if (Auth::check()) {
             $user = Auth::user();

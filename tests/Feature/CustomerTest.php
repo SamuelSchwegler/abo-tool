@@ -74,6 +74,10 @@ class CustomerTest extends TestCase
         $data['delivery_address'] = null;
 
         $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
+        $response->assertStatus(422);
+
+        $data['delivery_service']['id'] = 1;
+        $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
         $response->assertOk();
     }
 

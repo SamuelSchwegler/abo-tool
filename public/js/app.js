@@ -22462,7 +22462,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       if (this.delivery_option === "match") {
-        this.user.customer.billing_address = this.user.customer.delivery_address;
+        this.user.customer.billing_address = Object.create(this.user.customer.delivery_address);
       } else if (this.delivery_option === "pickup") {
         this.user.customer.delivery_address = {};
       }
@@ -22599,8 +22599,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this3.delivery_services.filter(function (s) {
         return s.pickup;
       }).forEach(function (s) {
-        console.log(s);
-
         _this3.pickup_options.push({
           id: s.id,
           type: 'pickup',
@@ -26920,7 +26918,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "aria-describedby": "".concat(option.id, "-description"),
       name: "plan",
       type: "radio",
-      checked: option.type === 'pickup' && _ctx.user.customer.hasOwnProperty('delivery_service') && _ctx.user.customer.delivery_service.id === option.id,
+      checked: _ctx.delivery_option === 'pickup' && option.type === 'pickup' && _ctx.user.customer.hasOwnProperty('delivery_service') && _ctx.user.customer.delivery_service.id === option.id,
       onChange: function onChange($event) {
         return $options.changeDeliveryOption(option.type, option);
       },

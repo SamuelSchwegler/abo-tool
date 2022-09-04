@@ -51,7 +51,7 @@
                                 <div class="flex items-center h-5">
                                     <input :id="option.id" :aria-describedby="`${option.id}-description`" name="plan"
                                            type="radio"
-                                           :checked="option.type === 'pickup' && user.customer.hasOwnProperty('delivery_service') && user.customer.delivery_service.id === option.id"
+                                           :checked="delivery_option === 'pickup' && option.type === 'pickup' && user.customer.hasOwnProperty('delivery_service') && user.customer.delivery_service.id === option.id"
                                            @change="changeDeliveryOption(option.type, option)"
                                            class="focus:ring-indigo-500 h-4 w-4 text-violet border-gray-300"
                                            v-bind:class="'delivery-option-' + option.id"/>
@@ -171,7 +171,7 @@ export default {
     methods: {
         proceed: function () {
             if (this.delivery_option === "match") {
-                this.user.customer.billing_address = this.user.customer.delivery_address;
+                this.user.customer.billing_address = Object.create(this.user.customer.delivery_address);
             } else if (this.delivery_option === "pickup") {
                 this.user.customer.delivery_address = {}
             }
@@ -213,7 +213,7 @@ export default {
         },
         changeDeliveryOption: function (type, service = null) {
             this.delivery_option = type;
-            if(service !== null) {
+            if (service !== null) {
                 this.user.customer.delivery_service = service;
             }
 
@@ -276,8 +276,6 @@ export default {
             this.delivery_services = response.data.services;
 
             this.delivery_services.filter(s => s.pickup).forEach(s => {
-                console.log(s);
-
                 this.pickup_options.push({
                     id: s.id,
                     type: 'pickup',
