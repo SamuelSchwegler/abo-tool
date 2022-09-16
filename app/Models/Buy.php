@@ -7,14 +7,23 @@ use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 use Sprain\SwissQrBill as QrBill;
 
-class Buy extends Model
+class Buy extends Model implements Auditable
 {
-    use HasFactory, TraitUuid;
+    use HasFactory, TraitUuid, AuditableTrait;
 
     protected $guarded = ['id'];
     protected $dates = ['issued'];
+
+    public function transformAudit(array $data): array
+    {
+        $data['auditable_id'] = Buy::latest()->first()->bill_number + 1;
+        return $data;
+    }
 
     public function bundle()
     {

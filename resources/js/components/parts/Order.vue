@@ -37,11 +37,14 @@
             <ClipboardDocumentListIcon class="h-6 w-6" @click="openAuditModal"></ClipboardDocumentListIcon>
         </td>
     </tr>
+    <audit-modal v-if="can('manage customers')" :key="'audit_modal_key_' + order.id + '_' + audit_modal_key" :show="open_audit_modal"
+                 :audits="order.audits"></audit-modal>
 </template>
 
 <script>
 import Toggle from '@vueform/toggle'
 import textInput from "../form/textInput";
+import AuditModal from "../../pages/Admin/Orders/AuditModal";
 import {ClipboardDocumentListIcon} from "@heroicons/vue/20/solid";
 
 export default {
@@ -55,14 +58,16 @@ export default {
     },
     emits: ['toggleOrder'],
     components: {
-        Toggle, textInput, ClipboardDocumentListIcon
+        Toggle, textInput, ClipboardDocumentListIcon, AuditModal
     },
     data: function () {
         return {
             order: this.input_order,
             running: !this.input_order.canceled,
             key: 0,
-            toggleDisabled: this.input_order.deadline_passed && !this.can('manage customers')
+            toggleDisabled: this.input_order.deadline_passed && !this.can('manage customers'),
+            open_audit_modal: false,
+            audit_modal_key: 0
         }
     },
     methods: {
@@ -91,7 +96,8 @@ export default {
             });
         },
         openAuditModal() {
-            alert('audit');
+            this.open_audit_modal = true;
+            this.audit_modal_key++;
         }
     }
 }

@@ -37,6 +37,7 @@ class OrderResource extends JsonResource
             'canceled' => $this->canceled,
             'affordable' => $this->affordable,
             'deadline_passed' => $this->deadlinePassed(),
+            'audits' => AuditResource::collection($this->audits)
         ];
     }
 }

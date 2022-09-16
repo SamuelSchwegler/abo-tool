@@ -35,7 +35,7 @@
             {{ buy.age }}
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 p-2 text-slate-500 dark:text-slate-400">
-            <a target="_blank" :href="'export/buy/' + buy.id + '/bill'" title="PDF Download"
+            <a target="_blank" :href="'/export/buy/' + buy.id + '/bill'" title="PDF Download"
                class="btn inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor" stroke-width="2">
