@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -100,12 +101,16 @@ class Delivery extends Model
      * Ist eine Lieferung im Zeitraum, in dem man bestellen kann?
      *
      * @param $query
+     * @param $date
      * @return mixed
      */
-    public function scopeReadyToOrder($query)
+    public function scopeReadyToOrder($query, ?Carbon $date = null)
     {
-        return $query->where('date', '>=', now()->subDay())
-            ->where('date', '<=', now()->addDays(Order::PREVIEW_OFFSET_DAYS))
+        if(is_null($date)) {
+            $date = now();
+        }
+        return $query->where('date', '>=', $date->copy()->subDay())
+            ->where('date', '<=', $date->copy()->addDays(Order::PREVIEW_OFFSET_DAYS))
             ->where('approved', '=', 1);
     }
 }

@@ -52,6 +52,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/order/{order}', [OrderController::class, 'update']);
     Route::patch('/order/{order}/toggle-cancel', [OrderController::class, 'toggleCancel']);
 
+    Route::group(['middleware' => ['permission:manage customers']], function () {
+        Route::delete('/order/{order}', [OrderController::class, 'delete']);
+    });
+
     Route::get('buy/{buy}', [BuyController::class, 'buy']);
     Route::patch('/buy/{buy}', [BuyController::class, 'update']);
 

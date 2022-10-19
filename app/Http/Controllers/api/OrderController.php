@@ -20,15 +20,22 @@ class OrderController extends Controller
 {
     public function orders(?Customer $customer = null)
     {
+        $user = Auth::user();
         if(is_null($customer)) {
-            $user = Auth::user();
             $customer = $user->customer;
+        }
+
+        if($user->can('manage deliveries')) {
+            $orders = $customer?->next_orders(now()->subWeeks(4))->get();
+        } else {
+            $orders = $customer?->next_orders(now()->subWeek())->get();
         }
 
         return \response([
             'customer' => CustomerResource::make($customer),
-            'orders' => OrderResource::collection($customer?->next_orders ?? collect([])),
+            'orders' => OrderResource::collection($orders ?? collect([])),
             'product_balances' => $customer?->productBalances() ?? [],
+            'distinct_delivery_services' => $orders->groupBy('delivery.delivery_service.id')->map->count()->count()
         ]);
     }
 
@@ -73,5 +80,11 @@ class OrderController extends Controller
         CreateOrders::dispatchSync($order->customer, $order->product);
 
         return response(['order' => OrderResource::make($order)]);
+    }
+
+    public function delete(Order $order): Response|Application|ResponseFactory
+    {
+        $order->delete();
+        return response(['msg' => 'ok']);
     }
 }

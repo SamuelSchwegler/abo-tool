@@ -31,7 +31,7 @@ class DeliverySeeder extends Seeder
             'paid' => 1,
         ]);
 
-        $start = now()->subMonths(2);
+        $start = now()->subDays(40);
         $end = $start->copy()->addMonths(3);
 
         $date = $start->copy();
@@ -59,7 +59,7 @@ class DeliverySeeder extends Seeder
         }
 
         foreach ($paidBuys as $buy) {
-            $date = $start->copy()->addDays(rand(0, 14));
+            $date = $start->copy()->addDays(rand(0, 31));
             CreateOrdersForBuy::dispatch($buy, $date);
         }
 

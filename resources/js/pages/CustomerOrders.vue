@@ -35,7 +35,10 @@
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Lieferdatum
                 </th>
-                <th v-if="multiple_products" class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                <th v-if="multiple_delivery_services" class="border-b dark:border-slate-600 font-medium py-4 px-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    Lieferart
+                </th>
+                <th v-if="multiple_products" class="border-b dark:border-slate-600 font-medium py-4 px-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                     Produkt
                 </th>
                 <th class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
@@ -49,11 +52,15 @@
                     Interner Kommentar
                 </th>
                 <th v-if="can('manage customers')"
-                    class="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                    class="border-b dark:border-slate-600 font-medium py-4 pr-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                </th>
+                <th v-if="can('manage customers')"
+                    class="border-b dark:border-slate-600 font-medium py-4 pr-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                 </th>
                 </thead>
                 <tbody class="bg-white dark:bg-slate-800">
                 <order v-for="(order, index) in orders" :input_order="order" :multiple_products="multiple_products"
+                       :multiple_delivery_services="multiple_delivery_services"
                        :key="'order_key_' + order.id + '_affordable_' + order.affordable" @toggleOrder="toggleOrder"></order>
                 </tbody>
             </table>
@@ -193,7 +200,8 @@ export default {
             customer_id: 0,
             customer: {},
             errors: [],
-            multiple_products: false
+            multiple_products: false,
+            multiple_delivery_services: false
         }
     },
     methods: {
@@ -238,6 +246,7 @@ export default {
                     this.product_balances = response.data.product_balances;
 
                     this.multiple_products = (Object.keys(this.product_balances).length > 1);
+                    this.multiple_delivery_services = (response.data.distinct_delivery_services > 1);
                 })
                 .catch(function (error) {
                     console.log(error);

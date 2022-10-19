@@ -1,5 +1,5 @@
 <template>
-    <tr v-bind:class="{'bg-gray-200': order.deadline_passed, 'bg-red-200': !order.affordable}"
+    <tr v-if="show" v-bind:class="{'bg-gray-200': order.deadline_passed, 'bg-red-200': !order.affordable}"
         :key="'order_key_' + order.id + '_' + key"
         v-bind:title="!order.affordable ? 'diese Bestellung ist Momentan nicht möglich, weil zu wenig Guthaben besteht.' : ''">
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
@@ -16,8 +16,12 @@
                 {{ order.delivery.date['d.m.Y'] }}
             </template>
         </td>
+        <td v-if="multiple_delivery_services"
+            class="border-b border-slate-100 dark:border-slate-700 px-2 py-1 text-slate-500 dark:text-slate-400">
+            {{order.delivery.delivery_service.name}}
+        </td>
         <td v-if="multiple_products"
-            class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
+            class="border-b border-slate-100 dark:border-slate-700 px-2 py-1 text-slate-500 dark:text-slate-400">
             {{ order.product.name }}
         </td>
         <td class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
@@ -33,19 +37,27 @@
                         @change="updateOrder"></text-input>
         </td>
         <td v-if="can('manage customers')"
-            class="border-b border-slate-100 dark:border-slate-700 px-4 py-1 text-slate-500 dark:text-slate-400">
+            class="border-b border-slate-100 dark:border-slate-700 pr-2 py-1 text-slate-500 dark:text-slate-400">
             <ClipboardDocumentListIcon class="h-6 w-6" @click="openAuditModal"></ClipboardDocumentListIcon>
         </td>
+        <td v-if="can('manage customers')"
+            class="border-b border-slate-100 dark:border-slate-700 pr-2 py-1 text-red-500 dark:text-red-400">
+            <TrashIcon class="h-6 w-6" @click="openDeleteModal"></TrashIcon>
+        </td>
     </tr>
-    <audit-modal v-if="can('manage customers')" :key="'audit_modal_key_' + order.id + '_' + audit_modal_key" :show="open_audit_modal"
-                 :audits="order.audits"></audit-modal>
+    <audit-modal v-if="can('manage customers')" :key="'audit_modal_key_' + order.id + '_' + audit_modal_key"
+                 :show="open_audit_modal" :audits="order.audits"></audit-modal>
+    <delete-modal  v-if="can('manage customers')" :key="'delete_modal_' + order.id + '_' + delete_modal_key"
+                   :show="open_delete_modal" :route="'/api/order/' + order.id" v-on:deleted="deleted"></delete-modal>
+
 </template>
 
 <script>
 import Toggle from '@vueform/toggle'
 import textInput from "../form/textInput";
 import AuditModal from "../../pages/Admin/Orders/AuditModal";
-import {ClipboardDocumentListIcon} from "@heroicons/vue/20/solid";
+import DeleteModal from "../../pages/parts/DeleteModal";
+import {ClipboardDocumentListIcon, TrashIcon} from "@heroicons/vue/20/solid";
 
 export default {
     name: "Order",
@@ -54,11 +66,15 @@ export default {
         multiple_products: {
             type: Boolean,
             default: false
+        },
+        multiple_delivery_services: {
+            type: Boolean,
+            default: false
         }
     },
     emits: ['toggleOrder'],
     components: {
-        Toggle, textInput, ClipboardDocumentListIcon, AuditModal
+        Toggle, textInput, ClipboardDocumentListIcon, AuditModal, TrashIcon, DeleteModal
     },
     data: function () {
         return {
@@ -67,7 +83,10 @@ export default {
             key: 0,
             toggleDisabled: this.input_order.deadline_passed && !this.can('manage customers'),
             open_audit_modal: false,
-            audit_modal_key: 0
+            open_delete_modal: false,
+            audit_modal_key: 0,
+            delete_modal_key: 0,
+            show: true
         }
     },
     methods: {
@@ -98,6 +117,13 @@ export default {
         openAuditModal() {
             this.open_audit_modal = true;
             this.audit_modal_key++;
+        },
+        openDeleteModal() {
+            this.open_delete_modal = true;
+            this.delete_modal_key++;
+        },
+        deleted() {
+            this.show = false;
         }
     }
 }

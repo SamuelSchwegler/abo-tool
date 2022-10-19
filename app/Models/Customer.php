@@ -146,12 +146,16 @@ class Customer extends Model implements Auditable
      * v0.1.0
      * Gibt die nächsten Bestellungen Zurück.
      *
+     * @param Carbon|null $date
      * @return HasMany
      */
-    public function next_orders(): HasMany
+    public function next_orders(?Carbon $date = null): HasMany
     {
-        return $this->orders()->whereHas('delivery', function ($query) {
-            $query->readyToOrder();
+        if(is_null($date))
+            $date = now();
+
+        return $this->orders()->whereHas('delivery', function ($query) use ($date) {
+            $query->readyToOrder($date);
         })->join('deliveries', 'deliveries.id', '=', 'orders.delivery_id')
             ->orderBy('deliveries.date')
             ->select('orders.*');
