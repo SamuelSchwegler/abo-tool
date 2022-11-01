@@ -3,6 +3,12 @@
         <div class="sm:flex-auto">
             <h1 class="page-title">Rechnungen</h1>
         </div>
+        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <span @click="openCreate" type="button"
+                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-green px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+                Neue Rechnung ausstellen
+            </span>
+        </div>
     </div>
     <div class="box bg-white">
         <table class="border-collapse table-auto w-full text-sm" v-if="buys.length > 0">
@@ -43,21 +49,32 @@
             </tbody>
         </table>
     </div>
+    <create-buy-modal :show="showCreateBuyModal" :key="createBuyConfirmModalKey"
+    ></create-buy-modal>
 </template>
 
 <script>
 
 import BuyPayment from "./Parts/BuyPayment";
+import CreateBuyModal from "./Parts/CreateBuyModal";
 
 export default {
     name: "ManagePayments",
     components: {
-        BuyPayment
+        BuyPayment, CreateBuyModal
     },
     data: function () {
         return {
-            buys: []
+            buys: [],
+            showCreateBuyModal: false,
+            createBuyConfirmModalKey: 0
         }
+    },
+    methods: {
+        openCreate() {
+            this.showCreateBuyModal = true;
+            this.createBuyConfirmModalKey++;
+        },
     },
     created() {
         this.$axios.get(`/api/payments/`)

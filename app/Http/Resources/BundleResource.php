@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BundleResource extends JsonResource
@@ -22,6 +23,7 @@ class BundleResource extends JsonResource
             'price_per_delivery' => $this->price_per_delivery,
             'trial' => $this->trial,
             'short_description' => $this->short_description,
+            'product' => ProductResource::make($this->product)
         ];
     }
 }
