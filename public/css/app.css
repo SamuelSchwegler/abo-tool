@@ -1237,6 +1237,10 @@ select{
   padding-top: 0px;
   padding-bottom: 0px;
 }
+.py-4{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
 .py-1{
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -1252,10 +1256,6 @@ select{
 .px-3{
   padding-left: 0.75rem;
   padding-right: 0.75rem;
-}
-.py-4{
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 }
 .py-5{
   padding-top: 1.25rem;
@@ -1286,6 +1286,9 @@ select{
 }
 .pb-3{
   padding-bottom: 0.75rem;
+}
+.pr-2{
+  padding-right: 0.5rem;
 }
 .pr-3{
   padding-right: 0.75rem;
@@ -1325,9 +1328,6 @@ select{
 }
 .pt-6{
   padding-top: 1.5rem;
-}
-.pr-2{
-  padding-right: 0.5rem;
 }
 .text-left{
   text-align: left;
