@@ -83,7 +83,7 @@ class BuyController extends Controller
         $customer = Customer::find($validated['customer_id']);
         $product = Product::find($validated['product_id']);
 
-        if (is_null($validated['bundle_id'])) {
+        if (!isset($validated['bundle_id'])) {
             // Was ist das Standardbundle für den Customer mit diesem Produkt?
             // Trial Bundles sollen nicht verlängert werden.
             $bundle = $customer->buys()->whereHas('bundle', function ($query) use ($product) {

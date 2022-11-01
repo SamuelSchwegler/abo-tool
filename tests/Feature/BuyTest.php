@@ -109,10 +109,8 @@ class BuyTest extends TestCase
             'product_id' => $bundle->product->id,
         ]);
         $customer->refresh();
-
-        self::assertEquals(2, $customer->buys->count());
-
         $response->assertOk();
+        self::assertEquals(2, $customer->buys->count());
 
         Notification::assertSentTo($customer->user, SendInvoice::class);
     }
