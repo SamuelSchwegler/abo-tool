@@ -106,4 +106,8 @@ class Order extends Model implements Auditable
 
         return $word_output;
     }
+
+    public function scopeIsActive($q) {
+        $q->where('canceled', 0)->where('affordable', 1);
+    }
 }

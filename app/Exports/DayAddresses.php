@@ -28,7 +28,7 @@ class DayAddresses implements FromCollection, WithMapping, ShouldAutoSize, WithH
     {
         $this->date = $date;
 
-        $ordersQuery = Order::whereHas('delivery', function ($query) {
+        $ordersQuery = Order::isActive()->whereHas('delivery', function ($query) {
             $query->where('date', '>=', $this->date->format('Y-m-d'))
                 ->where('date', '<=', $this->date->copy()->addDay()->format('Y-m-d'));
         });
