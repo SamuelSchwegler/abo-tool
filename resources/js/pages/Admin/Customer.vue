@@ -92,6 +92,7 @@
             <div v-if="customer.delivery_option !== 'pickup'" class="mt-5">
                 <h4>Lieferadresse</h4>
                 <address-vue :address="customer.delivery_address ?? {}" class="mt-5"
+                             v-on:postcodeChanged="updateDeliveryService"
                              v-on:updated="deliveryAddressUpdated" :key="'delivery_address'"
                              :errors="delivery_address_errors"></address-vue>
                 <div class="grid gap-4 grid-cols-4 pb-4" :key="key">
@@ -139,6 +140,7 @@ import Audits from "../parts/Audits";
 export default {
     name: "Customer",
     components: {Audits, CustomerData, AddressVue, UserData, TextInput, Toggle},
+    emits: ['authentication'],
     data() {
         return {
             customer: {},
@@ -198,6 +200,21 @@ export default {
 
             if (old === 'pickup' && this.customer.delivery_address === null) {
                 this.customer.delivery_address = this.customer.billing_address
+            }
+        },
+        async updateDeliveryService() {
+            if (this.customer.delivery_address !== null && this.customer.delivery_address.hasOwnProperty('postcode')) {
+                let postcode = this.customer.delivery_address.postcode;
+                if (postcode.length > 0) {
+                    await axios.get('/api/postcode-delivery-service', {
+                        params: {
+                            postcode: this.customer.delivery_address.postcode,
+                            strict: 1
+                        }
+                    }).then(response => {
+                        this.customer.delivery_service = response.data.service;
+                    });
+                }
             }
         },
         async update() {

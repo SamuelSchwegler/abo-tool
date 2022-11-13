@@ -18,7 +18,7 @@ use function response;
 
 class OrderController extends Controller
 {
-    public function orders(?Customer $customer = null)
+    public function orders(?Customer $customer = null): Response|Application|ResponseFactory
     {
         $user = Auth::user();
         if(is_null($customer)) {

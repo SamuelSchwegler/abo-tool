@@ -19,6 +19,11 @@ use Illuminate\Http\Response;
 
 class CustomerController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return Response
+     * @changes v0.1.3 - Suchfunktion
+     */
     public function customers(Request $request): Response
     {
         $customer_query = Customer::query();
@@ -114,16 +119,14 @@ class CustomerController extends Controller
                 ];
         }
 
-        $old_delivery_address = $customer->delivery_address;
-        $old_billing_address = $customer->billing_address;
+        if ($request->delivery_option === 'pickup' && !isset($request->delivery_service['id'])) {
+            return abort(422);
+        }
 
         $customer->update(array_merge($customerValidated, $address_data));
         $customer->refresh();
 
         if ($request->delivery_option === 'pickup') {
-            if (!isset($request->delivery_service['id'])) {
-                return abort(422);
-            }
             $service = DeliveryService::find($request->delivery_service['id']);
             $customer->update([
                 'delivery_service_id' => $service->id,

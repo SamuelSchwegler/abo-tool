@@ -50,9 +50,9 @@ export default {
     emits: ['updated', 'postcodeChanged'],
     methods: {
         postcodeChanged() {
-            this.$emit('postcodeChanged', this.address.postcode);
             delete this.errors['postcode'];
             this.updated();
+            this.$emit('postcodeChanged', this.address.postcode);
         },
         updated() {
             this.$emit('updated', this.address);

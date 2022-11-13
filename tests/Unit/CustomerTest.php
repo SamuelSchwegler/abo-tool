@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Jobs\CreateDeliveries;
+use App\Jobs\CustomerChangeDelivery;
 use App\Models\Address;
 use App\Models\Bundle;
 use App\Models\Buy;
@@ -10,6 +12,8 @@ use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Order;
 use App\Models\Postcode;
+use Couchbase\LookupGetFullSpec;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -102,5 +106,44 @@ class CustomerTest extends TestCase
 
         self::assertEquals($bundle->deliveries - 1, $customer->creditOfProduct($product));
         self::assertEquals($bundle->deliveries - 2, $customer->creditOfProduct($product, true));
+    }
+
+    public function test_customerChangeDelivery()
+    {
+        $pickupService = DeliveryService::where('pickup', 1)->first();
+        $deliveryService = DeliveryService::factory()->create([
+            'pickup' => 0,
+            'days' => $pickupService->days,
+            'deadline_distance' => $pickupService->deadline_distance
+        ]);
+
+        $customer = Customer::factory()->create([
+            'delivery_address_id' => null,
+            'delivery_service_id' => $pickupService->id,
+        ]);
+
+        self::assertTrue($pickupService->deliveries->count() > 0);
+        self::assertFalse($deliveryService->deliveries->count() > 0);
+
+        CreateDeliveries::dispatchSync($deliveryService);
+        $deliveryService->refresh();
+        self::assertTrue($deliveryService->deliveries->count() > 0);
+        $deliveryService->deliveries()->update(['approved' => true]);
+        $pickupService->deliveries()->update(['approved' => true]);
+
+        foreach ($deliveryService->deliveries as $delivery) {
+            Order::factory()->create([
+                'delivery_id' => $delivery->id,
+                'customer_id' => $customer->id
+            ]);
+        }
+
+        CustomerChangeDelivery::dispatch($customer);
+
+        $next = $customer->orders()->whereHas('delivery', function ($query) {
+            $query->where('deadline', '>=', now()->startOfDay()->format('Y-m-d H:i:s'));
+        })->get();
+        self::assertTrue($next->count() > 0);
+        self::assertEquals($pickupService->id, $next->first()->delivery->delivery_service->id);
     }
 }

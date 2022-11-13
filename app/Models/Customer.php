@@ -65,8 +65,10 @@ class Customer extends Model implements Auditable
             $query = $query->where('products.id', $product->id);
         }
 
+        $deadline = now()->startOfDay()->format('Y-m-d H:i:s');
+
         return $query->groupBy('products.id')
-            ->selectRaw('products.id as product_id, products.name, COUNT(orders.id) as ordered, SUM(IF(deliveries.deadline >= NOW(), 1, 0)) AS planned')->get();
+            ->selectRaw('products.id as product_id, products.name, COUNT(orders.id) as ordered, SUM(IF(deliveries.deadline >= "'.$deadline.'", 1, 0)) AS planned')->get();
     }
 
     /**
@@ -100,14 +102,6 @@ class Customer extends Model implements Auditable
                 Log::error('balance key '.$key.' not existing for customer: '.$this->id);
             }
         }
-
-        /*
-        foreach ($balances as $key => $balance) {
-            if ($balance->last_issue->lt(now()->subMonths(6)) && $balance->balance === 0 && $balance->planned === 0) {
-                unset($balances[$key]);
-            }
-        }
-        */
 
         return $balances;
     }

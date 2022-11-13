@@ -20719,6 +20719,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     TextInput: _components_form_textInput__WEBPACK_IMPORTED_MODULE_4__["default"],
     Toggle: _vueform_toggle__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
+  emits: ['authentication'],
   data: function data() {
     return {
       customer: {},
@@ -20793,54 +20794,88 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.customer.delivery_address = this.customer.billing_address;
       }
     },
-    update: function update() {
+    updateDeliveryService: function updateDeliveryService() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var postcode;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios.patch('/api/customer/' + _this2.$route.params.id, _objectSpread(_objectSpread({}, _this2.customer), {}, {
-                  active: _this2.active
-                })).then(function (response) {
-                  _this2.customer = response.data.customer;
-                  _this2.errors = [];
-                  _this2.delivery_address_errors = {};
-                  _this2.billing_address_errors = {};
-                  _this2.$notify({
-                    type: "success",
-                    text: 'Bearbeiten erfolgreich'
-                  });
-                })["catch"](function (errors) {
-                  _this2.errors = errors.response.data.errors;
-                  _this2.delivery_address_errors = {
-                    street: _this2.errors['delivery_address.street'],
-                    postcode: _this2.errors['delivery_address.postcode'],
-                    city: _this2.errors['delivery_address.city']
-                  };
-                  _this2.billing_address_errors = {
-                    street: _this2.errors['billing_address.street'],
-                    postcode: _this2.errors['billing_address.postcode'],
-                    city: _this2.errors['billing_address.city']
-                  };
-                  var text = 'Es ist ein Fehler aufgetreten';
-                  if (errors.response.status === 422) {
-                    text = "Die gesendeten Angaben sind ungültig. Bitte prüfen Sie die Felder.";
+                if (!(_this2.customer.delivery_address !== null && _this2.customer.delivery_address.hasOwnProperty('postcode'))) {
+                  _context2.next = 5;
+                  break;
+                }
+                postcode = _this2.customer.delivery_address.postcode;
+                if (!(postcode.length > 0)) {
+                  _context2.next = 5;
+                  break;
+                }
+                _context2.next = 5;
+                return axios.get('/api/postcode-delivery-service', {
+                  params: {
+                    postcode: _this2.customer.delivery_address.postcode,
+                    strict: 1
                   }
-                  _this2.$notify({
-                    type: "error",
-                    text: text
-                  });
+                }).then(function (response) {
+                  _this2.customer.delivery_service = response.data.service;
                 });
-              case 2:
-                _this2.key++;
-              case 3:
+              case 5:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
+      }))();
+    },
+    update: function update() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.patch('/api/customer/' + _this3.$route.params.id, _objectSpread(_objectSpread({}, _this3.customer), {}, {
+                  active: _this3.active
+                })).then(function (response) {
+                  _this3.customer = response.data.customer;
+                  _this3.errors = [];
+                  _this3.delivery_address_errors = {};
+                  _this3.billing_address_errors = {};
+                  _this3.$notify({
+                    type: "success",
+                    text: 'Bearbeiten erfolgreich'
+                  });
+                })["catch"](function (errors) {
+                  _this3.errors = errors.response.data.errors;
+                  _this3.delivery_address_errors = {
+                    street: _this3.errors['delivery_address.street'],
+                    postcode: _this3.errors['delivery_address.postcode'],
+                    city: _this3.errors['delivery_address.city']
+                  };
+                  _this3.billing_address_errors = {
+                    street: _this3.errors['billing_address.street'],
+                    postcode: _this3.errors['billing_address.postcode'],
+                    city: _this3.errors['billing_address.city']
+                  };
+                  var text = 'Es ist ein Fehler aufgetreten';
+                  if (errors.response.status === 422) {
+                    text = "Die gesendeten Angaben sind ungültig. Bitte prüfen Sie die Felder.";
+                  }
+                  _this3.$notify({
+                    type: "error",
+                    text: text
+                  });
+                });
+              case 2:
+                _this3.key++;
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     }
   },
@@ -23150,9 +23185,9 @@ __webpack_require__.r(__webpack_exports__);
   emits: ['updated', 'postcodeChanged'],
   methods: {
     postcodeChanged: function postcodeChanged() {
-      this.$emit('postcodeChanged', this.address.postcode);
       delete this.errors['postcode'];
       this.updated();
+      this.$emit('postcodeChanged', this.address.postcode);
     },
     updated: function updated() {
       this.$emit('updated', this.address);
@@ -24202,10 +24237,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }), 128 /* KEYED_FRAGMENT */))])])])]), $data.customer.delivery_option !== 'pickup' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_30, [_hoisted_31, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_address_vue, {
     address: (_$data$customer$deliv = $data.customer.delivery_address) !== null && _$data$customer$deliv !== void 0 ? _$data$customer$deliv : {},
     "class": "mt-5",
+    onPostcodeChanged: $options.updateDeliveryService,
     onUpdated: $options.deliveryAddressUpdated,
     key: 'delivery_address',
     errors: $data.delivery_address_errors
-  }, null, 8 /* PROPS */, ["address", "onUpdated", "errors"])), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+  }, null, 8 /* PROPS */, ["address", "onPostcodeChanged", "onUpdated", "errors"])), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
     "class": "grid gap-4 grid-cols-4 pb-4",
     key: $data.key
   }, [$data.customer.hasOwnProperty('delivery_service') && $data.customer.delivery_service !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_32, [_hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {

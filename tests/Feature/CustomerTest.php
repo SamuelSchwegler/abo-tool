@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Jobs\CreateOrdersForBuy;
+use App\Jobs\CustomerChangeDelivery;
 use App\Models\Bundle;
 use App\Models\Buy;
 use App\Models\Customer;
@@ -70,15 +71,22 @@ class CustomerTest extends TestCase
         $customer->refresh();
         self::assertEquals($data['billing_address']['city'], $customer->billing_address->city);
 
+
+        Bus::fake();
+
         $data['delivery_option'] = 'pickup';
         $data['delivery_address'] = null;
 
         $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
         $response->assertStatus(422);
 
+        Bus::assertNotDispatched(CustomerChangeDelivery::class);
+
         $data['delivery_service']['id'] = 1;
         $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
         $response->assertOk();
+
+        Bus::assertDispatched(CustomerChangeDelivery::class);
     }
 
     public function test_store()
