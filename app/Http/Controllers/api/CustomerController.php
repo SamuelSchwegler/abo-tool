@@ -19,10 +19,25 @@ use Illuminate\Http\Response;
 
 class CustomerController extends Controller
 {
-    public function customers(): Response
+    public function customers(Request $request): Response
     {
+        $customer_query = Customer::query();
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $customer_query = $customer_query->where(function ($q) use ($search) {
+                $q->where('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('first_name', 'like', '%' . $search . '%')->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('email', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $customers = $customer_query->orderBy('last_name')->orderBy('first_name')->get();
+
         return response([
-            'customers' => CustomerResource::collection(Customer::orderBy('last_name')->orderBy('first_name')->get()),
+            'customers' => CustomerResource::collection($customers),
+            'total_count' => Customer::count(),
         ]);
     }
 
@@ -30,18 +45,18 @@ class CustomerController extends Controller
     {
         return response([
             'customer' => CustomerResource::make($customer),
-            'user' => ! is_null($customer->user) ? UserResource::make($customer->user) : null,
+            'user' => !is_null($customer->user) ? UserResource::make($customer->user) : null,
         ]);
     }
 
     public function store(Request $request): Response|Application|ResponseFactory
     {
         $customerValidated = $request->validate(Customer::rules() + [
-            'email' => ['nullable', 'email', 'unique:users,email'],
-        ]);
+                'email' => ['nullable', 'email', 'unique:users,email'],
+            ]);
         $customer = Customer::create($customerValidated);
 
-        if (! is_null($customerValidated['email'])) {
+        if (!is_null($customerValidated['email'])) {
             $user = User::create([
                 'email' => $customerValidated['email'],
                 'password' => 'keinPasswort',
@@ -106,30 +121,18 @@ class CustomerController extends Controller
         $customer->refresh();
 
         if ($request->delivery_option === 'pickup') {
-            if(! isset($request->delivery_service['id'])) {
+            if (!isset($request->delivery_service['id'])) {
                 return abort(422);
             }
             $service = DeliveryService::find($request->delivery_service['id']);
             $customer->update([
                 'delivery_service_id' => $service->id,
             ]);
-        } elseif(!is_null($customer->delivery_service_id)) {
+        } elseif (!is_null($customer->delivery_service_id)) {
             $customer->update([
                 'delivery_service_id' => null,
             ]);
         }
-
-        /*
-        $old_delivery_address?->refresh();
-        if(!is_null($old_delivery_address) && $old_delivery_address->customers->count() === 0) {
-            $old_delivery_address->delete();
-        }
-
-        $old_billing_address?->refresh();
-        if(!is_null($old_billing_address) && $old_billing_address->customers->count() === 0) {
-            $old_billing_address->delete();
-        }
-        */
 
         return response([
             'msg' => 'ok',
@@ -139,8 +142,8 @@ class CustomerController extends Controller
     }
 
     /**
-     * @param  Customer  $customer
-     * @param  Request  $request
+     * @param Customer $customer
+     * @param Request $request
      * @return Response
      * @changes v0.1.2 - user orders überschrieben alle Produkte
      */

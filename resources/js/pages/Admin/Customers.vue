@@ -3,16 +3,24 @@
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
             <h1 class="page-title">Kunden</h1>
-            <p class="mt-2 text-sm text-gray-700">Zusammenfassung aller Kunden.</p>
+            <p class="mt-2 text-sm text-gray-700">
+                Zusammenfassung aller Kunden.
+                <span v-if="search.length > 0">({{customers.length}} von {{total_count}} werden Angezeigt)</span>
+            </p>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <router-link type="button" to="/customer"
-                    class="inline-flex items-center justify-center rounded-md border border-transparent bg-green px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+                         class="inline-flex items-center justify-center rounded-md border border-transparent bg-green px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                 Neuer Kunde erstellen
             </router-link>
         </div>
     </div>
     <div class="mt-8 flex flex-col">
+        <div class="box bg-white">
+            <div class="mt-1">
+                <text-input name="search" :value="search" v-model="search" label="Suche"></text-input>
+            </div>
+        </div>
         <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
@@ -23,7 +31,9 @@
                                 class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name
                             </th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Kontostand</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Kontostand
+                            </th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
                             <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                 <span class="sr-only">Edit</span>
@@ -45,8 +55,9 @@
                                 </a>
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                <span v-for="balance in person.balances.filter(b => b.balance > 0)" class="whitespace-nowrap">
-                                    {{balance.name}}: {{balance.balance + balance.planned}};
+                                <span v-for="balance in person.balances.filter(b => b.balance > 0)"
+                                      class="whitespace-nowrap">
+                                    {{ balance.name }}: {{ balance.balance + balance.planned }};
                                 </span>
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -54,9 +65,11 @@
                                     Offene Rechnung
                                 </span>
                                 <span v-else-if="person.active">
-                                    <button v-for="balance in person.balances.filter(b => b.balance + b.planned < 4 && b.planned > 0)" @click="issue(person.id, balance.product_id, balance.name)"
-                                            class="text-indigo-600 hover:text-indigo-900 whitespace-nowrap">
-                                    {{balance.name}} verlängern
+                                    <button
+                                        v-for="balance in person.balances.filter(b => b.balance + b.planned < 4 && b.planned > 0)"
+                                        @click="issue(person.id, balance.product_id, balance.name)"
+                                        class="text-indigo-600 hover:text-indigo-900 whitespace-nowrap">
+                                    {{ balance.name }} verlängern
                                 </button>
                                 </span>
                             </td>
@@ -83,9 +96,11 @@
 <script>
 
 import CreateBuyConfirmModal from "./Parts/CreateBuyConfirmModal";
+import TextInput from "../../components/form/textInput";
+
 export default {
     name: "Customers",
-    components: {CreateBuyConfirmModal},
+    components: {CreateBuyConfirmModal, TextInput},
 
     data() {
         return {
@@ -93,13 +108,25 @@ export default {
             showCreateBuyConfirmModal: false,
             createBuyConfirmModalCustomer: {},
             createBuyConfirmModalProduct: {},
-            createBuyConfirmModalKey: 0
+            createBuyConfirmModalKey: 0,
+            search: '',
+            total_count: 0
         }
     },
+    emits: ['authentication'],
     methods: {
         async load() {
-            await axios.get('/api/customers').then(response => {
+            let params = {};
+
+            if(this.search.length > 0) {
+                params.search = this.search;
+            }
+
+            await axios.get('/api/customers', {
+                params: params
+            }).then(response => {
                 this.customers = response.data.customers;
+                this.total_count = response.data.total_count;
             }).catch(error => {
                 console.log(error);
             })
@@ -114,6 +141,11 @@ export default {
             this.customers = this.customers.map(c => {
                 return (c.id === customer.id ? customer : c);
             });
+        }
+    },
+    watch: {
+        search: function (newValue) {
+            this.load();
         }
     },
     created() {
