@@ -109,7 +109,7 @@ class Delivery extends Model
             $date = now();
         }
         return $query->where('date', '>=', $date->copy()->subDay())
-            ->where('date', '<=', $date->copy()->addDays(Order::PREVIEW_OFFSET_DAYS))
+            ->where('date', '<=', now()->addDays(Order::PREVIEW_OFFSET_DAYS))
             ->where('approved', '=', 1);
     }
 }
