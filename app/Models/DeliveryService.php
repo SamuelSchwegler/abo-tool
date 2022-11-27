@@ -49,7 +49,7 @@ class DeliveryService extends Model
                 ->where('delivery_services.id', $this->id)
                 ->select('customers.*')->get();
         } else {
-            return Customer::whereNull('delivery_address_id')->get();
+            return Customer::whereNull('delivery_address_id')->where('delivery_service_id', $this->id);
         }
 
     }

@@ -204,6 +204,22 @@ class DeliveryTest extends TestCase
         $response->assertOk();
     }
 
+    public function test_exportDayAddresses()
+    {
+        if (env('SKIP_POTENTIAL_ERROR_TESTS', false)) {
+            $this->markTestSkipped('word probleme');
+        }
+        $this->actingAs($this->admin);
+        $delivery = Delivery::has('active_orders')->whereHas('delivery_service', function ($query) {
+            $query->where('pickup', 0);
+        })->inRandomOrder()->first();
+        self::assertNotNull($delivery);
+
+        $response = $this->get(route('day-addresses.export', $delivery->date->format('Y-m-d')));
+        $response->assertOk();
+    }
+
+
     public function test_sendOrderReminder()
     {
         $tomorrow = Delivery::factory([
