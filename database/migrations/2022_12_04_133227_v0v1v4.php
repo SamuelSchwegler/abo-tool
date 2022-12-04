@@ -30,7 +30,11 @@ return new class extends Migration
         Permission::create([
             'name' => 'manage users',
             'guard_name' => $guard
-        ])->syncRoles([$admin, $office]);
+        ])->syncRoles([$admin]);
+
+        if(Schema::hasColumn('customers', 'pickup')) {
+            Schema::dropColumns('customers', ['pickup']);
+        }
     }
 
     /**

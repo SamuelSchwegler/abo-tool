@@ -96,7 +96,7 @@ export default {
             }
         },
         item: {
-            type: String,
+            type: [String, Object],
             default: ""
         },
         label: {

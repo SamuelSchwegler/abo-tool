@@ -106,5 +106,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['middleware' => ['permission:manage users']], function () {
         Route::get('users', [UserController::class, 'users']);
         Route::post('user', [UserController::class, 'store']);
-
-    });});
+        Route::get('user/{user}', [UserController::class, 'user']);
+        Route::patch('user/{user}', [UserController::class, 'update']);
+        Route::delete('user/{user}', [UserController::class, 'delete']);
+    });
+});

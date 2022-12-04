@@ -29,7 +29,7 @@
         <div class="box bg-white">
             <customer-data v-on:updated="updated" :customer="customer" :errors="errors"
                            :editable="true"></customer-data>
-            <user-data v-if="customer.email !== null" :user="user"></user-data>
+            <user-data v-if="customer.email !== null" :user="user" :editable="can('manage customers')"></user-data>
             <div class="pb-4">
                 <label for="comment" class="block text-sm font-medium text-gray-700">Interner Kommentar</label>
                 <div class="mt-1">
@@ -220,6 +220,7 @@ export default {
         async update() {
             await axios.patch('/api/customer/' + this.$route.params.id, {
                 ...this.customer,
+                email: this.user.email,
                 active: this.active
             }).then(response => {
                 this.customer = response.data.customer;

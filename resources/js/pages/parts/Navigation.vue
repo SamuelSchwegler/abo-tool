@@ -18,9 +18,12 @@
                     </PopoverButton>
                 </div>
                 <PopoverGroup as="nav" class="hidden md:flex space-x-10" v-if="isLoggedIn">
-                    <router-link to="/" class="text-base font-medium text-gray-500 hover:text-gray-900" v-if="!settings.canAny">
-                        Startseite
-                    </router-link>
+                    <template  v-for="route in settings.customer_routes" :key="route.name" v-if="!settings.canAny">
+                        <router-link :to="route.href" class="text-base font-medium text-gray-500 hover:text-gray-900"
+                                     v-if="route.can">
+                            {{route.name}}
+                        </router-link>
+                    </template>
                     <template  v-for="route in settings.admin_routes"  :key="route.name">
                         <router-link :to="route.href" class="text-base font-medium text-gray-500 hover:text-gray-900"
                                      v-if="route.can">
@@ -245,7 +248,8 @@ export default {
                 canAny: canAny,
                 mobile_routes: mobile_routes,
                 admin_routes: admin_routes,
-                setting_routes: setting_routes
+                setting_routes: setting_routes,
+                customer_routes: customer_routes
             },
         }
     },

@@ -29,19 +29,12 @@
                         <tr>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Rolle</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                        <tr v-for="(person, personIdx) in users" :key="users.email">
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                <a :href="'mailto:' + person.email" class="text-indigo-600 hover:text-indigo-900">
-                                    {{ person.email }}
-                                </a>
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                <span v-for="role in person.roles">{{role.name}}</span>
-                            </td>
-                        </tr>
+                        <user-row v-for="user in users" :key="users.email" :user="user" />
                         </tbody>
                     </table>
                 </div>
@@ -54,10 +47,13 @@
 
 import CreateBuyConfirmModal from "./Parts/CreateBuyConfirmModal";
 import TextInput from "../../components/form/textInput";
+import DeleteModal from "../parts/DeleteModal";
+import {TrashIcon} from "@heroicons/vue/20/solid";
+import UserRow from "./Parts/UserRow";
 
 export default {
     name: "Users",
-    components: {CreateBuyConfirmModal, TextInput},
+    components: {CreateBuyConfirmModal, TextInput, UserRow},
 
     data() {
         return {
@@ -67,7 +63,9 @@ export default {
             createBuyConfirmModalProduct: {},
             createBuyConfirmModalKey: 0,
             search: '',
-            total_count: 0
+            total_count: 0,
+            deleteModalKey: 0,
+            open_delete: false
         }
     },
     emits: ['authentication'],
@@ -89,7 +87,7 @@ export default {
             }).catch(error => {
                 console.log(error);
             })
-        },
+        }
     },
     watch: {
         search: function (newValue) {

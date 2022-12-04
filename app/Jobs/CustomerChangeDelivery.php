@@ -41,7 +41,7 @@ class CustomerChangeDelivery implements ShouldQueue
             })->get();
 
             $delivery_service = $this->customer->delivery_service();
-            Log::info($delivery_service);
+
             foreach ($orders as $order) {
                 $delivery = Delivery::where('delivery_service_id', $delivery_service->id)
                     ->whereRaw('date(date) like "' . $order->delivery->date->format('Y-m-d') . '"')

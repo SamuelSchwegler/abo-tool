@@ -16,6 +16,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -134,6 +135,15 @@ class CustomerController extends Controller
         } elseif (!is_null($customer->delivery_service_id)) {
             $customer->update([
                 'delivery_service_id' => null,
+            ]);
+        }
+
+        if(!is_null($customer->user)) {
+            $user_validated = $request->validate([
+                'email' => ['required', 'unique:users,email,' . $customer->user->id, 'email:rfc,dns']
+            ]);
+            $customer->user()->update([
+                'email' => $user_validated['email']
             ]);
         }
 

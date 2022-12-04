@@ -48,7 +48,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $validated = $request->validate(User::rules());
         $validated['password'] = bcrypt(Str::random()); // zufälliges Passwort setzen
@@ -58,6 +58,46 @@ class UserController extends Controller
 
         return response([
             'user' => UserResource::make($user)
+        ]);
+    }
+
+    public function user(User $user): Response
+    {
+        return response([
+            'user' => UserResource::make($user)
+        ]);
+    }
+
+    public function update(User $user, Request $request): Response
+    {
+        $rules = User::rules();
+        $rules['email'] = ['required', 'unique:users,email,' . $user->id, 'email:rfc,dns'];
+
+        $validated = $request->validate($rules);
+        $user->update($validated);
+
+        $user->syncRoles([$validated['role']]);
+
+        return response([
+            'user' => UserResource::make($user)
+        ]);
+    }
+
+    public function delete(User $user): Response
+    {
+        $admin_count = User::whereHas('roles', function($q) {
+            $q->where('name', 'admin');
+        })->count();
+
+        if($user->hasRole('admin') && $admin_count === 1) {
+            return response([
+                'msg' => 'delete not allowed'
+            ], 422);
+        }
+        $user->delete();
+
+        return response([
+            'msg' => 'ok'
         ]);
     }
 }

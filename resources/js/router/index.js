@@ -19,6 +19,7 @@ import CustomerBuys from "../pages/Admin/CustomerBuys";
 import DeliveriesDate from "../pages/Admin/DeliveriesDate";
 import Users from "../pages/Admin/Users";
 import UserCreate from "../pages/Admin/UserCreate";
+import UserEdit from "../pages/Admin/UserEdit";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -232,8 +233,20 @@ export const routes = [
         }
     },
     {
+        name: 'user edit',
+        path: '/user/:id',
+        component: UserEdit,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage users')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
         name: 'user create',
-        path: '/user',
+        path: '/user/',
         component: UserCreate,
         beforeEnter: (to, from, next) => {
             if (window.Laravel.isLoggedIn && can('manage users')) {
