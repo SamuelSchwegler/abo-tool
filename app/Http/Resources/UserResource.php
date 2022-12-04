@@ -31,6 +31,7 @@ class UserResource extends JsonResource
                     'city' => '',
                 ],
             ],
+            'roles' => $this->roles
         ];
     }
 }

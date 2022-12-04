@@ -9,6 +9,7 @@ use App\Http\Controllers\api\DeliveryItemController;
 use App\Http\Controllers\api\DeliveryServiceController;
 use App\Http\Controllers\api\ItemController;
 use App\Http\Controllers\api\OrderController;
+use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -91,10 +92,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/items', [ItemController::class, 'items']);
 
-    Route::get('/customers', [CustomerController::class, 'customers']);
-    Route::get('/customer/{customer}', [CustomerController::class, 'customer']);
-    Route::patch('/customer/{customer}', [CustomerController::class, 'update']);
-    Route::post('/customer', [CustomerController::class, 'store']);
+    // Customers
+    Route::group(['middleware' => ['permission:manage customers']], function () {
+        Route::get('/customers', [CustomerController::class, 'customers']);
+        Route::get('/customer/{customer}', [CustomerController::class, 'customer']);
+        Route::patch('/customer/{customer}', [CustomerController::class, 'update']);
+        Route::post('/customer', [CustomerController::class, 'store']);
 
-    Route::patch('/customer/{customer}/used-orders', [CustomerController::class, 'updateUsedOrders']);
-});
+        Route::patch('/customer/{customer}/used-orders', [CustomerController::class, 'updateUsedOrders']);
+    });
+
+    // Users
+    Route::group(['middleware' => ['permission:manage users']], function () {
+        Route::get('users', [UserController::class, 'users']);
+        Route::post('user', [UserController::class, 'store']);
+
+    });});

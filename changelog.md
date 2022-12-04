@@ -1,6 +1,21 @@
 # Abo Tool Changelog
 
-## [0.1.3] - 2022-09-15
+## [0.1.4] - 2022-12-04
+
+### Added
+
+
+## [0.1.3] - 2022-12-04
+
+### Added
+
+- Export Lieferinhalte
+- Export aller Lieferungen pro Tag
+- Übersicht Produkte eines Liefertages
+- Wechsel von Lieferzone
+- Suchfunktion von Kunden
+- Mehrere Abholorte
+- Auditing
 
 ## [0.1.2] - 2022-08-30
 

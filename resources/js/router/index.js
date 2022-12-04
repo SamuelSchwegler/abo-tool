@@ -17,6 +17,8 @@ import Customer from "../pages/Admin/Customer";
 import CustomerCreate from "../pages/Admin/CustomerCreate";
 import CustomerBuys from "../pages/Admin/CustomerBuys";
 import DeliveriesDate from "../pages/Admin/DeliveriesDate";
+import Users from "../pages/Admin/Users";
+import UserCreate from "../pages/Admin/UserCreate";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -199,6 +201,42 @@ export const routes = [
         component: CustomerBuys,
         beforeEnter: (to, from, next) => {
             if (window.Laravel.isLoggedIn && can('manage customers')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'users',
+        path: '/users',
+        component: Users,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage users')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'users',
+        path: '/users',
+        component: Users,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage users')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'user create',
+        path: '/user',
+        component: UserCreate,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage users')) {
                 next();
             } else {
                 window.location.href = "/";

@@ -18,12 +18,15 @@
                     </PopoverButton>
                 </div>
                 <PopoverGroup as="nav" class="hidden md:flex space-x-10" v-if="isLoggedIn">
-                    <router-link to="/" class="text-base font-medium text-gray-500 hover:text-gray-900">
+                    <router-link to="/" class="text-base font-medium text-gray-500 hover:text-gray-900" v-if="!settings.canAny">
                         Startseite
                     </router-link>
-                    <router-link to="/my-orders" class="text-base font-medium text-gray-500 hover:text-gray-900">
-                       Verwaltung Lieferungen
-                    </router-link>
+                    <template  v-for="route in settings.admin_routes"  :key="route.name">
+                        <router-link :to="route.href" class="text-base font-medium text-gray-500 hover:text-gray-900"
+                                     v-if="route.can">
+                            {{route.name}}
+                        </router-link>
+                    </template>
                     <Popover class="relative" v-slot="{ open }" v-if="settings.canAny">
                         <PopoverButton
                             :class="[open ? 'text-gray-900' : 'text-gray-500', 'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
@@ -43,7 +46,7 @@
                                 class="absolute z-10 left-1/2 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-md sm:px-0">
                                 <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                                     <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                                        <a v-for="route in settings.admin_routes" :key="route.name" :href="route.href"
+                                        <a v-for="route in settings.setting_routes" :key="route.name" :href="route.href"
                                            class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50">
                                             <component :is="route.icon" class="flex-shrink-0 h-6 w-6 text-indigo-600"
                                                        aria-hidden="true"/>
@@ -98,7 +101,7 @@
                         </div>
                         <div class="mt-6">
                             <nav class="grid gap-y-8">
-                                <a v-if="isLoggedIn" v-for="item in settings.routes" :key="item.name" :href="item.href"
+                                <a v-if="isLoggedIn" v-for="item in settings.mobile_routes" :key="item.name" :href="item.href"
                                    class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
                                     <component :is="item.icon" class="flex-shrink-0 h-6 w-6 text-violet"
                                                aria-hidden="true"/>
@@ -169,6 +172,17 @@ export default {
             }
         ];
         let admin_routes = [];
+        let setting_routes = [];
+
+        if(this.can('manage customers')) {
+            admin_routes.push({
+                name: 'Kunden',
+                description: 'Kundenverwaltung',
+                href: '/customers',
+                icon: UserGroupIcon,
+                can: this.can('manage customers')
+            });
+        }
 
         if(this.can('manage payments')) {
             admin_routes.push({
@@ -191,7 +205,7 @@ export default {
         }
 
         if(this.can('manage delivery services')) {
-            admin_routes.push({
+            setting_routes.push({
                 name: 'Lieferzonen',
                 description: 'Postleitzahlen in Lieferzonen einteilen',
                 href: '/delivery-services',
@@ -200,25 +214,38 @@ export default {
             });
         }
 
-        if(this.can('manage customers')) {
-            admin_routes.push({
-                name: 'Kunden',
-                description: 'Kundenverwaltung',
-                href: '/customers',
+        if(this.can('manage users')) {
+            setting_routes.push({
+                name: 'Users',
+                description: 'Zugänge Verwalten',
+                href: '/users',
                 icon: UserGroupIcon,
-                can: this.can('manage customers')
+                can: this.can('manage users')
             });
         }
+
+        let canAny = this.can('manage payments') || this.can('manage deliveries') || this.can('manage orders');
+
+        let mobile_routes = [];
+        if(canAny) {
+            mobile_routes = [
+                ...admin_routes,
+                ...setting_routes
+            ];
+        } else {
+            mobile_routes = [
+                ...customer_routes,
+            ];
+        }
+
 
         return {
             isLoggedIn: false,
             settings: {
-                canAny: this.can('manage payments') || this.can('manage deliveries'),
-                routes: [
-                    ...customer_routes,
-                    ...admin_routes
-                ],
-                admin_routes: admin_routes
+                canAny: canAny,
+                mobile_routes: mobile_routes,
+                admin_routes: admin_routes,
+                setting_routes: setting_routes
             },
         }
     },

@@ -16,6 +16,8 @@
 -->
 <template>
     <Combobox as="div" v-model="selectedItem">
+        <label v-if="label.length > 0"
+               class="block text-sm font-medium text-gray-700">{{ label }}</label>
         <div class="relative mt-1">
             <ComboboxInput
                 class="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
@@ -94,6 +96,10 @@ export default {
             }
         },
         item: {
+            type: String,
+            default: ""
+        },
+        label: {
             type: String,
             default: ""
         }

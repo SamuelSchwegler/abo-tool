@@ -50,7 +50,7 @@
                                 </router-link>
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                <a :href="'mailto:' + person.mail" class="text-indigo-600 hover:text-indigo-900">
+                                <a :href="'mailto:' + person.email" class="text-indigo-600 hover:text-indigo-900">
                                     {{ person.email }}
                                 </a>
                             </td>
