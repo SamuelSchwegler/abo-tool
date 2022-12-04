@@ -23368,12 +23368,6 @@ __webpack_require__.r(__webpack_exports__);
         console.error(error);
       });
     }
-  },
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    if (window.Laravel.isLoggedIn) {
-      return next('dashboard');
-    }
-    next();
   }
 });
 
@@ -26834,6 +26828,9 @@ var _hoisted_5 = {
   "class": "box bg-white"
 };
 var _hoisted_6 = {
+  "class": "text-slate-500 text-sm mt-2"
+};
+var _hoisted_7 = {
   "class": "text-center"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -26870,7 +26867,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.changeRole($event);
     }),
     onSelected: $options.selectedRole
-  }, null, 8 /* PROPS */, ["modelValue", "item", "onSelected"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, null, 8 /* PROPS */, ["modelValue", "item", "onSelected"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Der / die neue NutzerIn kann das sich mittels "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "/forgot-password",
+    "class": "text-indigo-600 hover:text-indigo-900"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Passwort zurücksetzen")];
+    }),
+    _: 1 /* STABLE */
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" ein Passwort setzen.")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     onClick: _cache[2] || (_cache[2] = function () {
       return $options.create && $options.create.apply($options, arguments);

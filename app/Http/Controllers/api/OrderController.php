@@ -35,7 +35,7 @@ class OrderController extends Controller
             'customer' => CustomerResource::make($customer),
             'orders' => OrderResource::collection($orders ?? collect([])),
             'product_balances' => $customer?->productBalances() ?? [],
-            'distinct_delivery_services' => $orders->groupBy('delivery.delivery_service.id')->map->count()->count()
+            'distinct_delivery_services' => $orders->groupBy('delivery.delivery_service.id')->map->count()->count(),
         ]);
     }
 
@@ -85,6 +85,7 @@ class OrderController extends Controller
     public function delete(Order $order): Response|Application|ResponseFactory
     {
         $order->delete();
+
         return response(['msg' => 'ok']);
     }
 }

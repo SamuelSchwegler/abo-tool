@@ -6,7 +6,6 @@ use App\Jobs\CustomerChangeDelivery;
 use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Log;
 
 class CustomerObserver
 {

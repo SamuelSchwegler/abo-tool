@@ -50,6 +50,7 @@ class CustomerTest extends TestCase
                 'postcode' => Postcode::inRandomOrder()->first()->postcode,
                 'city' => $this->faker->city(),
             ],
+            'email' => $customer->user?->email
         ];
 
         $response = $this->json('patch', '/api/customer/'.$customer->id, $data);
@@ -70,7 +71,6 @@ class CustomerTest extends TestCase
         $response->assertOk();
         $customer->refresh();
         self::assertEquals($data['billing_address']['city'], $customer->billing_address->city);
-
 
         Bus::fake();
 

@@ -12,8 +12,6 @@ use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Order;
 use App\Models\Postcode;
-use Couchbase\LookupGetFullSpec;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -114,7 +112,7 @@ class CustomerTest extends TestCase
         $deliveryService = DeliveryService::factory()->create([
             'pickup' => 0,
             'days' => $pickupService->days,
-            'deadline_distance' => $pickupService->deadline_distance
+            'deadline_distance' => $pickupService->deadline_distance,
         ]);
 
         $customer = Customer::factory()->create([
@@ -134,7 +132,7 @@ class CustomerTest extends TestCase
         foreach ($deliveryService->deliveries as $delivery) {
             Order::factory()->create([
                 'delivery_id' => $delivery->id,
-                'customer_id' => $customer->id
+                'customer_id' => $customer->id,
             ]);
         }
 

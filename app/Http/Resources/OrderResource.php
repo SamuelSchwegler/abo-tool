@@ -9,7 +9,7 @@ class OrderResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -29,8 +29,8 @@ class OrderResource extends JsonResource
                 ],
                 'delivery_service' => [
                     'id' => $delivery->delivery_service->id,
-                    'name' => $delivery->delivery_service->name
-                ]
+                    'name' => $delivery->delivery_service->name,
+                ],
             ],
             'product' => [
                 'id' => $product->id,
@@ -41,7 +41,7 @@ class OrderResource extends JsonResource
             'canceled' => $this->canceled,
             'affordable' => $this->affordable,
             'deadline_passed' => $this->deadlinePassed(),
-            'audits' => AuditResource::collection($this->audits)
+            'audits' => AuditResource::collection($this->audits),
         ];
     }
 }

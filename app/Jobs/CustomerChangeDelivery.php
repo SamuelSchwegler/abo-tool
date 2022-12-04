@@ -10,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class CustomerChangeDelivery implements ShouldQueue
 {
@@ -44,11 +43,11 @@ class CustomerChangeDelivery implements ShouldQueue
 
             foreach ($orders as $order) {
                 $delivery = Delivery::where('delivery_service_id', $delivery_service->id)
-                    ->whereRaw('date(date) like "' . $order->delivery->date->format('Y-m-d') . '"')
+                    ->whereRaw('date(date) like "'.$order->delivery->date->format('Y-m-d').'"')
                     ->where('approved', 1)
                     ->first();
 
-                if (!is_null($delivery)) {
+                if (! is_null($delivery)) {
                     $order->update(['delivery_id' => $delivery->id]);
                 }
             }

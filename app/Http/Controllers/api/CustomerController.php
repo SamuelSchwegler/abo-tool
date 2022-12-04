@@ -16,12 +16,11 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return Response
      * @changes v0.1.3 - Suchfunktion
      */
@@ -32,9 +31,9 @@ class CustomerController extends Controller
         if ($request->has('search')) {
             $search = $request->search;
             $customer_query = $customer_query->where(function ($q) use ($search) {
-                $q->where('last_name', 'like', '%' . $search . '%')
-                    ->orWhere('first_name', 'like', '%' . $search . '%')->orWhereHas('user', function ($q) use ($search) {
-                        $q->where('email', 'like', '%' . $search . '%');
+                $q->where('last_name', 'like', '%'.$search.'%')
+                    ->orWhere('first_name', 'like', '%'.$search.'%')->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('email', 'like', '%'.$search.'%');
                     });
             });
         }
@@ -51,18 +50,18 @@ class CustomerController extends Controller
     {
         return response([
             'customer' => CustomerResource::make($customer),
-            'user' => !is_null($customer->user) ? UserResource::make($customer->user) : null,
+            'user' => ! is_null($customer->user) ? UserResource::make($customer->user) : null,
         ]);
     }
 
     public function store(Request $request): Response|Application|ResponseFactory
     {
         $customerValidated = $request->validate(Customer::rules() + [
-                'email' => ['nullable', 'email', 'unique:users,email'],
-            ]);
+            'email' => ['nullable', 'email', 'unique:users,email'],
+        ]);
         $customer = Customer::create($customerValidated);
 
-        if (!is_null($customerValidated['email'])) {
+        if (! is_null($customerValidated['email'])) {
             $user = User::create([
                 'email' => $customerValidated['email'],
                 'password' => 'keinPasswort',
@@ -120,7 +119,7 @@ class CustomerController extends Controller
                 ];
         }
 
-        if ($request->delivery_option === 'pickup' && !isset($request->delivery_service['id'])) {
+        if ($request->delivery_option === 'pickup' && ! isset($request->delivery_service['id'])) {
             return abort(422);
         }
 
@@ -132,18 +131,18 @@ class CustomerController extends Controller
             $customer->update([
                 'delivery_service_id' => $service->id,
             ]);
-        } elseif (!is_null($customer->delivery_service_id)) {
+        } elseif (! is_null($customer->delivery_service_id)) {
             $customer->update([
                 'delivery_service_id' => null,
             ]);
         }
 
-        if(!is_null($customer->user)) {
+        if(! is_null($customer->user)) {
             $user_validated = $request->validate([
-                'email' => ['required', 'unique:users,email,' . $customer->user->id, 'email:rfc,dns']
+                'email' => ['required', 'unique:users,email,'.$customer->user->id, 'email:rfc,dns'],
             ]);
             $customer->user()->update([
-                'email' => $user_validated['email']
+                'email' => $user_validated['email'],
             ]);
         }
 
@@ -155,8 +154,8 @@ class CustomerController extends Controller
     }
 
     /**
-     * @param Customer $customer
-     * @param Request $request
+     * @param  Customer  $customer
+     * @param  Request  $request
      * @return Response
      * @changes v0.1.2 - user orders überschrieben alle Produkte
      */

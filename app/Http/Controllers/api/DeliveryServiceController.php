@@ -82,7 +82,7 @@ class DeliveryServiceController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return Response|Application|ResponseFactory
      * @changes v0.1.3 - strict modus
      */
@@ -90,18 +90,18 @@ class DeliveryServiceController extends Controller
     {
         $validated = $request->validate([
             'postcode' => ['required'],
-            'strict' => ['nullable', 'boolean']
+            'strict' => ['nullable', 'boolean'],
         ]);
 
         $strict = $request->strict ?? false;
         $service = DeliveryService::findServiceForPostcode($validated['postcode']);
 
-        if(!$strict && is_null($service))
+        if(! $strict && is_null($service))
             $service = DeliveryService::where('pickup', 1)->first();
 
         return \response([
             'msg' => 'ok',
-            'service' => !is_null($service) ? (new DeliveryServiceResource($service)) : ['id' => 0, 'name' => 'keine Lieferung'],
+            'service' => ! is_null($service) ? (new DeliveryServiceResource($service)) : ['id' => 0, 'name' => 'keine Lieferung'],
         ]);
     }
 }

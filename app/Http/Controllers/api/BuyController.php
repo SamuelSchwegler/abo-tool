@@ -35,7 +35,7 @@ class BuyController extends Controller
 
         if ($request->has('paid') && $buy->paid) {
             CreateOrdersForBuy::dispatch($buy);
-            if (!is_null($buy->customer->user)) {
+            if (! is_null($buy->customer->user)) {
                 try {
                     $buy->customer->user->notify(new ConfirmPayment($buy));
                 } catch (TransportException $exception) {
@@ -70,7 +70,7 @@ class BuyController extends Controller
     /**
      * Manuelles Ausstellen einer neuen Rechnung. Bspw. weil Guthaben nicht mehr so hoch ist.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Response
      */
     public function issue(Request $request): Response
@@ -78,12 +78,12 @@ class BuyController extends Controller
         $validated = $request->validate([
             'customer_id' => ['required', 'exists:customers,id'],
             'product_id' => ['required', 'exists:products,id'],
-            'bundle_id' => ['nullable', 'exists:bundles,id']
+            'bundle_id' => ['nullable', 'exists:bundles,id'],
         ]);
         $customer = Customer::find($validated['customer_id']);
         $product = Product::find($validated['product_id']);
 
-        if (!isset($validated['bundle_id'])) {
+        if (! isset($validated['bundle_id'])) {
             // Was ist das Standardbundle für den Customer mit diesem Produkt?
             // Trial Bundles sollen nicht verlängert werden.
             $bundle = $customer->buys()->whereHas('bundle', function ($query) use ($product) {
@@ -104,7 +104,7 @@ class BuyController extends Controller
         ]);
 
         $user = $customer->user;
-        if (!is_null($user)) {
+        if (! is_null($user)) {
             $user->notify(new SendInvoice($buy, true));
         }
 

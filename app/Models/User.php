@@ -52,12 +52,11 @@ class User extends Authenticatable
         return $this->hasOne(Customer::class);
     }
 
-
     public static function rules(): array
     {
         return [
             'email' => ['required', 'unique:users,email', 'email:rfc,dns'],
-            'role' => ['required', 'exists:roles,name']
+            'role' => ['required', 'exists:roles,name'],
         ];
     }
 }

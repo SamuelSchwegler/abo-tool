@@ -219,7 +219,6 @@ class DeliveryTest extends TestCase
         $response->assertOk();
     }
 
-
     public function test_sendOrderReminder()
     {
         $tomorrow = Delivery::factory([

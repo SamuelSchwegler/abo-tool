@@ -57,12 +57,6 @@ export default {
                     console.error(error);
                 });
         }
-    },
-    beforeRouteEnter(to, from, next) {
-        if (window.Laravel.isLoggedIn) {
-            return next('dashboard');
-        }
-        next();
     }
 }
 </script>

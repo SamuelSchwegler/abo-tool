@@ -135,7 +135,7 @@ class BundleController extends Controller
                 'delivery_service_id' => $service->id,
             ]);
         } else {
-            if(!is_null($customer->delivery_service_id)) {
+            if(! is_null($customer->delivery_service_id)) {
                 $customer->update([
                     'delivery_service_id' => null,
                 ]);

@@ -7,7 +7,6 @@ use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -69,7 +68,7 @@ class DayAddresses implements FromCollection, WithMapping, ShouldAutoSize, WithH
         $data = [
             [null],
             [$delivery->delivery_service->name],
-            ['Vorname', 'Nachname', 'Strasse', 'PLZ', 'Ort', 'Produkt']
+            ['Vorname', 'Nachname', 'Strasse', 'PLZ', 'Ort', 'Produkt'],
         ];
 
         foreach ($delivery->active_orders as $order) {
@@ -92,9 +91,9 @@ class DayAddresses implements FromCollection, WithMapping, ShouldAutoSize, WithH
     public function headings(): array
     {
         $headings = [
-            ['Adressen für Lieferungen am ' . $this->date->format('d.m.Y')],
-            ['Exportiert am ' . now()->format('d.m.Y') . ' von ' . Auth::user()->email],
-            []
+            ['Adressen für Lieferungen am '.$this->date->format('d.m.Y')],
+            ['Exportiert am '.now()->format('d.m.Y').' von '.Auth::user()->email],
+            [],
         ];
 
         foreach ($this->product_summary as $array)
@@ -110,7 +109,7 @@ class DayAddresses implements FromCollection, WithMapping, ShouldAutoSize, WithH
     {
         $styles = [
             1 => ['font' => ['bold' => true]],
-            2 => ['font' => ['bold' => true]]
+            2 => ['font' => ['bold' => true]],
         ];
 
         foreach ($this->bold_rows as $row)

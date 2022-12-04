@@ -140,7 +140,7 @@ class Customer extends Model implements Auditable
      * v0.1.0
      * Gibt die nächsten Bestellungen Zurück.
      *
-     * @param Carbon|null $date
+     * @param  Carbon|null  $date
      * @return HasMany
      */
     public function next_orders(?Carbon $date = null): HasMany

@@ -9,7 +9,7 @@ class AuditResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -20,13 +20,13 @@ class AuditResource extends JsonResource
             'id' => $this->id,
             'event' => __($this->event),
             'created_at' => [
-                'd.m.Y H:i' => $this->created_at->format('d.m.Y H:i')
+                'd.m.Y H:i' => $this->created_at->format('d.m.Y H:i'),
             ],
             'user' => [
-                'email' => $user->email
+                'email' => $user->email,
             ],
             'old_values' => $this->old_values,
-            'new_values' => $this->new_values
+            'new_values' => $this->new_values,
         ];
     }
 }

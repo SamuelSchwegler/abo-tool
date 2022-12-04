@@ -15,6 +15,8 @@
             <user-data :user="user" :editable="true" v-on:updated="updated" :errors="errors"></user-data>
             <search-select label="Rolle" :items="[{'name': 'admin'},{'name': 'office'}]" v-model="role" :item="role"
                            @change="changeRole($event)" @selected="selectedRole"></search-select>
+            <p class="text-slate-500 text-sm mt-2">Der / die neue NutzerIn kann das sich mittels
+                <router-link to="/forgot-password" class="text-indigo-600 hover:text-indigo-900">Passwort zurücksetzen</router-link> ein Passwort setzen.</p>
         </div>
     </div>
     <div class="text-center">
