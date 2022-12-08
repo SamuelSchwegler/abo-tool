@@ -20,6 +20,7 @@ import DeliveriesDate from "../pages/Admin/DeliveriesDate";
 import Users from "../pages/Admin/Users";
 import UserCreate from "../pages/Admin/UserCreate";
 import UserEdit from "../pages/Admin/UserEdit";
+import Bundles from "../pages/Admin/Bundles.vue";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -250,6 +251,18 @@ export const routes = [
         component: UserCreate,
         beforeEnter: (to, from, next) => {
             if (window.Laravel.isLoggedIn && can('manage users')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'bundles',
+        path: '/bundles/',
+        component: Bundles,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage bundles')) {
                 next();
             } else {
                 window.location.href = "/";

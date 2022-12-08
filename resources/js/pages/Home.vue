@@ -1,11 +1,11 @@
 <template>
-    <div class="sm:flex sm:items-center mb-4">
+    <div class="sm:flex sm:items-center mb-4" v-if="texts.hasOwnProperty('home_title')">
         <div class="sm:flex-auto">
-            <h1 class="page-title">Gemüse-Abo: Frisches Bio-Gemüse im Abonnement</h1>
+            <h1 class="page-title">{{texts.home_title}}</h1>
         </div>
     </div>
-    <div class="box bg-white">
-        <p>Saisonales Bio-Gemüse, jede Woche frisch angeliefert – hier wählen Sie das für Sie passende Abonnement.</p>
+    <div class="box bg-white" v-if="texts.hasOwnProperty('home_description') && texts.home_description.length > 0">
+        <p>{{texts.home_description}}</p>
     </div>
     <div class="mt-4 grid lg:grid-cols-2 gap-4 grid-cols-1">
         <bundle v-for="bundle in bundles" :bundle="bundle" :allowOrder="true"></bundle>
@@ -34,14 +34,16 @@ export default {
     data: function () {
       return {
           bundles: [],
-          trials: []
+          trials: [],
+          texts: {}
       }
     },
     methods:{
         async loadData() {
-            await axios.get('/api/bundles').then(response => {
-                this.bundles = response.data.data.filter(bundle => !bundle.trial);
-                this.trials = response.data.data.filter(bundle => bundle.trial);
+            await axios.get('/api/home').then(response => {
+                this.bundles = response.data.bundles.filter(bundle => !bundle.trial);
+                this.trials = response.data.bundles.filter(bundle => bundle.trial);
+                this.texts = response.data.texts;
             }).catch(error => {
 
             });

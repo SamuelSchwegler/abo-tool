@@ -140,7 +140,15 @@
 import {Popover, PopoverButton, PopoverGroup, PopoverPanel} from '@headlessui/vue'
 import {
     Bars3Icon,
-    BanknotesIcon, ChevronDownIcon, MapIcon, UserGroupIcon, HomeIcon, BookOpenIcon, EnvelopeIcon, XMarkIcon
+    BanknotesIcon,
+    ChevronDownIcon,
+    MapIcon,
+    UserGroupIcon,
+    HomeIcon,
+    BookOpenIcon,
+    EnvelopeIcon,
+    XMarkIcon,
+    PuzzlePieceIcon
 } from '@heroicons/vue/20/solid'
 
 export default {
@@ -224,6 +232,16 @@ export default {
                 href: '/users',
                 icon: UserGroupIcon,
                 can: this.can('manage users')
+            });
+        }
+
+        if(this.can('manage bundles')) {
+            setting_routes.push({
+                name: 'Angebote',
+                description: 'Angebote Verwalten',
+                href: '/bundles',
+                icon: PuzzlePieceIcon,
+                can: this.can('manage bundles')
             });
         }
 

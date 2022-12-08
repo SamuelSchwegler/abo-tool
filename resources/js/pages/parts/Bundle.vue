@@ -6,11 +6,10 @@
         <form class="flex-auto p-6">
             <div class="flex flex-wrap">
                 <h1 class="flex-auto text-lg font-semibold text-slate-900">
-                    {{ bundle.name }}
+                    {{ bundle.title }}
                 </h1>
                 <div class="text-md font-semibold text-slate-500">
-                    CHF {{ bundle.formatted_price }}<br>
-                    {{ bundle.deliveries }} Lieferungen à CHF {{ bundle.price_per_delivery }}<br>
+                    {{ bundle.deliveries }} Lieferungen à CHF {{ bundle.price_per_delivery }}<br>(total CHF {{ bundle.formatted_price }})
                     <span v-if="delivery_cost !== null" class="whitespace-nowrap">
                         zzgl. Lieferkosten CHF {{ delivery_cost }}
                     </span>

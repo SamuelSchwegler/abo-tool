@@ -50,7 +50,7 @@ class CustomerTest extends TestCase
                 'postcode' => Postcode::inRandomOrder()->first()->postcode,
                 'city' => $this->faker->city(),
             ],
-            'email' => $customer->user?->email
+            'email' => $customer->user?->email,
         ];
 
         $response = $this->json('patch', '/api/customer/'.$customer->id, $data);

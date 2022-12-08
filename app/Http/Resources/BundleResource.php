@@ -17,6 +17,7 @@ class BundleResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'title' => $this->title ?? $this->name,
             'formatted_price' => $this->formatted_price,
             'deliveries' => $this->deliveries,
             'price_per_delivery' => $this->price_per_delivery,

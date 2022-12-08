@@ -7,6 +7,7 @@ use App\Http\Controllers\api\CustomerController;
 use App\Http\Controllers\api\DeliveryController;
 use App\Http\Controllers\api\DeliveryItemController;
 use App\Http\Controllers\api\DeliveryServiceController;
+use App\Http\Controllers\api\HomeController;
 use App\Http\Controllers\api\ItemController;
 use App\Http\Controllers\api\OrderController;
 use App\Http\Controllers\api\UserController;
@@ -34,8 +35,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('home', [HomeController::class, 'getHomeData']);
+
 Route::get('bundles', [BundleController::class, 'bundles']);
 Route::get('bundle/{bundle}', [BundleController::class, 'bundle']);
+Route::patch('bundle/{bundle}', [BundleController::class, 'update']);
 
 Route::post('bundle/{bundle}/buy', [BundleController::class, 'submitBuy']);
 

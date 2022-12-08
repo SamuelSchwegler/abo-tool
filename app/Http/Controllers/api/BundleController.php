@@ -28,12 +28,26 @@ class BundleController extends Controller
 {
     public function bundles()
     {
-        return BundleResource::collection(Bundle::all());
+        return BundleResource::collection(Bundle::orderBy('order')->get());
     }
 
     public function bundle(Bundle $bundle)
     {
         return BundleResource::make($bundle);
+    }
+
+    public function update(Bundle $bundle, Request $request): response
+    {
+        $validated = $request->validate([
+            'title' => ['nullable', 'string'],
+            'short_description' => ['nullable', 'string'],
+        ]);
+
+        $bundle->update($validated);
+
+        return response([
+            'bundle' => BundleResource::make($bundle),
+        ]);
     }
 
     /**
@@ -127,7 +141,7 @@ class BundleController extends Controller
         $user->refresh(); // customer für user nachladen
 
         if ($request->delivery_option === 'pickup') {
-            if(! isset($request->delivery_service['id'])) {
+            if (! isset($request->delivery_service['id'])) {
                 return abort(422);
             }
             $service = DeliveryService::find($request->delivery_service['id']);
@@ -135,7 +149,7 @@ class BundleController extends Controller
                 'delivery_service_id' => $service->id,
             ]);
         } else {
-            if(! is_null($customer->delivery_service_id)) {
+            if (! is_null($customer->delivery_service_id)) {
                 $customer->update([
                     'delivery_service_id' => null,
                 ]);
