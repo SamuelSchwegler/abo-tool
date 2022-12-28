@@ -32,6 +32,7 @@ class CreateReadyOrders implements ShouldQueue
     public function handle()
     {
         $delivieries = Delivery::where('date', '<=', now()->addDays(Order::PREVIEW_OFFSET_DAYS))
+            ->where('approved', '=', 1)
             ->has('orders', '=', 0)->get();
 
         foreach ($delivieries as $deliviery) {
