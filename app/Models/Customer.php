@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -40,6 +41,11 @@ class Customer extends Model implements Auditable
         return $this->hasMany(Buy::class)->orderByDesc('created_at');
     }
 
+    public function deliveries(): HasManyThrough
+    {
+        return $this->hasManyThrough(Delivery::class, Order::class, 'customer_id', 'id', 'id','delivery_id');
+    }
+
     public function productBuys(?Product $product = null): Collection
     {
         $query = DB::table('buys')->where('buys.customer_id', '=', $this->id)->where('buys.paid', 1)
@@ -68,7 +74,7 @@ class Customer extends Model implements Auditable
         $deadline = now()->startOfDay()->format('Y-m-d H:i:s');
 
         return $query->groupBy('products.id')
-            ->selectRaw('products.id as product_id, products.name, COUNT(orders.id) as ordered, SUM(IF(deliveries.deadline >= "'.$deadline.'", 1, 0)) AS planned')->get();
+            ->selectRaw('products.id as product_id, products.name, COUNT(orders.id) as ordered, SUM(IF(deliveries.deadline >= "'.$deadline.'", 1, 0)) AS planned, SUM(IF(orders.affordable = 0, 1, 0)) as unaffordable')->get();
     }
 
     /**
@@ -113,7 +119,7 @@ class Customer extends Model implements Auditable
      * @param  bool  $with_planned
      * @return int
      */
-    public function creditOfProduct(Product $product, bool $with_planned = false): int
+    public function creditOfProduct(Product $product, bool $with_planned = false, bool $with_unaffordable = true): int
     {
         $buys = $this->productBuys($product)->first();
         $orders = $this->productOrders($product)->first();
@@ -121,11 +127,12 @@ class Customer extends Model implements Auditable
         $balance = $buys?->total_deliveries ?? 0;
 
         if (! is_null($orders)) {
-            if ($with_planned) {
-                $balance -= $orders->ordered;
-            } else {
-                $balance -= $orders->ordered - $orders->planned;
-            }
+            $balance -= $orders->ordered;
+            if (!$with_planned)
+                $balance += $orders->planned;
+
+            if(!$with_unaffordable)
+                $balance += $orders->unaffordable;
         }
 
         // bereits bestellt
@@ -140,16 +147,17 @@ class Customer extends Model implements Auditable
      * v0.1.0
      * Gibt die nächsten Bestellungen Zurück.
      *
-     * @param  Carbon|null  $date
+     * @param Carbon|null $date
+     * @param int|null $offset_days
      * @return HasMany
      */
-    public function next_orders(?Carbon $date = null): HasMany
+    public function next_orders(?Carbon $date = null, ?int $offset_days = null): HasMany
     {
         if(is_null($date))
             $date = now();
 
-        return $this->orders()->whereHas('delivery', function ($query) use ($date) {
-            $query->readyToOrder($date);
+        return $this->orders()->whereHas('delivery', function ($query) use ($date, $offset_days) {
+            $query->readyToOrder($date, $offset_days);
         })->join('deliveries', 'deliveries.id', '=', 'orders.delivery_id')
             ->orderBy('deliveries.date')
             ->select('orders.*');

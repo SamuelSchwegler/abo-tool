@@ -12,6 +12,8 @@ use App\Models\Delivery;
 use App\Models\DeliveryService;
 use App\Models\Order;
 use App\Models\Postcode;
+use App\Notifications\FixOrdersNotification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -97,7 +99,7 @@ class CustomerTest extends TestCase
             'customer_id' => $customer->id,
             'product_id' => $product->id,
             'delivery_id' => $deliverySoon->id,
-            'canceled' => 0,
+            'canceled' => 0
         ]);
 
         $customer->refresh();
@@ -143,5 +145,86 @@ class CustomerTest extends TestCase
         })->get();
         self::assertTrue($next->count() > 0);
         self::assertEquals($pickupService->id, $next->first()->delivery->delivery_service->id);
+    }
+
+    public function test_fixMissingOrdersCommand()
+    {
+        $this->artisan('orders:fill-in-missing')->assertOk(); // aufräumen vorher
+
+        $deliveryService = DeliveryService::factory()->create([
+            'pickup' => 0,
+            'days' => [],
+            'deadline_distance' => 3,
+        ]);
+
+        $customer = Customer::factory()->create([
+            'delivery_address_id' => null,
+            'delivery_service_id' => $deliveryService->id,
+        ]);
+
+        Notification::fake();
+        $bundle = Bundle::inRandomOrder()->first();
+        $product = $bundle->product;
+
+        $buy = Buy::factory()->create([
+            'customer_id' => $customer->id,
+            'bundle_id' => $bundle->id,
+            'paid' => 1,
+        ]);
+
+        // Mit bestellungen
+        $deliveryPast = Delivery::factory()->create([
+            'delivery_service_id' => $deliveryService->id,
+            'date' => now()->subWeeks(2),
+            'deadline' => now()->subWeeks(2),
+            'approved' => true,
+        ]);
+
+        Order::factory()->create([
+            'customer_id' => $customer->id,
+            'product_id' => $product->id,
+            'delivery_id' => $deliveryPast->id,
+            'canceled' => 0,
+        ]);
+
+        $deliverySoon = Delivery::factory()->create([
+            'delivery_service_id' => $deliveryService->id,
+            'date' => now()->addDays(32),
+            'deadline' => now()->addDays(32),
+            'approved' => true,
+        ]);
+
+        Order::factory()->create([
+            'customer_id' => $customer->id,
+            'product_id' => $product->id,
+            'delivery_id' => $deliverySoon->id,
+            'canceled' => 0,
+            'affordable' => 1
+        ]);
+
+        $order_count = Order::where('customer_id', $customer->id)->count();
+
+        $this->artisan('orders:fill-in-missing')->assertOk();
+        self::assertEquals($order_count, Order::where('customer_id', $customer->id)->count());
+        Notification::assertNothingSent();
+
+        $deliverySoon2 = Delivery::factory()->create([
+            'delivery_service_id' => $deliveryService->id,
+            'date' => now()->addDays(10),
+            'deadline' => now()->addDays(10),
+            'approved' => true,
+        ]);
+        self::assertEquals(0, $deliverySoon2->orders->count());
+        self::assertEquals($order_count, Order::where('customer_id', $customer->id)->count());
+
+        $this->artisan('orders:fill-in-missing')->assertOk();
+        $deliverySoon2->refresh();
+        self::assertEquals(1, $deliverySoon2->orders->count());
+
+        self::assertEquals($order_count + 1, Order::where('customer_id', $customer->id)->count());
+
+        Notification::assertSentTo($this->admin, function (FixOrdersNotification $notification, $channels) use ($customer) {
+            return $notification->customer->id = $customer->id;
+        });
     }
 }

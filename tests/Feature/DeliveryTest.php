@@ -78,8 +78,12 @@ class DeliveryTest extends TestCase
 
     public function test_update()
     {
+        $service = DeliveryService::factory([
+           'deadline_distance' => 2
+        ])->create();
         $delivery = Delivery::factory()->create([
-            'deadline' => now()->addDays(2),
+            'delivery_service_id' => $service->id,
+            'deadline' => now()->addDays(2)
         ]);
         $new_date = $delivery->date->addDay();
 

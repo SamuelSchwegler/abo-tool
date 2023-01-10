@@ -26,7 +26,7 @@ class OrderController extends Controller
         }
 
         if($user->can('manage deliveries')) {
-            $orders = $customer?->next_orders(now()->subWeeks(4))->get();
+            $orders = $customer?->next_orders(now()->subWeeks(4), 365)->get();
         } else {
             $orders = $customer?->next_orders(now()->subWeek())->get();
         }

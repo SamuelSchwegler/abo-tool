@@ -22,7 +22,7 @@ class Order extends Model implements Auditable
         'affordable' => 'boolean',
     ];
 
-    const PREVIEW_OFFSET_DAYS = 60; // wie viele Tage Lieferungen voraus werden Orders angezeigt.
+    const PREVIEW_OFFSET_DAYS = 90; // wie viele Tage Lieferungen voraus werden Orders angezeigt.
 
     public function delivery(): BelongsTo
     {

@@ -103,14 +103,18 @@ class Delivery extends Model
      * @param $date
      * @return mixed
      */
-    public function scopeReadyToOrder($query, ?Carbon $date = null)
+    public function scopeReadyToOrder($query, ?Carbon $date = null, ?int $offset_days = null)
     {
+        if(is_null($offset_days)) {
+            $offset_days = Order::PREVIEW_OFFSET_DAYS;
+        }
+
         if(is_null($date)) {
             $date = now();
         }
 
         return $query->where('date', '>=', $date->copy()->subDay())
-            ->where('date', '<=', now()->addDays(Order::PREVIEW_OFFSET_DAYS))
+            ->where('date', '<=', now()->addDays($offset_days))
             ->where('approved', '=', 1);
     }
 }

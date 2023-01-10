@@ -24,6 +24,9 @@ class Kernel extends ConsoleKernel
         $schedule->job(new CreateDeliveries)->dailyAt('02:10');
         $schedule->job(new DeliveryOrderReminder)->dailyAt('04:30');
 
+        // Fix
+        $schedule->command('orders:fill-in-missing')->wednesdays()->at('14:00');
+
         // db backups
         $schedule->command('db:backup')->daily()->everyFourHours()->between('6:00', '22:00');
         $schedule->command('db:backup:clean')->dailyAt('04:10');
