@@ -129,13 +129,13 @@
 
 <script>
 
-import CustomerData from "../parts/CustomerData";
-import AddressVue from "../parts/Address";
-import UserData from "../parts/UserData";
+import CustomerData from "../parts/CustomerData.vue";
+import AddressVue from "../parts/Address.vue";
+import UserData from "../parts/UserData.vue";
 import customerHelpers from "./Helpers/customerHelpers";
-import TextInput from "../../components/form/textInput";
+import TextInput from "../../components/form/textInput.vue";
 import Toggle from "@vueform/toggle";
-import Audits from "../parts/Audits";
+import Audits from "../parts/Audits.vue";
 
 export default {
     name: "Customer",

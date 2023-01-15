@@ -54,9 +54,9 @@
 
 <script>
 import Toggle from '@vueform/toggle'
-import textInput from "../form/textInput";
-import AuditModal from "../../pages/Admin/Orders/AuditModal";
-import DeleteModal from "../../pages/parts/DeleteModal";
+import textInput from "../form/textInput.vue";
+import AuditModal from "../../pages/Admin/Orders/AuditModal.vue";
+import DeleteModal from "../../pages/parts/DeleteModal.vue";
 import {ClipboardDocumentListIcon, TrashIcon} from "@heroicons/vue/20/solid";
 
 export default {

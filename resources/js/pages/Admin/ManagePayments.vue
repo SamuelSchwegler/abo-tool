@@ -55,8 +55,8 @@
 
 <script>
 
-import BuyPayment from "./Parts/BuyPayment";
-import CreateBuyModal from "./Parts/CreateBuyModal";
+import BuyPayment from "./Parts/BuyPayment.vue";
+import CreateBuyModal from "./Parts/CreateBuyModal.vue";
 
 export default {
     name: "ManagePayments",

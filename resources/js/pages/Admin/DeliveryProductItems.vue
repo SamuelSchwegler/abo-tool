@@ -58,7 +58,7 @@
 
 <script>
 import {MinusIcon, ShoppingBagIcon} from '@heroicons/vue/20/solid'
-import SearchSelect from "../parts/SearchSelect";
+import SearchSelect from "../parts/SearchSelect.vue";
 
 export default {
     props: {

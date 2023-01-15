@@ -58,9 +58,9 @@
 
 <script>
 import Toggle from "@vueform/toggle";
-import TextInput from "../../../components/form/textInput";
+import TextInput from "../../../components/form/textInput.vue";
 import {ArchiveBoxIcon, TrashIcon} from "@heroicons/vue/20/solid";
-import DeleteModal from "../../parts/DeleteModal";
+import DeleteModal from "../../parts/DeleteModal.vue";
 
 export default {
     name: "BuyPayment",

@@ -17,7 +17,7 @@
 
 <script>
 
-import textInput from "../../components/form/textInput";
+import textInput from "../../components/form/textInput.vue";
 
 export default {
     name: "Address",

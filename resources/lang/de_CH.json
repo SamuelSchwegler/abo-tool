@@ -156,6 +156,7 @@
     "Create API Token": "API-Token erstellen",
     "Create New Team": "Neues Team erstellen",
     "Create Team": "Team erstellen",
+    "created": "Erstellt",
     "Created.": "Erstellt.",
     "Croatia": "Kroatien",
     "Cuba": "Kuba",
@@ -177,6 +178,7 @@
     "Delete Resource": "Ressource löschen",
     "Delete Selected": "Ausgewählte löschen",
     "Delete Team": "Team löschen",
+    "deleted": "Gelöscht",
     "Denmark": "Dänemark",
     "Detach": "Trennen",
     "Detach Resource": "Ressource abtrennen",
@@ -661,6 +663,7 @@
     "Update Payment Information": "Update Payment Information",
     "Update Payment Method": "Update Payment Method",
     "Update your account's profile information and email address.": "Aktualisieren Sie die Profilinformationen und die E-Mail-Adresse Ihres Kontos.",
+    "updated": "Bearbeitet",
     "Uruguay": "Uruguay",
     "Use a recovery code": "Verwenden Sie einen Wiederherstellungscode",
     "Use an authentication code": "Verwenden Sie einen Authentifizierungscode",
@@ -717,7 +720,5 @@
     "Zimbabwe": "Simbabwe",
     "Zip / Postal Code": "Zip / Postal Code",
     "Åland Islands": "Åland Islands",
-    "created": "Erstellt",
-    "updated": "Bearbeitet",
-    "deleted": "Gelöscht"
+    "Please enter at least one delivery day.": "Bitte geben sie mindestens einen Liefertag an."
 }

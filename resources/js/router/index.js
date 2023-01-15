@@ -1,25 +1,25 @@
 import {createWebHistory, createRouter} from "vue-router";
 
-import Home from '../pages/Home';
-import Login from "../pages/auth/Login";
-import Dashboard from "../pages/Dashboard";
-import BundleContact from "../pages/Buy/BundleContact";
-import Bill from "../pages/Buy/Bill";
-import CustomerOrders from "../pages/CustomerOrders";
-import ManagePayments from "../pages/Admin/ManagePayments";
-import DeliveryServices from "../pages/Admin/DeliveryServices";
-import ForgotPassword from "../pages/auth/ForgotPassword";
-import ResetPassword from "../pages/auth/ResetPassword";
-import Deliveries from "../pages/Admin/Deliveries";
-import Customers from "../pages/Admin/Customers";
-import Delivery from "../pages/Admin/Delivery";
-import Customer from "../pages/Admin/Customer";
-import CustomerCreate from "../pages/Admin/CustomerCreate";
-import CustomerBuys from "../pages/Admin/CustomerBuys";
-import DeliveriesDate from "../pages/Admin/DeliveriesDate";
-import Users from "../pages/Admin/Users";
-import UserCreate from "../pages/Admin/UserCreate";
-import UserEdit from "../pages/Admin/UserEdit";
+import Home from '../pages/Home.vue';
+import Login from "../pages/auth/Login.vue";
+import Dashboard from "../pages/Dashboard.vue";
+import BundleContact from "../pages/Buy/BundleContact.vue";
+import Bill from "../pages/Buy/Bill.vue";
+import CustomerOrders from "../pages/CustomerOrders.vue";
+import ManagePayments from "../pages/Admin/ManagePayments.vue";
+import DeliveryServices from "../pages/Admin/DeliveryServices.vue";
+import ForgotPassword from "../pages/auth/ForgotPassword.vue";
+import ResetPassword from "../pages/auth/ResetPassword.vue";
+import Deliveries from "../pages/Admin/Deliveries.vue";
+import Customers from "../pages/Admin/Customers.vue";
+import Delivery from "../pages/Admin/Delivery.vue";
+import Customer from "../pages/Admin/Customer.vue";
+import CustomerCreate from "../pages/Admin/CustomerCreate.vue";
+import CustomerBuys from "../pages/Admin/CustomerBuys.vue";
+import DeliveriesDate from "../pages/Admin/DeliveriesDate.vue";
+import Users from "../pages/Admin/Users.vue";
+import UserCreate from "../pages/Admin/UserCreate.vue";
+import UserEdit from "../pages/Admin/UserEdit.vue";
 import Bundles from "../pages/Admin/Bundles.vue";
 
 const can = (can) => {

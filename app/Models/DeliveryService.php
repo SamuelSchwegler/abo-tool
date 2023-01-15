@@ -40,9 +40,16 @@ class DeliveryService extends Model
         ];
     }
 
+    public static function messages(): array
+    {
+        return [
+            'days.required' => __('Please enter at least one delivery day.')
+        ];
+    }
+
     public function customers()
     {
-        if(! $this->pickup) {
+        if (!$this->pickup) {
             return Customer::leftJoin('addresses', 'addresses.id', 'customers.delivery_address_id')
                 ->leftJoin('postcodes', 'postcodes.postcode', 'addresses.postcode')
                 ->leftJoin('delivery_services', 'delivery_services.id', 'postcodes.delivery_service_id')
@@ -60,15 +67,15 @@ class DeliveryService extends Model
     protected function deliveryCost(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100,
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     /**
      * Gibt den passenden Lieferdienst für eine Postleitzahl zurück.
      *
-     * @param  string  $postcode
+     * @param string $postcode
      * @return ?DeliveryService
      */
     public static function findServiceForPostcode(string $postcode): ?DeliveryService

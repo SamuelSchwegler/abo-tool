@@ -29,9 +29,9 @@
 
 <script>
 
-import AddressVue from "../parts/Address";
-import UserData from "../parts/UserData";
-import SearchSelect from "../parts/SearchSelect";
+import AddressVue from "../parts/Address.vue";
+import UserData from "../parts/UserData.vue";
+import SearchSelect from "../parts/SearchSelect.vue";
 
 export default {
     name: "UserCreate",

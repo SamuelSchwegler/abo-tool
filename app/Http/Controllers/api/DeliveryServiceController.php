@@ -23,7 +23,7 @@ class DeliveryServiceController extends Controller
 
     public function store(Request $request): Response
     {
-        $validated = $request->validate(DeliveryService::rules());
+        $validated = $request->validate(DeliveryService::rules(), DeliveryService::messages());
 
         $service = DeliveryService::create($validated);
         CreateDeliveries::dispatchSync($service);

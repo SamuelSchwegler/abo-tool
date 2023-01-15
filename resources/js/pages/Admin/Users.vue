@@ -45,11 +45,9 @@
 
 <script>
 
-import CreateBuyConfirmModal from "./Parts/CreateBuyConfirmModal";
-import TextInput from "../../components/form/textInput";
-import DeleteModal from "../parts/DeleteModal";
-import {TrashIcon} from "@heroicons/vue/20/solid";
-import UserRow from "./Parts/UserRow";
+import CreateBuyConfirmModal from "./Parts/CreateBuyConfirmModal.vue";
+import TextInput from "../../components/form/textInput.vue";
+import UserRow from "./Parts/UserRow.vue";
 
 export default {
     name: "Users",

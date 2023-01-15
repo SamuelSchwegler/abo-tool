@@ -120,7 +120,7 @@
 
 <script>
 import {PaperClipIcon} from "@heroicons/vue/20/solid";
-import DeliveryProductItems from "./DeliveryProductItems";
+import DeliveryProductItems from "./DeliveryProductItems.vue";
 
 export default {
     name: "Delivery",

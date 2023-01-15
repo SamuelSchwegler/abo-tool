@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import ProgressSteps from "../parts/ProgressSteps";
-import Bundle from "../parts/Bundle";
+import ProgressSteps from "../parts/ProgressSteps.vue";
+import Bundle from "../parts/Bundle.vue";
 
 export default {
     name: "Bill",

@@ -67,7 +67,7 @@
 
 <script>
 import formats from "../../formats";
-import DeliveryProductItems from "./DeliveryProductItems";
+import DeliveryProductItems from "./DeliveryProductItems.vue";
 
 export default {
     name: "DeliveriesDate",

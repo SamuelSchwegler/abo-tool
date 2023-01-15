@@ -3,6 +3,9 @@
         <div class="sm:flex-auto">
             <h1 class="page-title">Lieferzonen</h1>
         </div>
+        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <vue-button @click="deleteService()" color="red" v-if="service !== null" text="Löschen" />
+        </div>
     </div>
     <div class="grid grid-cols-5 gap-8" :key="serviceKey">
         <div class="box bg-white">
@@ -25,12 +28,14 @@
 </template>
 
 <script>
-import PostcodeManagement from "./Parts/PostcodeManagement";
-import DeliveryServiceEdit from "./Parts/DeliveryServiceEdit";
+import PostcodeManagement from "./Parts/PostcodeManagement.vue";
+import DeliveryServiceEdit from "./Parts/DeliveryServiceEdit.vue";
+import VueButton from "../../components/form/button.vue";
 
 export default {
     name: "DeliveryServices",
     components: {
+        VueButton,
         DeliveryServiceEdit, PostcodeManagement
     },
     data() {
@@ -72,6 +77,9 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+        async deleteService() {
+            console.log('hui')
         }
     },
     created() {

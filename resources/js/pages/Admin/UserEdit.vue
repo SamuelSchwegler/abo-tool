@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import UserData from "../parts/UserData";
-import SearchSelect from "../parts/SearchSelect";
+import UserData from "../parts/UserData.vue";
+import SearchSelect from "../parts/SearchSelect.vue";
 
 export default {
     name: "UserEdit",

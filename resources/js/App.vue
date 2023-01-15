@@ -1,22 +1,22 @@
 <template>
     <div class="min-h-screen bg-default flex flex-col justify-between">
-        <navigation :key="'nav_key_' + navKey"></navigation>
+        <navigation :key="'nav_key_' + navKey" />
         <!-- Page Content -->
         <main class="container mx-auto mb-auto">
             <div class="py-12">
                 <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                    <router-view @authentication="authentication($event)"/>
+                    <router-view @authentication="authentication($event)" />
                 </div>
             </div>
-            <notifications position="bottom right"></notifications>
+            <notifications position="bottom right" />
         </main>
         <footer-component></footer-component>
     </div>
 </template>
 
 <script>
-import Navigation from "./pages/parts/Navigation";
-import FooterComponent from "./pages/parts/FooterComponent";
+import Navigation from "./pages/parts/Navigation.vue";
+import FooterComponent from "./pages/parts/FooterComponent.vue";
 
 export default {
     name: "App",

@@ -26,10 +26,9 @@
 
 <script>
 
-import CustomerData from "../parts/CustomerData";
-import AddressVue from "../parts/Address";
-import UserData from "../parts/UserData";
-import customerHelpers from "./Helpers/customerHelpers";
+import CustomerData from "../parts/CustomerData.vue";
+import AddressVue from "../parts/Address.vue";
+import UserData from "../parts/UserData.vue";
 
 export default {
     name: "Customer",

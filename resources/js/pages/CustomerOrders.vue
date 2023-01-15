@@ -184,9 +184,9 @@
 
 <script>
 
-import order from "../components/parts/Order";
-import Alert from "../components/parts/Alert";
-import TextInput from "../components/form/textInput";
+import order from "../components/parts/Order.vue";
+import Alert from "../components/parts/Alert.vue";
+import TextInput from "../components/form/textInput.vue";
 
 export default {
     name: "CustomerOrders",

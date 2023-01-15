@@ -11,8 +11,7 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    @vite(['resources/js/app.js'])
 </head>
 <body class="font-sans antialiased h-full" id="app">
 @if (Auth::check())
@@ -34,7 +33,5 @@
 <script>
     window.Laravel = JSON.parse(atob('{{ base64_encode(json_encode($user_auth_data)) }}'));
 </script>
-<script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
-
 </body>
 </html>

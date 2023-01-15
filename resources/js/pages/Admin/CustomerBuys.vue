@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import BuyPayment from "./Parts/BuyPayment";
+import BuyPayment from "./Parts/BuyPayment.vue";
 
 export default {
     name: "CustomerBuys",

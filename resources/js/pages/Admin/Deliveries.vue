@@ -65,7 +65,7 @@
 
 <script>
 import formats from "../../formats";
-import DeliveryFilter from "./Parts/DeliveryFilter";
+import DeliveryFilter from "./Parts/DeliveryFilter.vue";
 import helpers from "../../helpers";
 
 export default {

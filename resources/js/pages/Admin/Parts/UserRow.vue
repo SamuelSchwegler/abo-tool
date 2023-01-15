@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import CreateBuyConfirmModal from "./CreateBuyConfirmModal";
-import TextInput from "../../../components/form/textInput";
-import DeleteModal from "../../parts/DeleteModal";
+import CreateBuyConfirmModal from "./CreateBuyConfirmModal.vue";
+import TextInput from "../../../components/form/textInput.vue";
+import DeleteModal from "../../parts/DeleteModal.vue";
 import {TrashIcon} from "@heroicons/vue/20/solid";
 
 export default {

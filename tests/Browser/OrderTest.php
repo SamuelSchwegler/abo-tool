@@ -30,7 +30,7 @@ class OrderTest extends DuskTestCase
             $customer_count = Customer::count();
             $addresses_count = Address::count();
 
-            $browser->visit('/')->waitForText('Gemüse-Abo:', 4);
+            $browser->visit('/')->waitForText('Seitentitel', 4);
             $browser->click('.order-button')
                 ->assertPathBeginsWith('/bundle/buy')
                 ->assertSee('Damit Sie Liefertermine verwalten können (beispielsweise um Ferienabwesenheiten zu melden), benötigen Sie ein persönliches Konto. In diesem Schritt können Sie dies eröffnen.');

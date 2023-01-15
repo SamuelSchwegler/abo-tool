@@ -53,7 +53,7 @@
 <script>
 import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue'
 import {CheckIcon} from '@heroicons/vue/20/solid'
-import DropdownSelect from "../../parts/DropdownSelect";
+import DropdownSelect from "../../parts/DropdownSelect.vue";
 
 export default {
     props: {

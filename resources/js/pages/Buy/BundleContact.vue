@@ -95,14 +95,14 @@
 </template>
 
 <script>
-import TextInput from "../../components/form/textInput";
-import Alert from "../../components/parts/Alert";
-import ProgressSteps from "../parts/ProgressSteps";
-import CustomerData from "../parts/CustomerData";
-import AddressVue from "../parts/Address";
-import Bundle from "../parts/Bundle";
-import LoginModal from "./parts/LoginModal";
-import LoginCredentials from "./parts/LoginCredentials";
+import TextInput from "../../components/form/textInput.vue";
+import Alert from "../../components/parts/Alert.vue";
+import ProgressSteps from "../parts/ProgressSteps.vue";
+import CustomerData from "../parts/CustomerData.vue";
+import AddressVue from "../parts/Address.vue";
+import Bundle from "../parts/Bundle.vue";
+import LoginModal from "./parts/LoginModal.vue";
+import LoginCredentials from "./parts/LoginCredentials.vue";
 import customerHelpers from "../Admin/Helpers/customerHelpers";
 
 export default {

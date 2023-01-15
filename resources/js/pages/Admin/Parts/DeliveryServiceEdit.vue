@@ -41,18 +41,23 @@
                             </div>
                         </div>
                     </div>
+                    <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1" v-if="errors.hasOwnProperty('days') && errors['days'].length > 0">
+                        <span v-for="e in errors['days']">{{ e }}</span>
+                    </span>
                 </div>
             </fieldset>
-            <div>
-                <text-input name="deadline_distance" label="Vorlauf ab Stichtag in Tagen" v-model="deadline_distance"
-                            :value="deadline_distance" :error="errors['deadline_distance']"
-                            @change="updateDeliveryService"></text-input>
-            </div>
-            <div>
-                <text-input name="delivery_cost" label="Kosten / Lieferung in CHF" v-model="delivery_cost"
-                            :value="delivery_cost"
-                            :error="errors['delivery_cost']" @change="updateDeliveryService"></text-input>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <text-input name="deadline_distance" label="Vorlauf ab Stichtag in Tagen" v-model="deadline_distance"
+                                :value="deadline_distance" :error="errors['deadline_distance']"
+                                @change="updateDeliveryService"></text-input>
+                </div>
+                <div>
+                    <text-input name="delivery_cost" label="Kosten / Lieferung" v-model="delivery_cost"
+                                :value="delivery_cost" suffix="CHF"
+                                :error="errors['delivery_cost']" @change="updateDeliveryService"></text-input>
 
+                </div>
             </div>
             <div class="col-span-1" v-if="service === null">
                 <button class="btn bg-green w-full mt-6" @click="updateDeliveryService">Erstellen</button>
@@ -96,7 +101,7 @@
 
 <script>
 
-import TextInput from "../../../components/form/textInput";
+import TextInput from "../../../components/form/textInput.vue";
 import helpers from "../../../helpers";
 import Toggle from "@vueform/toggle";
 

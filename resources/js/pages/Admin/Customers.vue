@@ -95,8 +95,8 @@
 
 <script>
 
-import CreateBuyConfirmModal from "./Parts/CreateBuyConfirmModal";
-import TextInput from "../../components/form/textInput";
+import CreateBuyConfirmModal from "./Parts/CreateBuyConfirmModal.vue";
+import TextInput from "../../components/form/textInput.vue";
 
 export default {
     name: "Customers",

@@ -7,7 +7,7 @@
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <a href="/">
                         <span class="sr-only">Logo</span>
-                        <img class="h-8 w-auto sm:h-10" src="/img/logo-gsh_header.png" alt=""/>
+                        <img class="h-8 w-auto sm:h-10" :src="logo_path" alt=""/>
                     </a>
                 </div>
                 <div class="-mr-2 -my-2 md:hidden">
@@ -91,7 +91,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <img class="h-8 w-auto"
-                                     src="/img/logo-gsh.png"
+                                     :src="logo_gsh"
                                      alt="Workflow"/>
                             </div>
                             <div class="-mr-2">
@@ -269,6 +269,7 @@ export default {
                 setting_routes: setting_routes,
                 customer_routes: customer_routes
             },
+            logo_path: new URL('/img/logo-gsh_header.png', import.meta.url).href
         }
     },
     created() {

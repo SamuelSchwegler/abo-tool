@@ -24,7 +24,7 @@
 
 <script>
 
-import Bundle from "./parts/Bundle";
+import Bundle from "./parts/Bundle.vue";
 
 export default {
     name: "Home",
