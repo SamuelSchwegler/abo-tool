@@ -69,6 +69,9 @@ export default {
     watch: {
         error: function (newValue, old){
             this.hasError = Object.keys(newValue).length > 0
+        },
+        value: function (newValue) {
+            this.input = newValue;
         }
     }
 }
