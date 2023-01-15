@@ -75,7 +75,7 @@ jobs:
       - name: Compile CSS and Javascript
         run: |
           npm install
-          npm run prod
+          npm run build
 
       - name: Create deployment artifact
         env:
