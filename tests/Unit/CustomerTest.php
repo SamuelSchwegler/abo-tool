@@ -99,7 +99,7 @@ class CustomerTest extends TestCase
             'customer_id' => $customer->id,
             'product_id' => $product->id,
             'delivery_id' => $deliverySoon->id,
-            'canceled' => 0
+            'canceled' => 0,
         ]);
 
         $customer->refresh();
@@ -199,7 +199,7 @@ class CustomerTest extends TestCase
             'product_id' => $product->id,
             'delivery_id' => $deliverySoon->id,
             'canceled' => 0,
-            'affordable' => 1
+            'affordable' => 1,
         ]);
 
         $order_count = Order::where('customer_id', $customer->id)->count();

@@ -43,7 +43,7 @@ class Customer extends Model implements Auditable
 
     public function deliveries(): HasManyThrough
     {
-        return $this->hasManyThrough(Delivery::class, Order::class, 'customer_id', 'id', 'id','delivery_id');
+        return $this->hasManyThrough(Delivery::class, Order::class, 'customer_id', 'id', 'id', 'delivery_id');
     }
 
     public function productBuys(?Product $product = null): Collection
@@ -128,10 +128,10 @@ class Customer extends Model implements Auditable
 
         if (! is_null($orders)) {
             $balance -= $orders->ordered;
-            if (!$with_planned)
+            if (! $with_planned)
                 $balance += $orders->planned;
 
-            if(!$with_unaffordable)
+            if(! $with_unaffordable)
                 $balance += $orders->unaffordable;
         }
 
@@ -147,8 +147,8 @@ class Customer extends Model implements Auditable
      * v0.1.0
      * Gibt die nächsten Bestellungen Zurück.
      *
-     * @param Carbon|null $date
-     * @param int|null $offset_days
+     * @param  Carbon|null  $date
+     * @param  int|null  $offset_days
      * @return HasMany
      */
     public function next_orders(?Carbon $date = null, ?int $offset_days = null): HasMany
