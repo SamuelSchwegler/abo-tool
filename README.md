@@ -13,7 +13,7 @@ Funktioniert mit [Laravel Permission von Spatie](https://spatie.be/docs/laravel-
 ## Development
 
 ### Tailwind
-Muss mittels `npm run watch` komiliziert werden.
+Muss mittels `npm run build` komiliziert werden.
 
 ### Mailhog
 Installation siehe [github](https://github.com/mailhog/MailHog) `~/go/bin/MailHog`
