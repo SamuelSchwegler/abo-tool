@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Models\Customer;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -25,7 +24,7 @@ class FixOrdersNotification extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -36,7 +35,7 @@ class FixOrdersNotification extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
@@ -44,15 +43,15 @@ class FixOrdersNotification extends Notification
         return (new MailMessage)
             ->subject('Korrigierte Lieferungen im Gemüseabotool')
             ->greeting('Hey '.$notifiable->email)
-            ->line('Hier ist das Gemüseabotool. Ich habe soeben automatisiert fehlende Lieferungen für ' . $this->customer->name . ' korrigiert.')
-            ->action('Lieferübersicht', url('/customer/' . $this->customer->id . '/orders'))
+            ->line('Hier ist das Gemüseabotool. Ich habe soeben automatisiert fehlende Lieferungen für '.$this->customer->name.' korrigiert.')
+            ->action('Lieferübersicht', url('/customer/'.$this->customer->id.'/orders'))
             ->line('Bitte prüfe, ob alles seine Richtigkeit hat. Dieses Email geht an alle Admins.');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function toArray($notifiable)

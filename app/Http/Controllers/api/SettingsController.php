@@ -12,15 +12,15 @@ class SettingsController extends Controller
         $settings = Setting::first();
 
         return response([
-            'settings' => $settings
+            'settings' => $settings,
         ]);
     }
 
     public function updateTexts(Request $request) {
 
         $rules = [
-            'home_title' => ['required', 'string'],
-            'home_description' => ['required', 'string']
+            'home_title' => ['nullable', 'string'],
+            'home_description' => ['nullable', 'string'],
         ];
 
         $validated = $request->validate($rules);
@@ -33,7 +33,7 @@ class SettingsController extends Controller
         }
 
         $setting->update([
-            'texts' => $texts
+            'texts' => $texts,
         ]);
     }
 }
