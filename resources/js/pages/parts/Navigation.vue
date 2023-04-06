@@ -148,7 +148,7 @@ import {
     BookOpenIcon,
     EnvelopeIcon,
     XMarkIcon,
-    PuzzlePieceIcon
+    PuzzlePieceIcon, PaintBrushIcon
 } from '@heroicons/vue/20/solid'
 
 export default {
@@ -241,6 +241,16 @@ export default {
                 description: 'Angebote Verwalten',
                 href: '/bundles',
                 icon: PuzzlePieceIcon,
+                can: this.can('manage bundles')
+            });
+        }
+
+        if(this.can('manage bundles')) {
+            setting_routes.push({
+                name: 'Anpassen',
+                description: 'Design anpassen',
+                href: '/settings/customize',
+                icon: PaintBrushIcon,
                 can: this.can('manage bundles')
             });
         }

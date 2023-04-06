@@ -1,6 +1,5 @@
 <template>
-    <div class="box bg-white" v-if="can('see audits') && audits.length > 0">
-        <h3 class="title">Verlauf</h3>
+    <Box v-if="can('see audits') && audits.length > 0" title="Verlauf">
         <ul role="list" class="divide-y divide-gray-200">
             <li v-for="audit in audits" :key="audit.id" class="py-4">
                 <div class="flex space-x-3">
@@ -16,12 +15,15 @@
                 </div>
             </li>
         </ul>
-    </div>
+    </Box>
 </template>
 
 <script>
+import Box from "../../components/Box.vue";
+
 export default {
     name: "Audits",
+    components: {Box},
     props: {
         audits: {
             type: Array,

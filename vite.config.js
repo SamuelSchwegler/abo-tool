@@ -9,4 +9,5 @@ export default defineConfig({
             'resources/js/app.js',
         ]),
     ],
+    publicDir: './public/'
 });

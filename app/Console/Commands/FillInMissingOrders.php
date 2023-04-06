@@ -36,6 +36,7 @@ class FillInMissingOrders extends Command
             $fixes = false;
             $delivery_service = $customer->delivery_service();
             if (! is_null($delivery_service)) {
+                // todo get max of relation
                 $max_order_date = $customer->deliveries()->max('date');
                 $max_order = $customer->orders()->whereHas('delivery', function ($q) use ($max_order_date) {
                     $q->where('date', '=', $max_order_date);

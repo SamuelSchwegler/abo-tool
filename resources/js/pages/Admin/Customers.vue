@@ -1,26 +1,23 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-    <div class="sm:flex sm:items-center">
-        <div class="sm:flex-auto">
-            <h1 class="page-title">Kunden</h1>
-            <p class="mt-2 text-sm text-gray-700">
-                Zusammenfassung aller Kunden.
-                <span v-if="search.length > 0">({{customers.length}} von {{total_count}} werden Angezeigt)</span>
-            </p>
-        </div>
-        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+    <PageHead page-title="Kunden">
+        <template #description>
+            Zusammenfassung aller Kunden.
+            <span v-if="search.length > 0">({{customers.length}} von {{total_count}} werden Angezeigt)</span>
+        </template>
+        <template #links>
             <router-link type="button" to="/customer"
                          class="inline-flex items-center justify-center rounded-md border border-transparent bg-green px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                 Neuer Kunde erstellen
             </router-link>
-        </div>
-    </div>
-    <div class="mt-8 flex flex-col">
-        <div class="box bg-white">
+        </template>
+    </PageHead>
+    <PageContent>
+        <Box>
             <div class="mt-1">
                 <text-input name="search" :value="search" v-model="search" label="Suche"></text-input>
             </div>
-        </div>
+        </Box>
         <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
@@ -86,7 +83,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </PageContent>
     <create-buy-confirm-modal :show="showCreateBuyConfirmModal" :customer="createBuyConfirmModalCustomer"
                               :product="createBuyConfirmModalProduct" :key="createBuyConfirmModalKey"
                               v-on:issued="issued"
@@ -97,10 +94,13 @@
 
 import CreateBuyConfirmModal from "./Parts/CreateBuyConfirmModal.vue";
 import TextInput from "../../components/form/textInput.vue";
+import Box from "../../components/Box.vue";
+import PageContent from "../../layout/PageContent.vue";
+import PageHead from "../../layout/PageHead.vue";
 
 export default {
     name: "Customers",
-    components: {CreateBuyConfirmModal, TextInput},
+    components: {PageHead, PageContent, Box, CreateBuyConfirmModal, TextInput},
 
     data() {
         return {

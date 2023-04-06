@@ -4,7 +4,9 @@
             <h1 class="page-title">Lieferzonen</h1>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <vue-button @click="deleteService()" color="red" v-if="service !== null" text="Löschen" />
+            <vue-button @click="deleteService()" color="red" v-if="service !== null">
+                Löschen
+            </vue-button>
         </div>
     </div>
     <div class="grid grid-cols-5 gap-8" :key="serviceKey">

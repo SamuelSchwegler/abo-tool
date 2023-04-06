@@ -63,12 +63,16 @@ export default {
             search: '',
             total_count: 0,
             deleteModalKey: 0,
-            open_delete: false
+            open_delete: false,
+            loadIndex: 0
         }
     },
     emits: ['authentication'],
     methods: {
         async load() {
+            this.loadIndex++;
+            const startIndex = this.loadIndex;
+
             let params = {
                 roles: ['admin', 'office']
             };
@@ -79,11 +83,15 @@ export default {
 
             await axios.get('/api/users', {
                 params: params
-            }).then(response => {
-                this.users = response.data.users;
-                this.total_count = response.data.total_count;
-            }).catch(error => {
+            }).then((response) => {
+                if(startIndex === this.loadIndex) {
+                    this.users = response.data.users;
+                    this.total_count = response.data.total_count;
+                }
+            }).catch((error) => {
                 console.log(error);
+            }).finally(() => {
+
             })
         }
     },

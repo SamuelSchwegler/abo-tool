@@ -1,14 +1,13 @@
+
 <template>
     <div>
         <label :for="name" v-bind:class="{'text-red-500': hasError}"
                class="block text-sm font-medium text-gray-700">{{ label }}</label>
         <div :class="'mt-1 relative rounded-md shadow-sm ' + inputClass">
-            <input :type="type" :name="name" v-model="input" @input="onChanged"
-                   v-bind:class="{'border-red-500': hasError}" v-bind:readonly="readonly"
-                   :class="'focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md read-only:bg-gray-100 ' + inputClass"/>
-            <div v-if="suffix.length > 0" class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <span class="text-gray-500 sm:text-sm" id="price-currency"> {{ suffix }} </span>
-            </div>
+            <textarea id="message" rows="4" @input="onChanged"
+                      class="block p-2.5 pt-2 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      v-model="input">
+            </textarea>
         </div>
         <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1" v-if="hasError">
 			<span v-for="e in error">{{ e }}</span>

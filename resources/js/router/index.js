@@ -20,7 +20,8 @@ import DeliveriesDate from "../pages/Admin/DeliveriesDate.vue";
 import Users from "../pages/Admin/Users.vue";
 import UserCreate from "../pages/Admin/UserCreate.vue";
 import UserEdit from "../pages/Admin/UserEdit.vue";
-import Bundles from "../pages/Admin/Bundles.vue";
+import Bundles from "../pages/Admin/Settings/Bundles.vue";
+import Customize from "../pages/Admin/Settings/Customize.vue";
 
 const can = (can) => {
     if (window.Laravel.permissions.length > 0) {
@@ -263,6 +264,18 @@ export const routes = [
         component: Bundles,
         beforeEnter: (to, from, next) => {
             if (window.Laravel.isLoggedIn && can('manage bundles')) {
+                next();
+            } else {
+                window.location.href = "/";
+            }
+        }
+    },
+    {
+        name: 'customize',
+        path: '/settings/customize',
+        component: Customize,
+        beforeEnter: (to, from, next) => {
+            if (window.Laravel.isLoggedIn && can('manage bundles')) { // todo berechtigung für customize
                 next();
             } else {
                 window.location.href = "/";
