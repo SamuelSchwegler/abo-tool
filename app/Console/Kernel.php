@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new CreateReadyOrders)->dailyAt('01:55');
+        $schedule->job(new CreateReadyOrders)->dailyAt('01:55'); // Erstellt für Lieferdaten die Approved sind die Orders
         $schedule->job(new CancelUnaffordableOrders)->dailyAt('02:05');
         $schedule->job(new CreateDeliveries)->dailyAt('02:10');
         $schedule->job(new DeliveryOrderReminder)->dailyAt('04:30');

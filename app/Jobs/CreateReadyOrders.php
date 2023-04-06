@@ -31,12 +31,12 @@ class CreateReadyOrders implements ShouldQueue
      */
     public function handle()
     {
-        $delivieries = Delivery::where('date', '<=', now()->addDays(Order::PREVIEW_OFFSET_DAYS))
-            ->where('approved', '=', 1)
-            ->has('orders', '=', 0)->get();
+        $deliveries = Delivery::where('date', '>=', now()->format('Y-m-d'))
+            ->where('date', '<=', now()->addDays(Order::PREVIEW_OFFSET_DAYS)->format('Y-m-d'))
+            ->where('approved', '=', 1)->orderBy('date')->get();
 
-        foreach ($delivieries as $deliviery) {
-            DeliveryCreateOrders::dispatch($deliviery);
+        foreach ($deliveries as $delivery) {
+            DeliveryCreateOrders::dispatch($delivery);
         }
     }
 }
