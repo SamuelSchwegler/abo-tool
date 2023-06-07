@@ -82,6 +82,7 @@ class Order extends Model implements Auditable
         $template->setValue('customer_street', $delivery_address?->street ?? $billing_address?->street);
         $template->setValue('customer_postcode', $delivery_address?->postcode ?? $billing_address?->postcode);
         $template->setValue('customer_city', $delivery_address?->city ?? $billing_address?->city);
+        $template->setValue('customer_company_name', $customer->company_name);
 
         // Items
         $item_rows = [];
