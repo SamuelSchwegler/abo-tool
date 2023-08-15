@@ -14,8 +14,14 @@ class HomeController extends Controller
     {
         $setting = Setting::first();
 
+        $bundles = Bundle::orderBy('order')->when(now()->gt('2023-10-13 23:59:00'), function ($q) {
+            $q->where('trial', '!=', 0);
+        })->when(now()->gt('2023-11-10 23:59:00'), function ($q) {
+            $q->where('trial', '!=', 1);
+        })->get();
+
         return response([
-            'bundles' => BundleResource::collection(Bundle::orderBy('order')->get()),
+            'bundles' => BundleResource::collection($bundles),
             'texts' => [
                 'home_title' => $setting->texts['home_title'] ?? 'Seitentitel',
                 'home_description' => $setting->texts['home_description'] ?? '',
